@@ -65,7 +65,9 @@ Polymer({
   handleResponse: function(response) {
     var res = response.detail.response.body;
     this.set('paragraph', res);
-    this.fillTemplate(res.result.type);
+    if(res.result){
+      this.fillTemplate(res.result.type);
+    }
   },
   
   //Selects template type to fill.
