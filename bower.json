@@ -22,7 +22,6 @@
     "src/bower_components/"
   ],
   "dependencies": {
-    "ace-builds": "^1.2.4",
     "polymer": "^1.6.0",
     "iron-ajax": "^1.4.3",
     "polymer-sortablejs": "^0.1.3",
