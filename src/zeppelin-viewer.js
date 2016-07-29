@@ -4,11 +4,11 @@ Polymer({
 
   properties: {
 
-    //URL for zeppelin
+    // URL for zeppelin
     zeppelinUrl: {
       type: String,
       value: 'http://localhost:8080/api/notebook'
     }
-  },
+  }
 
 });
