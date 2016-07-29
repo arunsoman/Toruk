@@ -1,0 +1,11 @@
+<dom-module id="zeppelin-notebooks">
+    <template>
+        <iron-ajax url="[[ url ]]/notebook" auto handle-as="json" on-response="handleResponse" id="ajax"></iron-ajax>
+        <template is="dom-repeat" items="[[ responseItems ]]">
+            <paper-card heading="[[ item.name ]]">
+                <div class="card-content">[[ item.name ]]</div>
+            </paper-card>
+        </template>
+    </template>
+    <script src="zeppelin-notebooks.js"></script>
+</dom-module>
