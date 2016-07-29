@@ -1,0 +1,32 @@
+{
+  "name": "zeppelin-viewer",
+  "version": "1.0.0",
+  "description": "Webcomponent based UI for apache zeppelin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm install && bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arunsoman/zeppelin-viewer.git"
+  },
+  "keywords": [
+    "zeppelin",
+    "apache",
+    "polymer"
+  ],
+  "author": "flytxt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arunsoman/zeppelin-viewer/issues"
+  },
+  "homepage": "https://github.com/arunsoman/zeppelin-viewer#readme",
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "dryice": "^0.4.11",
+    "eslint": "^3.1.1",
+    "polymer-cli": "^0.12.0",
+    "vulcanize": "^1.14.8"
+  }
+}
