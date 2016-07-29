@@ -16,6 +16,9 @@ Polymer({
         jobName: ''
       }
     },
+    notebookId:{
+      type:String
+    },
     // import dependency charts
     charts: {
       type: Array
@@ -41,21 +44,21 @@ Polymer({
       }
     },
 
-    //base url for zeppelin `http://localhost:8080/#/api` by default
-    zeppelinUrl: {
-      type: String,
-      value: 'http://localhost:8080/api'
-    }
+    // //base url for zeppelin `http://localhost:8080/#/api` by default
+    // zeppelinUrl: {
+    //   type: String,
+    //   value: 'http://localhost:8080/api'
+    // }
   },
   
   ready: function() {
 
-    //To Do: Ajax only if data isn't passed down by notebook
-    this.async(function() {
-      this.$.ajax.url = this.zeppelinUrl + '/notebook/2A94M5J1Z/paragraph/20150212-145404_867439529';
-      this.$.ajax.method = 'GET';
-      this.$.ajax.generateRequest();
-    });
+    // //To Do: Ajax only if data isn't passed down by notebook
+    // this.async(function() {
+    //   this.$.ajax.url = this.zeppelinUrl + '/notebook/2A94M5J1Z/paragraph/20150212-145404_867439529';
+    //   this.$.ajax.method = 'GET';
+    //   this.$.ajax.generateRequest();
+    // });
   },
   
   //Handles API Response  and sets 

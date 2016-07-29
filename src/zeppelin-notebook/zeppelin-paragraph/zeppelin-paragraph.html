@@ -19,8 +19,8 @@
 
   <template>
 
-    <iron-ajax id="ajax" on-response="handleResponse"  handle-as="json"></iron-ajax>
-    <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST"  handle-as="json"></iron-ajax>
+    <iron-ajax auto id="ajax" url="[[ url ]]notebook/[[ notebookId ]]/paragraph/[[ paragraphId ]]" on-response="handleResponse"  handle-as="json"></iron-ajax>
+    <!-- <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST"  handle-as="json"></iron-ajax> -->
 
     <article class="card">
 
