@@ -1,0 +1,4 @@
+Polymer({
+
+  is: 'analytical-model'
+});
