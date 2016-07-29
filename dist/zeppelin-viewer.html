@@ -1,0 +1,510 @@
+<html><head><meta charset="UTF-8"></head><body><div hidden="" by-vulcanize=""><dom-module id="zeppelin-dynamic-input" assetpath="helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-input/">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <paper-input label="[[mappedObj.label]]" value="{{mappedObj.value}}" type="number"></paper-input>
+  </template>
+  <script src="helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-input/zeppelin-dynamic-input.js">
+  Polymer({
+  is: 'zeppelin-dynamic-input',
+
+  properties: {
+    forms: {
+      type: Object
+    },
+    params: {
+      type: Object
+    },
+    mappedObj: {
+      type: Object,
+      value: {
+        label: '',
+        value: ''
+      }
+    }
+  },
+  observers: ['_mappedObjObs(mappedObj.value)'],
+
+  //On input change, set the specific param with current value
+  _mappedObjObs: function(val) {
+    var param = this.mappedObj.label;
+    if (this.params) {
+      this.params[param] = val;
+    }
+  }
+});
+</script>
+</dom-module><dom-module id="zeppelin-dynamic-form" assetpath="helper-elements/zeppelin-dynamic-form/">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      zeppelin-dynamic-input {
+        display: inline-block;
+        width: 40%;
+      }
+    </style>
+    <form is="iron-form" id="zep-dynamic-form">
+      <template is="dom-repeat" items="{{formArray}}">
+        <!-- This element is introduced to solve a  complexity in zeppelin Dynamic input -->
+        <!-- Zeppelin generates dnamic inputs from the object paragraph.settings.froms  -->
+        <!-- But the value from form is passed to zeppelin.paragraph.settings.params  -->
+        <!-- And we cant dom-repeat on objects -->
+        <zeppelin-dynamic-input form="[[form]]" params="{{ params }}" mapped-obj="{{item}}"></zeppelin-dynamic-input>
+      </template>      
+    </form>
+  </template>
+  <script src="helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-form.js">
+  Polymer({
+  is: 'zeppelin-dynamic-form',
+
+  properties: {
+
+    //Forms
+    forms: {
+      type: Object
+    },
+
+    //Params
+    params: {
+      type: Object
+    },
+
+    //Array from which inputs are created
+    formArray: {
+      type: Array
+    }
+  },
+
+  observers: ['_formsObs(forms.*)'],
+
+  _formsObs: function(formObj) {
+    var tempArray;
+    if (formObj.path === 'forms') {
+      this.set('formArray', this._map(formObj.value));
+    }
+  },
+
+  //Converts object into array
+  _map: function(fromObj) {
+    var arr = [];
+    for (var key in fromObj) {
+      arr.push({
+        label: key,
+        value: this.params[key]
+      });
+    }
+    return arr;
+  }
+
+});
+</script>
+</dom-module><dom-module id="editor-view" assetpath="zeppelin-notebook/zeppelin-paragraph/editor-view/">
+
+  <template>
+    <!-- <iron-ajax id="ajax" on-response="handleResponse"  handle-as="json"></iron-ajax> -->
+
+    <style>
+      :host {
+        display: block;
+      }
+      .ace-editor {
+        display: block;
+        height: 200px;
+        font-size: 14px;
+        width: 100%;
+      }
+    </style>
+
+    <div id="[[editorId]]" class="ace-editor">[[ content ]] </div>
+
+  </template>
+  <script src="zeppelin-notebook/zeppelin-paragraph/editor-view/editor-view.js">Polymer({
+
+  is: 'editor-view',
+
+  properties: {
+
+    //Unique Id to be assigned to editor
+    editorId: {
+      type: String
+    },
+    content: {
+      type: String,
+      value: '0'
+    },
+    //Instance of ACE editor
+    editor: Object
+  },
+
+  observers: ['_editorIdChange(editorId)'],
+
+  _editorIdChange: function(editorId) {
+    //initiantes a editor on reciving editor id
+    if (!!editorId) {
+      this.editor = ace.edit(this.editorId);
+      this.editor.setTheme('ace/theme/eclipse');
+      this.editor.getSession().setMode('ace/mode/scala');
+    }
+  },
+
+  attached: function() {
+    // var that = this;
+    // that.async(function() {
+    //   //Init editor
+      
+    // });
+  }
+});
+</script>
+</dom-module>
+<dom-module id="chart-view" assetpath="zeppelin-notebook/zeppelin-paragraph/chart-view/">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    I'm showing charts
+    <!-- Renders the  form from paragraph.settings.params-->
+    <zeppelin-dynamic-form forms="[[ settings.forms ]]" params="[[ settings.params ]]"></zeppelin-dynamic-form>
+    <div id="graph"></div>
+  </template>
+  <script src="zeppelin-notebook/zeppelin-paragraph/chart-view/chart-view.js">
+  Polymer({
+  is: 'chart-view',
+
+  properties: {
+    //Result from backend
+    paragraph: {},
+
+    charts: {
+      type: Array
+    },
+
+  },
+  observers: ['_importCharts(charts)'],
+
+  _importCharts: function(charts) {
+    var me = this;
+    if (charts) {
+      charts.forEach(function(chart) {
+        me._importFile(chart, function(a) {
+          var el = document.createElement(chart);
+          el.paragraph = this.paragraph;
+          me.$.graph.appendChild(el);
+        })
+      });
+    }
+  },
+  _importFile: function(path,onload) {
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'import');
+    link.setAttribute('href','../charts/' + path + '/' + path + '.html');
+    this.appendChild(link);
+    link.onload = onload;
+  }
+});
+</script>
+</dom-module>
+<dom-module id="html-view" assetpath="zeppelin-notebook/zeppelin-paragraph/html-view/">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div id="html_content"></div>
+  </template>
+  <script src="zeppelin-notebook/zeppelin-paragraph/html-view/html-view.js">
+  Polymer({
+
+  is: 'html-view',
+
+  properties: {
+
+    //The String version of htmlnode, coming from zeppelin backend
+    result: {
+      type: String,
+      value: ''
+    },
+
+    //parsed HTML node to be placed inside div#html_content
+    parsedNode: {}
+  },
+
+  observers: ['_resultObs(result)'],
+
+  //Attaching directly to div#html_content not works some times-
+  //because the dom-if couldn't render the `html-view` element 
+  _resultObs: function(result) {
+    if (!!result) {
+      this.parsedNode = result.msg;
+    } else {
+      this.parsedNode = '';
+    }
+    if (this.$$('#html_content')) {
+      this._setInnerHTML();
+    }
+  },
+
+  _setInnerHTML: function() {
+    if (this.parsedNode !== '') {
+      this.$$('#html_content').innerHTML = this.parsedNode;
+    } else {
+      this.$$('#html_content').innerHTML = '';
+    }
+  },
+
+  attached: function() {
+    //Workaround related to _resultObs issue
+    this._setInnerHTML();
+  }
+
+});
+</script>
+</dom-module>
+<script src="zeppelin.js">(function() {
+  'use strict';
+  window.zeppelin = window.zeppelin || {};
+
+  var zeppelin = window.zeppelin;
+
+  //Config for zeppelin
+  zeppelin.config = {
+    charts: '../charts/'
+  };
+
+  //Helper function to map csv from zeppelin into json
+  zeppelin.csvtoJSON = function(csv) {
+
+    var lines = csv.split('\n');
+    var result = [];
+    var headers = lines[0].split('\t');
+
+    for (var i = 1; i < lines.length; i++) {
+      var obj = {};
+      var currentline = lines[i].split('\t');
+
+      for (var j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentline[j];
+      }
+
+      result.push(obj);
+
+    }
+    
+    return result; //JavaScript object
+  };
+  // debugger;
+  // condocument.currentScript;
+
+  //To import webcomponents on the fly
+  //Path: Path of element.
+  //onload: Callback on successfull load
+  //onerror: Callback on loading failure
+  zeppelin.importElem = function(path, onload, onerror) {
+
+    var link = document.createElement('link');
+            link.setAttribute('rel', 'import');
+            link.setAttribute('href', zeppelin.config.charts+path+'/'+path+'.html');
+            this.appendChild(link);
+            link.onload = onload;
+
+    // Polymer.Base.importHref(zeppelin.config.charts+path+'/'+path+'.html', function(success) {
+    //   onload(success);
+    // }, function(error) {
+    //   onerror(error);
+    // });
+  };
+
+})();
+</script><!-- Local components -->
+<!-- <link rel="import" href="chart-viewconfig.html"> -->
+<!-- External libraries -->
+
+
+<!-- Utilities -->
+
+
+<dom-module id="zeppelin-paragraph" assetpath="zeppelin-notebook/zeppelin-paragraph/">
+
+  <link rel="import" type="css" href="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.css">
+
+  <template>
+
+    <iron-ajax id="ajax" on-response="handleResponse" handle-as="json"></iron-ajax>
+    <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST" handle-as="json"></iron-ajax>
+
+    <article class="card">
+
+      <!-- Title -->
+      <header>
+        <h2>[[paragraph.title]]</h2>      
+      </header>
+
+      <!-- Zeppelin top menu -->
+      <ul class="topbar">
+        <li><button on-tap="runParagraph">Run</button></li>
+        <!-- <li><iron-icon icon="icons:update"></iron-icon></li>
+        <li>Run</li>
+        <li>Editor</li>
+        <li>Ouput</li>
+        <li>Settings</li> -->
+      </ul>
+
+      <!-- ACE Editor -->
+      <!-- {{content}} -->
+      <section class="ace-editor">
+        <editor-view editor-id="[[ paragraph.id ]]" content="{{ paragraph.text }}"></editor-view>
+      </section>
+
+      <!-- Visualization of results -->
+      <section class="visualization">
+        <template is="dom-if" if="[[ templatetype.html ]]" restamp="">
+          <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph.result ]]"></html-view>
+        </template>
+        <template is="dom-if" if="{{ templatetype.graph }}" restamp="">
+          <chart-view paragraph="[[ paragraph ]]" charts="[[ charts ]]"></chart-view>
+        </template>
+      </section>
+
+    </article>
+
+  </template>
+
+  <script src="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.js">Polymer({
+
+  is: 'zeppelin-paragraph',
+
+  properties: {
+
+    //Paragraph object
+    paragraph: {
+      type: Object,
+      value: {
+        config: {},
+        result: {},
+        id: null,
+        status: '',
+        text: '',
+        jobName: ''
+      }
+    },
+    // import dependency charts
+    charts: {
+      type: Array
+    },
+
+    //The content that fills ACE Editor
+    content: {
+      type: String
+    },
+
+    //Results that go to the place where results are shown(graph, html, table)
+    result: {
+      type: Object
+    },
+
+    //Helps to determine and show what's the out put from zeppelin backend
+    templatetype: {
+      type: Object,
+      value: {
+        html: false,
+        text: false,
+        graph: false
+      }
+    },
+
+    //base url for zeppelin `http://localhost:8080/#/api` by default
+    zeppelinUrl: {
+      type: String,
+      value: 'http://localhost:8080/api'
+    }
+  },
+  
+  ready: function() {
+
+    //To Do: Ajax only if data isn't passed down by notebook
+    this.async(function() {
+      this.$.ajax.url = this.zeppelinUrl + '/notebook/2A94M5J1Z/paragraph/20150212-145404_867439529';
+      this.$.ajax.method = 'GET';
+      this.$.ajax.generateRequest();
+    });
+  },
+  
+  //Handles API Response  and sets 
+  handleResponse: function(response) {
+    var res = response.detail.response.body;
+    this.set('paragraph', res);
+    this.fillTemplate(res.result.type);
+  },
+  
+  //Selects template type to fill.
+  fillTemplate: function(resultType) {
+
+    switch (resultType) {
+      case 'HTML':
+      case 'TEXT':
+      case 'ANGULAR':
+        this.set('templatetype.html', true);
+        break;
+      case 'TABLE':
+        this.set('templatetype.graph', true);
+        break;
+    }
+  },
+
+  //Runs Paragraph
+  runParagraph: function() {
+    this.$.ajaxPost.url = this.zeppelinUrl + '/notebook/job/2A94M5J1Z/' + this.paragraph.id;
+    this.$.ajaxPost.method = 'POST';
+    this.$.ajaxPost.body = JSON.stringify(this.paragraph);
+    this.$.ajaxPost.generateRequest();
+  },
+  //Handler for run
+  handlePOST: function(res) {
+    console.info(res.detail.response.status);
+  }
+
+});
+</script>
+
+</dom-module>
+<dom-module id="zeppelin-notebook" assetpath="zeppelin-notebook/">
+	<template>
+		I am zeppelin-notebook
+		<zeppelin-paragraph></zeppelin-paragraph>
+		
+	</template>
+	<script src="zeppelin-notebook/zeppelin-notebook.js">Polymer({
+
+  is: 'zeppelin-notebook'
+});</script>
+</dom-module></div><dom-module id="zeppelin-viewer">
+  <template>
+    <zeppelin-notebook></zeppelin-notebook>
+  </template>
+
+  <script src="zeppelin-viewer.js">
+  Polymer({
+
+  is: 'zeppelin-viewer',
+
+  properties: {
+
+    // URL for zeppelin
+    zeppelinUrl: {
+      type: String,
+      value: 'http://localhost:8080/api/notebook'
+    }
+  }
+
+});
+</script>
+</dom-module>
+</body></html>

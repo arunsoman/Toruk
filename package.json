@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup": "npm install && bower install",
     "lint": "eslint 'src/**/*.js' ",
-    "server": "gulp browser-sync"
+    "server": "gulp browser-sync",
+    "vulcanize": "gulp vulcanize"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,7 @@
     "eslint": "^3.1.1",
     "eslint-config-google": "^0.6.0",
     "gulp": "^3.9.1",
-    "polymer-cli": "^0.12.0",
-    "vulcanize": "^1.14.8"
+    "gulp-vulcanize": "^6.1.0",
+    "polymer-cli": "^0.12.0"
   }
 }
