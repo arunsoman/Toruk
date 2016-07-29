@@ -11,9 +11,9 @@ var CONSTS = {
 gulp.task('vulcanize', function () {
     return gulp.src('src/zeppelin-viewer.html')
       .pipe(vulcanize({
-          abspath: '',
-          excludes: [],
-          stripExcludes: false
+        stripComments: true,
+        inlineCss: true,
+        inlineScripts: true
       }))
       .pipe(gulp.dest('dist'));
 });
