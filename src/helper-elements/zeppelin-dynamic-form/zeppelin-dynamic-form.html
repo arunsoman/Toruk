@@ -1,0 +1,40 @@
+<!--
+Creates a dynamic form from object -forms of structure
+  formObject: {
+    maxAge: {
+      name: "maxAge",
+      defaultValue: " 64",
+      hidden: false
+    }
+    maxBal: {
+      name: "maxBal",
+      defaultValue: "45",
+      hidden: false
+    } 
+  }
+-->
+<link rel="import" href="zeppelin-dynamic-input/zeppelin-dynamic-input.html">
+<dom-module id="zeppelin-dynamic-form">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      zeppelin-dynamic-input {
+        display: inline-block;
+        width: 40%;
+      }
+    </style>
+    <form is="iron-form" id="zep-dynamic-form">
+      <template is="dom-repeat" items="{{formArray}}">
+        <!-- This element is introduced to solve a  complexity in zeppelin Dynamic input -->
+        <!-- Zeppelin generates dnamic inputs from the object paragraph.settings.froms  -->
+        <!-- But the value from form is passed to zeppelin.paragraph.settings.params  -->
+        <!-- And we cant dom-repeat on objects -->
+        <zeppelin-dynamic-input form="[[form]]" params="{{ params }}" mapped-obj="{{item}}"></zeppelin-dynamic-input>
+      </template>      
+    </form>
+  </template>
+  <script src="zeppelin-dynamic-form.js">
+  </script>
+</dom-module>

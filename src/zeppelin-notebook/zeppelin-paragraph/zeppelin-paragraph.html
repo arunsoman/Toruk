@@ -1,0 +1,64 @@
+<!-- Polymer dependencies -->
+<link rel="import" href="../../helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-form.html">
+
+<!-- Local components -->
+<link rel="import" href="editor-view/editor-view.html">
+<!-- <link rel="import" href="chart-viewconfig.html"> -->
+<link rel="import" href="chart-view/chart-view.html">
+<link rel="import" href="html-view/html-view.html">
+
+<!-- External libraries -->
+
+
+<!-- Utilities -->
+<script src="../../zeppelin.js"></script>
+
+<dom-module id="zeppelin-paragraph">
+
+  <link rel="import" type="css" href="zeppelin-paragraph.css">
+
+  <template>
+
+    <iron-ajax id="ajax" on-response="handleResponse"  handle-as="json"></iron-ajax>
+    <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST"  handle-as="json"></iron-ajax>
+
+    <article class="card">
+
+      <!-- Title -->
+      <header>
+        <h2>[[paragraph.title]]</h2>      
+      </header>
+
+      <!-- Zeppelin top menu -->
+      <ul class="topbar">
+        <li><button on-tap="runParagraph">Run</button></li>
+        <!-- <li><iron-icon icon="icons:update"></iron-icon></li>
+        <li>Run</li>
+        <li>Editor</li>
+        <li>Ouput</li>
+        <li>Settings</li> -->
+      </ul>
+
+      <!-- ACE Editor -->
+      <!-- {{content}} -->
+      <section class="ace-editor">
+        <editor-view editor-id="[[ paragraph.id ]]" content="{{ paragraph.text }}"></editor-view>
+      </section>
+
+      <!-- Visualization of results -->
+      <section class="visualization">
+        <template is="dom-if" if="[[ templatetype.html ]]" restamp>
+          <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph.result ]]"></html-view>
+        </template>
+        <template is="dom-if" if="{{ templatetype.graph }}" restamp>
+          <chart-view paragraph="[[ paragraph ]]" charts="[[ charts ]]"></chart-view>
+        </template>
+      </section>
+
+    </article>
+
+  </template>
+
+  <script src="zeppelin-paragraph.js"></script>
+
+</dom-module>

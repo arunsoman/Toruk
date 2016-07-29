@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm install && bower install"
+    "setup": "npm install && bower install",
+    "lint": "eslint 'src/**/*.js' ",
+    "polymer": "browser-sync"
   },
   "repository": {
     "type": "git",
@@ -24,8 +26,10 @@
   "homepage": "https://github.com/arunsoman/zeppelin-viewer#readme",
   "devDependencies": {
     "bower": "^1.7.9",
+    "browser-sync": "^2.13.0",
     "dryice": "^0.4.11",
     "eslint": "^3.1.1",
+    "gulp": "^3.9.1",
     "polymer-cli": "^0.12.0",
     "vulcanize": "^1.14.8"
   }
