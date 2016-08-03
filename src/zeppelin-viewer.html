@@ -1,14 +1,19 @@
-<!-- <link rel="import" href="zeppelin-notebook/zeppelin-notebook.html"> -->
+<dom-module id="zeppelin-viewer">
+
 <link rel="import" href="zeppelin-notebooks/zeppelin-notebooks.html">
 <link rel="import" href="zeppelin-notebook/zeppelin-notebook.html">
 <link rel="import" href="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.html">
-<dom-module id="zeppelin-viewer">
-  <template>
-    <zeppelin-notebooks url ="[[ zeppelinUrl ]]"></zeppelin-notebooks>
-    <zeppelin-notebook url ="[[ zeppelinUrl ]]" notebook-id="2A94M5J1Z"></zeppelin-notebook>
-    <!-- <zeppelin-paragraph url ="[[ zeppelinUrl ]]" notebook-id="2A94M5J1Z" paragraph-id="20150212-145404_867439529"></zeppelin-paragraph> -->
-  </template>
+<link rel="import" type="css" href="zeppelin-viewer.css">
 
-  <script src="zeppelin-viewer.js">
-  </script>
+    <template>
+        <zeppelin-notebooks url="[[ zeppelinUrl ]]"></zeppelin-notebooks>
+        <ul>
+            <li on-tap="simpleView">Compact View</li>
+            <li on-tap="editorView">Editor View</li>
+        </ul>
+        <zeppelin-notebook url="[[ zeppelinUrl ]]" notebook-id="2A94M5J1Z" editor="[[ editor ]]" class="noselect"></zeppelin-notebook>
+        <!-- <zeppelin-paragraph url ="[[ zeppelinUrl ]]" notebook-id="2A94M5J1Z" paragraph-id="20150212-145404_867439529"></zeppelin-paragraph> -->
+    </template>
+    <script src="zeppelin-viewer.js">
+    </script>
 </dom-module>

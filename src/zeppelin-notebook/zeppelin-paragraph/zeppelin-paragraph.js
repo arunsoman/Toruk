@@ -45,26 +45,17 @@ Polymer({
     },
 
     // //base url for zeppelin `http://localhost:8080/#/api` by default
-    // zeppelinUrl: {
+    // url: {
     //   type: String,
     //   value: 'http://localhost:8080/api'
     // }
-  },
-  
-  ready: function() {
-
-    // //To Do: Ajax only if data isn't passed down by notebook
-    // this.async(function() {
-    //   this.$.ajax.url = this.zeppelinUrl + '/notebook/2A94M5J1Z/paragraph/20150212-145404_867439529';
-    //   this.$.ajax.method = 'GET';
-    //   this.$.ajax.generateRequest();
-    // });
   },
   
   //Handles API Response  and sets 
   handleResponse: function(response) {
     var res = response.detail.response.body;
     this.set('paragraph', res);
+    this.set('grid',res.config.colWidth);
     if(res.result){
       this.fillTemplate(res.result.type);
     }
@@ -87,7 +78,7 @@ Polymer({
 
   //Runs Paragraph
   runParagraph: function() {
-    this.$.ajaxPost.url = this.zeppelinUrl + '/notebook/job/2A94M5J1Z/' + this.paragraph.id;
+    this.$.ajaxPost.url = this.url + '/notebook/job/2A94M5J1Z/' + this.paragraph.id;
     this.$.ajaxPost.method = 'POST';
     this.$.ajaxPost.body = JSON.stringify(this.paragraph);
     this.$.ajaxPost.generateRequest();

@@ -1,64 +1,74 @@
-<!-- Polymer dependencies -->
-<link rel="import" href="../../helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-form.html">
-
-<!-- Local components -->
-<link rel="import" href="editor-view/editor-view.html">
-<!-- <link rel="import" href="chart-viewconfig.html"> -->
-<link rel="import" href="chart-view/chart-view.html">
-<link rel="import" href="html-view/html-view.html">
-
-<!-- External libraries -->
-
-
-<!-- Utilities -->
-<script src="../../zeppelin.js"></script>
-
 <dom-module id="zeppelin-paragraph">
-
-  <link rel="import" type="css" href="zeppelin-paragraph.css">
-
-  <template>
-
-    <iron-ajax auto id="ajax" url="[[ url ]]notebook/[[ notebookId ]]/paragraph/[[ paragraphId ]]" on-response="handleResponse"  handle-as="json"></iron-ajax>
-    <!-- <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST"  handle-as="json"></iron-ajax> -->
-
-    <article class="card">
-
-      <!-- Title -->
-      <header>
-        <h2>[[paragraph.title]]</h2>      
-      </header>
-
-      <!-- Zeppelin top menu -->
-      <ul class="topbar">
-        <li><button on-tap="runParagraph">Run</button></li>
-        <!-- <li><iron-icon icon="icons:update"></iron-icon></li>
-        <li>Run</li>
-        <li>Editor</li>
-        <li>Ouput</li>
-        <li>Settings</li> -->
-      </ul>
-
-      <!-- ACE Editor -->
-      <!-- {{content}} -->
-      <section class="ace-editor">
-        <editor-view editor-id="[[ paragraph.id ]]" content="{{ paragraph.text }}"></editor-view>
-      </section>
-
-      <!-- Visualization of results -->
-      <section class="visualization">
-        <template is="dom-if" if="[[ templatetype.html ]]" restamp>
-          <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph.result ]]"></html-view>
-        </template>
-        <template is="dom-if" if="{{ templatetype.graph }}" restamp>
-          <chart-view paragraph="[[ paragraph ]]" charts="[[ charts ]]"></chart-view>
-        </template>
-      </section>
-
-    </article>
-
-  </template>
-
-  <script src="zeppelin-paragraph.js"></script>
-
+    <!-- Polymer dependencies -->
+    <link rel="import" href="../../helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-form.html">
+    <!-- Local components -->
+    <link rel="import" href="editor-view/editor-view.html">
+    <!-- <link rel="import" href="chart-viewconfig.html"> -->
+    <link rel="import" href="chart-view/chart-view.html">
+    <link rel="import" href="html-view/html-view.html">
+    <link rel="import" href="zeppelin-resizer/zeppelin-resizer.html">
+    <!-- External libraries -->
+    <!-- Utilities -->
+    <script src="../../zeppelin.js"></script>
+    <link rel="import" type="css" href="zeppelin-paragraph.css">
+    <template>
+        <iron-ajax auto id="ajax" url="[[ url ]]notebook/[[ notebookId ]]/paragraph/[[ paragraphId ]]" on-response="handleResponse" handle-as="json"></iron-ajax>
+        <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST" handle-as="json"></iron-ajax>
+        <div class$="col-md-[[ grid ]] col">
+            <article class$="card  editor-[[ editor ]]" id="article">
+                <template is="dom-if" if="[[ editor ]]" restamp>
+                    <!-- Title -->
+                    <header>
+                        <h2>[[paragraph.title]] Untitled</h2>
+                    </header>
+                    <ul class="topbar">
+                        <li>
+                            <paper-button raised on-tap="runParagraph">Run</paper-button>
+                        </li>
+                        <li>
+                            <paper-dropdown-menu label="Grid">
+                                <paper-menu attr-for-selected="value" selected="{{ grid }}" class="dropdown-content">
+                                    <paper-item value="1">1</paper-item>
+                                    <paper-item value="2">2</paper-item>
+                                    <paper-item value="3">3</paper-item>
+                                    <paper-item value="4">4</paper-item>
+                                    <paper-item value="5">5</paper-item>
+                                    <paper-item value="6">6</paper-item>
+                                    <paper-item value="7">7</paper-item>
+                                    <paper-item value="8">8</paper-item>
+                                    <paper-item value="9">9</paper-item>
+                                    <paper-item value="10">10</paper-item>
+                                    <paper-item value="11">11</paper-item>
+                                    <paper-item value="12">12</paper-item>
+                                </paper-menu>
+                            </paper-dropdown-menu>
+                        </li>
+                        <!-- <li><iron-icon icon="icons:update"></iron-icon></li>
+          <li>Run</li>
+          <li>Editor</li>
+          <li>Ouput</li>
+          <li>Settings</li> -->
+                    </ul>
+                    <!-- ACE Editor -->
+                    <!-- {{content}} -->
+                    <section class="ace-editor">
+                        <editor-view editor-id="[[ paragraph.id ]]" content="{{ paragraph.text }}"></editor-view>
+                    </section>
+                    <div class="drag-me">
+                        <zeppelin-resizer grid="{{ grid }}"></zeppelin-resizer>
+                    </div>
+                </template>
+                <!-- Visualization of results -->
+                <section class="visualization">
+                    <template is="dom-if" if="[[ templatetype.html ]]" restamp>
+                        <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph.result ]]"></html-view>
+                    </template>
+                    <template is="dom-if" if="{{ templatetype.graph }}" restamp>
+                        <chart-view paragraph="[[ paragraph ]]" charts="[[ charts ]]"></chart-view>
+                    </template>
+                </section>
+            </article>
+        </div>
+    </template>
+    <script src="zeppelin-paragraph.js"></script>
 </dom-module>

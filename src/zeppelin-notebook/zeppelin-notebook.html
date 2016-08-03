@@ -3,7 +3,7 @@
 	<template>
     	<iron-ajax auto id="ajax" url="[[ url ]]notebook/job/[[ notebookId ]]" on-response="handleResponse"  handle-as="json"></iron-ajax>
 		<template is="dom-repeat" items="[[ responseItems ]]">
-			<zeppelin-paragraph notebook-id="[[ notebookId ]]" url="[[ url ]]" paragraph-id="[[ item.id ]]"></zeppelin-paragraph>
+			<zeppelin-paragraph editor="[[ editor ]]" notebook-id="[[ notebookId ]]" url="[[ url ]]" paragraph-id="[[ item.id ]]"></zeppelin-paragraph>
 		</template>
 		
 	</template>
