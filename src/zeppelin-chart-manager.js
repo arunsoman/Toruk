@@ -22,7 +22,7 @@ Polymer({
       var firstRow = lines[1].split('\t');
 
       for (var key in headers) {
-        var type = me.getType(firstRow[key]);
+        var type = me.getDataType(firstRow[key]);
         headerObj.push({
           'key': headers[key],
           'value': key,
@@ -36,7 +36,8 @@ Polymer({
         var currentline = lines[i].split('\t');
 
         for (var j = 0; j < headers.length; j++) {
-          obj.push(currentline[j]);
+          var converted = me.convertData(currentline[j], headerObj[j].type);
+          obj.push(converted);
         }
 
         result.push(obj);
@@ -48,7 +49,8 @@ Polymer({
 
 
   },
-  getType: function(data) {
+
+  getDataType: function(data) {
     var result = '';
     if (data.match(/^\d+$/g)) {
       result = "Number";
@@ -56,6 +58,21 @@ Polymer({
       result = "Date";
     } else {
       result = "String";
+    }
+    return result;
+  },
+
+  convertData: function(data, type) {
+    var result;
+    switch (type) {
+      case "Number":
+        result = parseInt(data);
+        break;
+      case "Date":
+        result = new Date(data);
+        break;
+      default:
+        result = data;
     }
     return result;
   }
