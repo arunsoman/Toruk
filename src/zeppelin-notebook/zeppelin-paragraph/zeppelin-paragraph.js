@@ -9,7 +9,6 @@ Polymer({
       type: Object,
       value: {
         config: {},
-        result: {},
         id: null,
         status: '',
         text: '',
@@ -21,7 +20,8 @@ Polymer({
     },
     // import dependency charts
     charts: {
-      type: Array
+      type: Array,
+      notify:true
     },
 
     //The content that fills ACE Editor
@@ -43,12 +43,34 @@ Polymer({
         graph: false
       }
     },
+    formObjects:{
+      type:Array,
+      value:[]
+    },
+    data:{
+      type:Object,
+      value:{
+        external:[],
+        source:[]
+      }
+    }
 
     // //base url for zeppelin `http://localhost:8080/#/api` by default
     // url: {
     //   type: String,
     //   value: 'http://localhost:8080/api'
     // }
+  },
+  observers:['_convertObjects(paragraph.settings.forms)'],
+
+  _convertObjects:function(item){
+    if(item){
+      var objectKey = Object.keys(item);
+      var me = this;
+      objectKey.forEach(function(a){
+        me.push('formObjects',me.get('paragraph.settings.forms.'+a));
+      });
+    }
   },
   
   //Handles API Response  and sets 

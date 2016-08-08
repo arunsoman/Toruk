@@ -4,9 +4,9 @@
     <!-- Local components -->
     <link rel="import" href="editor-view/editor-view.html">
     <!-- <link rel="import" href="chart-viewconfig.html"> -->
-    <link rel="import" href="chart-view/chart-view.html">
     <link rel="import" href="html-view/html-view.html">
     <link rel="import" href="zeppelin-resizer/zeppelin-resizer.html">
+    <link rel="import" href="../../zeppelin-chart-manager.html">
     <!-- External libraries -->
     <!-- Utilities -->
     <script src="../../zeppelin.js"></script>
@@ -14,7 +14,7 @@
     <template>
         <iron-ajax auto id="ajax" url="[[ url ]]notebook/[[ notebookId ]]/paragraph/[[ paragraphId ]]" on-response="handleResponse" handle-as="json"></iron-ajax>
         <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST" handle-as="json"></iron-ajax>
-        <div class$="col-md-[[ grid ]] col">
+        <div class$="col-md-[[ paragraph.config.colWidth ]] col">
             <article class$="card  editor-[[ editor ]]" id="article">
                 <template is="dom-if" if="[[ editor ]]" restamp>
                     <!-- Title -->
@@ -23,31 +23,32 @@
                     </header>
                     <ul class="topbar">
                         <li>
-                            <paper-button raised on-tap="runParagraph">Run</paper-button>
+                            <paper-icon-button icon="chevron-right" on-tap="runParagraph">Run</paper-icon-button>
+                            <paper-icon-button icon="arrow-upward" on-tap="moveUp"></paper-icon-button>
+                            <paper-icon-button icon="arrow-downward" on-tap="moveDown"></paper-icon-button>
+                            <paper-icon-button icon="list" on-tap="hideNumber"></paper-icon-button>
+                            <paper-icon-button icon="clear" on-tap="removeParagraph"></paper-icon-button>
+                            <paper-icon-button icon="add" on-tap="addParagraph"></paper-icon-button>
+                            <paper-icon-button icon="more-vert"></paper-icon-button>
+                            <iron-dropdown horizontal-align="right" vertical-align="top">
+                                <paper-dropdown-menu label="Grid">
+                                    <paper-menu attr-for-selected="value" selected="{{ paragraph.config.colWidth }}" class="dropdown-content">
+                                        <paper-item value="1">1</paper-item>
+                                        <paper-item value="2">2</paper-item>
+                                        <paper-item value="3">3</paper-item>
+                                        <paper-item value="4">4</paper-item>
+                                        <paper-item value="5">5</paper-item>
+                                        <paper-item value="6">6</paper-item>
+                                        <paper-item value="7">7</paper-item>
+                                        <paper-item value="8">8</paper-item>
+                                        <paper-item value="9">9</paper-item>
+                                        <paper-item value="10">10</paper-item>
+                                        <paper-item value="11">11</paper-item>
+                                        <paper-item value="12">12</paper-item>
+                                    </paper-menu>
+                                </paper-dropdown-menu>
+                            </iron-dropdown>
                         </li>
-                        <li>
-                            <paper-dropdown-menu label="Grid">
-                                <paper-menu attr-for-selected="value" selected="{{ grid }}" class="dropdown-content">
-                                    <paper-item value="1">1</paper-item>
-                                    <paper-item value="2">2</paper-item>
-                                    <paper-item value="3">3</paper-item>
-                                    <paper-item value="4">4</paper-item>
-                                    <paper-item value="5">5</paper-item>
-                                    <paper-item value="6">6</paper-item>
-                                    <paper-item value="7">7</paper-item>
-                                    <paper-item value="8">8</paper-item>
-                                    <paper-item value="9">9</paper-item>
-                                    <paper-item value="10">10</paper-item>
-                                    <paper-item value="11">11</paper-item>
-                                    <paper-item value="12">12</paper-item>
-                                </paper-menu>
-                            </paper-dropdown-menu>
-                        </li>
-                        <!-- <li><iron-icon icon="icons:update"></iron-icon></li>
-          <li>Run</li>
-          <li>Editor</li>
-          <li>Ouput</li>
-          <li>Settings</li> -->
                     </ul>
                     <!-- ACE Editor -->
                     <!-- {{content}} -->
@@ -55,16 +56,34 @@
                         <editor-view editor-id="[[ paragraph.id ]]" content="{{ paragraph.text }}"></editor-view>
                     </section>
                     <div class="drag-me">
-                        <zeppelin-resizer grid="{{ grid }}"></zeppelin-resizer>
+                        <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
                     </div>
                 </template>
                 <!-- Visualization of results -->
                 <section class="visualization">
+                    <!-- options -->
+                    <div class="options">
+                        <template is="dom-repeat" items="{{ formObjects }}">
+                            <template is="dom-if" if="[[ !item.options ]]">
+                                <paper-input label="[[ item.name ]]" value="[[ item.defaultValue ]]"></paper-input>
+                            </template>
+                            <template is="dom-if" if="[[ item.options ]]">
+                                <paper-dropdown-menu label="[[ item.name ]]">
+                                    <paper-menu attr-for-selected="value" class="dropdown-content">
+                                        <template is="dom-repeat" items="[[ item.options ]]">
+                                            <paper-item value="[[ item.value ]]">[[ item.value ]]</paper-item>
+                                        </template>
+                                    </paper-menu>
+                                </paper-dropdown-menu>
+                            </template>
+                        </template>
+                    </div>
+                    <!-- / options -->
                     <template is="dom-if" if="[[ templatetype.html ]]" restamp>
                         <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph.result ]]"></html-view>
                     </template>
                     <template is="dom-if" if="{{ templatetype.graph }}" restamp>
-                        <chart-view paragraph="[[ paragraph ]]" charts="[[ charts ]]"></chart-view>
+                        <zeppelin-chart-manager data="{{ paragraph }}"></zeppelin-chart-manager>
                     </template>
                 </section>
             </article>

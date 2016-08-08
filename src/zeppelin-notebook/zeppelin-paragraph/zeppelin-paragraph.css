@@ -38,6 +38,11 @@
   pointer-events: none;
   z-index: 5;
 }
+.options{
+  display: flex;
+  -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
 ::content code{
     white-space: normal;
 }
@@ -97,3 +102,6 @@
     width: 100%!important;
 }
 }
+.iron-selected {
+      background: #eee;
+    }

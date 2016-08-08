@@ -1,9 +1,12 @@
 <link rel="import" href="zeppelin-paragraph/zeppelin-paragraph.html">
+<link rel="import" href="../zeppelin-chart-manager.html">
 <dom-module id="zeppelin-notebook">
 	<template>
     	<iron-ajax auto id="ajax" url="[[ url ]]notebook/job/[[ notebookId ]]" on-response="handleResponse"  handle-as="json"></iron-ajax>
-		<template is="dom-repeat" items="[[ responseItems ]]">
-			<zeppelin-paragraph editor="[[ editor ]]" notebook-id="[[ notebookId ]]" url="[[ url ]]" paragraph-id="[[ item.id ]]"></zeppelin-paragraph>
+		<template is="dom-repeat" items="[[ responseItems ]]" id="repeater">
+			<zeppelin-paragraph editor="[[ editor ]]" notebook-id="[[ notebookId ]]" url="[[ url ]]" paragraph-id="[[ item.id ]]">
+				<zeppelin-chart-manager></zeppelin-chart-manager>
+			</zeppelin-paragraph>
 		</template>
 		
 	</template>
