@@ -4,10 +4,10 @@ Polymer({
 
   properties: {
 
-    // URL for zeppelin
-    zeppelinUrl: {
+    // Websocket Url for zeppelin
+    WS:{
       type: String,
-      value: 'http://localhost:8080/api/'
+      value: 'ws://localhost:8080/ws/'
     },
     editor:{
     	type:Boolean,

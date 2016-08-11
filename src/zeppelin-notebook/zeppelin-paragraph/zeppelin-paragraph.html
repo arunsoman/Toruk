@@ -12,10 +12,8 @@
     <script src="../../zeppelin.js"></script>
     <link rel="import" type="css" href="zeppelin-paragraph.css">
     <template>
-        <iron-ajax auto id="ajax" url="[[ url ]]notebook/[[ notebookId ]]/paragraph/[[ paragraphId ]]" on-response="handleResponse" handle-as="json"></iron-ajax>
-        <iron-ajax id="ajaxPost" method="POST" on-response="handlePOST" handle-as="json"></iron-ajax>
-        <div class$="col-md-[[ paragraph.config.colWidth ]] col">
-            <article class$="card  editor-[[ editor ]]" id="article">
+        <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
+            <article class$="card  editor-[[ editor ]]">
                 <template is="dom-if" if="[[ editor ]]" restamp>
                     <!-- Title -->
                     <header>
@@ -23,15 +21,27 @@
                     </header>
                     <ul class="topbar">
                         <li>
-                            <paper-icon-button icon="chevron-right" on-tap="runParagraph">Run</paper-icon-button>
-                            <paper-icon-button icon="arrow-upward" on-tap="moveUp"></paper-icon-button>
-                            <paper-icon-button icon="arrow-downward" on-tap="moveDown"></paper-icon-button>
-                            <paper-icon-button icon="list" on-tap="hideNumber"></paper-icon-button>
-                            <paper-icon-button icon="clear" on-tap="removeParagraph"></paper-icon-button>
-                            <paper-icon-button icon="add" on-tap="addParagraph"></paper-icon-button>
-                            <paper-icon-button icon="more-vert"></paper-icon-button>
-                            <iron-dropdown horizontal-align="right" vertical-align="top">
-                                <paper-dropdown-menu label="Grid">
+                            <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]">
+                                Pending
+                            </template>
+                            <template is="dom-if" if="[[ eq(paragraph.status,'FINISHED') ]]">
+                                <paper-icon-button icon="chevron-right" on-tap="runParagraph">Run</paper-icon-button>
+                            </template>
+                            <template is="dom-if" if="[[ eq(paragraph.status,'ERROR') ]]">
+                                <iron-icon icon="warning" title="Error"></iron-icon>
+                                <paper-icon-button icon="chevron-right" title="Run" on-tap="runParagraph"></paper-icon-button>
+                            </template>
+                            <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
+                            <iron-dropdown horizontal-align="right" noOverlap id="navdrop" vertical-align="top">
+                                <div class="dropdown-content">
+                                    <paper-icon-button icon="arrow-upward" on-tap="moveUp" title="Move Up"></paper-icon-button>
+                                    <paper-icon-button icon="arrow-downward" on-tap="moveDown" title="Move Down"></paper-icon-button>
+                                    <paper-icon-button icon="list" on-tap="hideNumber" title="Toggle line number"></paper-icon-button>
+                                    <paper-icon-button icon="clear" on-tap="removeParagraph" title="Delete Paragraph"></paper-icon-button>
+                                    <paper-icon-button icon="add" on-tap="addParagraph" title="Add Paragraph"></paper-icon-button>
+                                    <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
+                                </div>
+                                <!-- <paper-dropdown-menu label="Grid">
                                     <paper-menu attr-for-selected="value" selected="{{ paragraph.config.colWidth }}" class="dropdown-content">
                                         <paper-item value="1">1</paper-item>
                                         <paper-item value="2">2</paper-item>
@@ -46,20 +56,23 @@
                                         <paper-item value="11">11</paper-item>
                                         <paper-item value="12">12</paper-item>
                                     </paper-menu>
-                                </paper-dropdown-menu>
+                                </paper-dropdown-menu> -->
                             </iron-dropdown>
                         </li>
                     </ul>
                     <!-- ACE Editor -->
                     <!-- {{content}} -->
                     <section class="ace-editor">
-                        <editor-view editor-id="[[ paragraph.id ]]" content="{{ paragraph.text }}"></editor-view>
+                        <editor-view paragraph="[[ paragraph ]]" settings="[[ settings ]]" id="editor"></editor-view>
                     </section>
                     <div class="drag-me">
                         <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
                     </div>
                 </template>
                 <!-- Visualization of results -->
+                <template is="dom-if" if="[[ eq(settings.progress,paragraph.id) ]]">
+                    <paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
+                </template>
                 <section class="visualization">
                     <!-- options -->
                     <div class="options">
@@ -80,7 +93,8 @@
                     </div>
                     <!-- / options -->
                     <template is="dom-if" if="[[ templatetype.html ]]" restamp>
-                        <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph.result ]]"></html-view>
+                        [[ paragraph.result.msg ]]
+                        <!-- <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph ]]"></html-view> -->
                     </template>
                     <template is="dom-if" if="{{ templatetype.graph }}" restamp>
                         <zeppelin-chart-manager data="{{ paragraph }}"></zeppelin-chart-manager>

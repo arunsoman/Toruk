@@ -6,22 +6,21 @@ Polymer({
 
     //Paragraph object
     paragraph: {
-      type: Object,
-      value: {
-        config: {},
-        id: null,
-        status: '',
-        text: '',
-        jobName: ''
-      }
+      type: Object
     },
-    notebookId:{
-      type:String
+    notebookId: {
+      type: String,
+      value: "2A94M5J1Z"
     },
     // import dependency charts
     charts: {
       type: Array,
-      notify:true
+      notify: true
+    },
+
+    wsData: {
+      type: Object,
+      notify: true
     },
 
     //The content that fills ACE Editor
@@ -34,6 +33,10 @@ Polymer({
       type: Object
     },
 
+    editorShowLine: {
+      type: Boolean,
+      value: true
+    },
     //Helps to determine and show what's the out put from zeppelin backend
     templatetype: {
       type: Object,
@@ -43,46 +46,86 @@ Polymer({
         graph: false
       }
     },
-    formObjects:{
-      type:Array,
-      value:[]
-    },
-    data:{
-      type:Object,
-      value:{
-        external:[],
-        source:[]
+
+    data: {
+      type: Object,
+      value: {
+        external: [],
+        source: []
       }
     }
-
-    // //base url for zeppelin `http://localhost:8080/#/api` by default
-    // url: {
-    //   type: String,
-    //   value: 'http://localhost:8080/api'
-    // }
   },
-  observers:['_convertObjects(paragraph.settings.forms)'],
+  observers: ['_changeId(paragraph)','_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)'],
 
-  _convertObjects:function(item){
-    if(item){
+  __attached: function() {
+
+    if (this.paragraph.result) {
+      this.fillTemplate(this.paragraph.result.type);
+    }
+    this.push('settings.order',this.paragraph.id);
+
+  },
+  showDropDown:function(){
+    this.$$('#navdrop').open();
+  },
+
+  _changeId:function(data){
+    if (this.paragraph.result) {
+      this.fillTemplate(this.paragraph.result.type);
+    }
+    //this.push('settings.order',this.paragraph.id);
+  },
+  _convertObjects: function(item) {
+    this.formObjects = [];
+    if (item) {
       var objectKey = Object.keys(item);
       var me = this;
-      objectKey.forEach(function(a){
-        me.push('formObjects',me.get('paragraph.settings.forms.'+a));
+      objectKey.forEach(function(a) {
+        me.push('formObjects', me.get('paragraph.settings.forms.' + a));
       });
     }
   },
-  
+
+  eq: function(a, b) {
+    return a === b;
+  },
+  not: function(a, b) {
+    return a !== b;
+  },
+
+  _gridChange: function(obj) {
+    if (obj.path === 'paragraph.config.colWidth') {
+      this._commit_paragraph();
+    }
+  },
+
+  _commit_paragraph: function() {
+    var postData = {
+      config: this.paragraph.config,
+      id: this.paragraph.id,
+      paragraph: this.paragraph.text
+    };
+    this.handlePOST({
+      op: "COMMIT_PARAGRAPH",
+      data: postData
+    });
+  },
+
+  hideNumber: function() {
+    this.set('editorShowLine', !this.editorShowLine);
+    this.$$('editor-view').editor.renderer.setShowGutter(this.editorShowLine);
+  },
+
   //Handles API Response  and sets 
   handleResponse: function(response) {
     var res = response.detail.response.body;
     this.set('paragraph', res);
-    this.set('grid',res.config.colWidth);
-    if(res.result){
+    this.set('grid', res.config.colWidth);
+    if (res.result) {
       this.fillTemplate(res.result.type);
     }
   },
-  
+
   //Selects template type to fill.
   fillTemplate: function(resultType) {
 
@@ -98,16 +141,75 @@ Polymer({
     }
   },
 
-  //Runs Paragraph
   runParagraph: function() {
-    this.$.ajaxPost.url = this.url + '/notebook/job/2A94M5J1Z/' + this.paragraph.id;
-    this.$.ajaxPost.method = 'POST';
-    this.$.ajaxPost.body = JSON.stringify(this.paragraph);
-    this.$.ajaxPost.generateRequest();
+    var postData = {
+      config: this.paragraph.config,
+      id: this.paragraph.id,
+      paragraph: this.paragraph.text
+    };
+    this.handlePOST({
+      op: "RUN_PARAGRAPH",
+      data: postData
+    });
+  },
+
+  addParagraph: function() {
+    var newIndex = parseInt(this.index) + 1;
+    this.handlePOST({
+      op: "INSERT_PARAGRAPH",
+      data: {
+        index: newIndex
+      }
+    });
+  },
+
+  removeParagraph: function() {
+    var newIndex = parseInt(this.index) + 1;
+    this.handlePOST({
+      op: "PARAGRAPH_REMOVE",
+      data: {
+        id: this.paragraph.id
+      }
+    });
+  },
+
+  moveDown: function(e) {
+    var newIndex = parseInt(this.index) + 1;
+
+    this.handlePOST({
+      op: "MOVE_PARAGRAPH",
+      data: {
+        id: this.paragraph.id,
+        index: newIndex
+      }
+    });
+  },
+
+  moveUp: function() {
+    var indexValue = parseInt(this.index);
+    var newIndex = indexValue > 0 ? indexValue - 1 : 0;
+
+    this.handlePOST({
+      op: "MOVE_PARAGRAPH",
+      data: {
+        id: this.paragraph.id,
+        index: newIndex
+      }
+    });
+  },
+  postResponse: function(res) {
+    console.info(res.detail.response.status);
   },
   //Handler for run
-  handlePOST: function(res) {
-    console.info(res.detail.response.status);
+  handlePOST: function(obj) {
+    var postObj = {
+      op: obj.op,
+      principal: "anonymous",
+      roles: "[]",
+      data: obj.data,
+      ticket: "anonymous"
+    }
+    this.set('wsData', postObj);
   }
 
 });

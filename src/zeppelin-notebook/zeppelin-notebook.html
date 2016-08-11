@@ -2,9 +2,11 @@
 <link rel="import" href="../zeppelin-chart-manager.html">
 <dom-module id="zeppelin-notebook">
 	<template>
-    	<iron-ajax auto id="ajax" url="[[ url ]]notebook/job/[[ notebookId ]]" on-response="handleResponse"  handle-as="json"></iron-ajax>
-		<template is="dom-repeat" items="[[ responseItems ]]" id="repeater">
-			<zeppelin-paragraph editor="[[ editor ]]" notebook-id="[[ notebookId ]]" url="[[ url ]]" paragraph-id="[[ item.id ]]">
+
+    	<web-socket id="socket" url="[[ ws ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket>
+
+		<template is="dom-repeat" items="{{ responseItems }}">
+			<zeppelin-paragraph editor="[[ editor ]]" settings="[[ settings ]]" notebook-id="[[ notebookId ]]" ws = "[[ ws ]]" ws-data="{{ wsData }}" paragraph="[[ item ]]" index="[[ index ]]">
 				<zeppelin-chart-manager></zeppelin-chart-manager>
 			</zeppelin-paragraph>
 		</template>

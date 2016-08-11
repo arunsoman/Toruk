@@ -4,34 +4,37 @@ Polymer({
 
   properties: {
 
-    //Unique Id to be assigned to editor
-    editorId: {
-      type: String
+    //paragrahp object
+    paragraph: {
+      type: Object
     },
-    content: {
-      type: String,
-      value: '0'
+
+    settings:{
+      type:Object
     },
+
     //Instance of ACE editor
-    editor: Object
-  },
-
-  observers: ['_editorIdChange(editorId)'],
-
-  _editorIdChange: function(editorId) {
-    //initiantes a editor on reciving editor id
-    if (!!editorId) {
-      this.editor = ace.edit(this.editorId);
-      this.editor.setTheme('ace/theme/eclipse');
-      this.editor.getSession().setMode('ace/mode/scala');
+    editor: {
+      type: Object
     }
   },
+  observers: ['_editorChange(settings.*)'],
 
+  _editorChange: function(settings) {
+    // debugger;
+      // this.appendContent();
+  },  
   attached: function() {
-    // var that = this;
-    // that.async(function() {
-    //   //Init editor
-      
-    // });
+    var me = this;
+    if (me.paragraph.text) {
+      me.editor = ace.edit(me.paragraph.id);
+      me.editor.setValue(me.paragraph.text, 1);
+      me.editor.setTheme('ace/theme/eclipse');
+      me.editor.getSession().setMode('ace/mode/scala');
+      me.editor.on("change", function(a, b) {
+        me.set('me.paragraph.text', me.editor.getSession().getValue());
+      })
+    }
   }
+
 });

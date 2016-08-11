@@ -19,10 +19,6 @@ Polymer({
     }
   },
   _touchActive: true,
-  ready: function() {
-    // this.resize.bind(this);
-    // this.resize.bind(this);
-  },
 
   regularTap: function(e) {
     var me = this;
