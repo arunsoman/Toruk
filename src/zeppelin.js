@@ -4,14 +4,13 @@
 
   var zeppelin = window.zeppelin;
 
-  //Config for zeppelin
+  // Config for zeppelin
   zeppelin.config = {
     charts: '../charts/'
   };
 
-  //Helper function to map csv from zeppelin into json
+  // Helper function to map csv from zeppelin into json
   zeppelin.csvtoJSON = function(csv) {
-
     var lines = csv.split('\n');
     var result = [];
     var headers = lines[0].split('\t');
@@ -25,25 +24,22 @@
       }
 
       result.push(obj);
-
     }
-    
-    return result; //JavaScript object
+    return result; // JavaScript object
   };
   // debugger;
   // condocument.currentScript;
 
-  //To import webcomponents on the fly
-  //Path: Path of element.
-  //onload: Callback on successfull load
-  //onerror: Callback on loading failure
+  // To import webcomponents on the fly
+  // Path: Path of element.
+  // onload: Callback on successfull load
+  // onerror: Callback on loading failure
   zeppelin.importElem = function(path, onload, onerror) {
-
     var link = document.createElement('link');
-            link.setAttribute('rel', 'import');
-            link.setAttribute('href', zeppelin.config.charts+path+'/'+path+'.html');
-            this.appendChild(link);
-            link.onload = onload;
+    link.setAttribute('rel', 'import');
+    link.setAttribute('href', zeppelin.config.charts + path + '/' + path + '.html');
+    this.appendChild(link);
+    link.onload = onload;
 
     // Polymer.Base.importHref(zeppelin.config.charts+path+'/'+path+'.html', function(success) {
     //   onload(success);
@@ -51,5 +47,4 @@
     //   onerror(error);
     // });
   };
-
 })();

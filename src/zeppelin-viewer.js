@@ -5,23 +5,23 @@ Polymer({
   properties: {
 
     // Websocket Url for zeppelin
-    WS:{
+    WS: {
       type: String,
       value: 'ws://localhost:8080/ws/'
     },
-    editor:{
-    	type:Boolean,
-    	value:"true",
-    	notify:true
+    editor: {
+      type: Boolean,
+      value: 'true',
+      notify: true
     }
   },
-  
-  simpleView:function(){
-  	this.set('editor',null);
+
+  simpleView: function() {
+    this.set('editor', null);
   },
 
-  editorView:function(){
-  	this.set('editor',"true");
+  editorView: function() {
+    this.set('editor', 'true');
   }
 
 });

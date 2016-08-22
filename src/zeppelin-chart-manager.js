@@ -21,14 +21,15 @@ Polymer({
       var headers = lines[0].split('\t');
       var firstRow = lines[1].split('\t');
 
-      for (var key in headers) {
+      headers.forEach(function(el, key) {
         var type = me.getDataType(firstRow[key]);
         headerObj.push({
-          'key': headers[key],
-          'value': key,
-          'type': type
-        })
-      }
+          key: headers[key],
+          value: key,
+          type: type
+        });
+      });
+
       me.set('external', headerObj);
 
       for (var i = 1; i < lines.length; i++) {
@@ -41,23 +42,20 @@ Polymer({
         }
 
         result.push(obj);
-
       }
 
-      this.set('source', result); //JavaScript object
+      this.set('source', result); // JavaScript object
     }
-
-
   },
 
   getDataType: function(data) {
     var result = '';
     if (data.match(/^\d+$/g)) {
-      result = "Number";
+      result = 'Number';
     } else if (Date.parse(data)) {
-      result = "Date";
+      result = 'Date';
     } else {
-      result = "String";
+      result = 'String';
     }
     return result;
   },
@@ -65,14 +63,14 @@ Polymer({
   convertData: function(data, type) {
     var result;
     switch (type) {
-      case "Number":
-        result = parseInt(data);
-        break;
-      case "Date":
-        result = new Date(data);
-        break;
-      default:
-        result = data;
+    case 'Number':
+      result = parseInt(data);
+      break;
+    case 'Date':
+      result = new Date(data);
+      break;
+    default:
+      result = data;
     }
     return result;
   }

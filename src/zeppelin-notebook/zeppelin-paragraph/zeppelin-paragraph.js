@@ -4,13 +4,13 @@ Polymer({
 
   properties: {
 
-    //Paragraph object
+    // Paragraph object
     paragraph: {
       type: Object
     },
     notebookId: {
       type: String,
-      value: "2A94M5J1Z"
+      value: '2A94M5J1Z'
     },
     // import dependency charts
     charts: {
@@ -23,12 +23,12 @@ Polymer({
       notify: true
     },
 
-    //The content that fills ACE Editor
+    // The content that fills ACE Editor
     content: {
       type: String
     },
 
-    //Results that go to the place where results are shown(graph, html, table)
+    // Results that go to the place where results are shown(graph, html, table)
     result: {
       type: Object
     },
@@ -37,7 +37,7 @@ Polymer({
       type: Boolean,
       value: true
     },
-    //Helps to determine and show what's the out put from zeppelin backend
+    // Helps to determine and show what's the out put from zeppelin backend
     templatetype: {
       type: Object,
       value: {
@@ -55,25 +55,23 @@ Polymer({
       }
     }
   },
-  observers: ['_changeId(paragraph)','_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)'],
+  observers: ['_changeId(paragraph)', '_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)'],
 
   __attached: function() {
-
     if (this.paragraph.result) {
       this.fillTemplate(this.paragraph.result.type);
     }
-    this.push('settings.order',this.paragraph.id);
-
+    this.push('settings.order', this.paragraph.id);
   },
-  showDropDown:function(){
+  showDropDown: function() {
     this.$$('#navdrop').open();
   },
 
-  _changeId:function(data){
+  _changeId: function(data) {
     if (this.paragraph.result) {
       this.fillTemplate(this.paragraph.result.type);
     }
-    //this.push('settings.order',this.paragraph.id);
+    // this.push('settings.order',this.paragraph.id);
   },
   _convertObjects: function(item) {
     this.formObjects = [];
@@ -95,18 +93,18 @@ Polymer({
 
   _gridChange: function(obj) {
     if (obj.path === 'paragraph.config.colWidth') {
-      this._commit_paragraph();
+      this._commitParagraph();
     }
   },
 
-  _commit_paragraph: function() {
+  _commitParagraph: function() {
     var postData = {
       config: this.paragraph.config,
       id: this.paragraph.id,
       paragraph: this.paragraph.text
     };
     this.handlePOST({
-      op: "COMMIT_PARAGRAPH",
+      op: 'COMMIT_PARAGRAPH',
       data: postData
     });
   },
@@ -116,7 +114,7 @@ Polymer({
     this.$$('editor-view').editor.renderer.setShowGutter(this.editorShowLine);
   },
 
-  //Handles API Response  and sets 
+  // Handles API Response  and sets
   handleResponse: function(response) {
     var res = response.detail.response.body;
     this.set('paragraph', res);
@@ -126,18 +124,19 @@ Polymer({
     }
   },
 
-  //Selects template type to fill.
+  // Selects template type to fill.
   fillTemplate: function(resultType) {
-
     switch (resultType) {
-      case 'HTML':
-      case 'TEXT':
-      case 'ANGULAR':
-        this.set('templatetype.html', true);
-        break;
-      case 'TABLE':
-        this.set('templatetype.graph', true);
-        break;
+    case 'HTML':
+    case 'TEXT':
+    case 'ANGULAR':
+      this.set('templatetype.html', true);
+      break;
+    case 'TABLE':
+      this.set('templatetype.graph', true);
+      break;
+    default:
+      throw Error('no implementation found');
     }
   },
 
@@ -148,7 +147,7 @@ Polymer({
       paragraph: this.paragraph.text
     };
     this.handlePOST({
-      op: "RUN_PARAGRAPH",
+      op: 'RUN_PARAGRAPH',
       data: postData
     });
   },
@@ -156,7 +155,7 @@ Polymer({
   addParagraph: function() {
     var newIndex = parseInt(this.index) + 1;
     this.handlePOST({
-      op: "INSERT_PARAGRAPH",
+      op: 'INSERT_PARAGRAPH',
       data: {
         index: newIndex
       }
@@ -164,9 +163,8 @@ Polymer({
   },
 
   removeParagraph: function() {
-    var newIndex = parseInt(this.index) + 1;
     this.handlePOST({
-      op: "PARAGRAPH_REMOVE",
+      op: 'PARAGRAPH_REMOVE',
       data: {
         id: this.paragraph.id
       }
@@ -177,7 +175,7 @@ Polymer({
     var newIndex = parseInt(this.index) + 1;
 
     this.handlePOST({
-      op: "MOVE_PARAGRAPH",
+      op: 'MOVE_PARAGRAPH',
       data: {
         id: this.paragraph.id,
         index: newIndex
@@ -190,7 +188,7 @@ Polymer({
     var newIndex = indexValue > 0 ? indexValue - 1 : 0;
 
     this.handlePOST({
-      op: "MOVE_PARAGRAPH",
+      op: 'MOVE_PARAGRAPH',
       data: {
         id: this.paragraph.id,
         index: newIndex
@@ -200,15 +198,15 @@ Polymer({
   postResponse: function(res) {
     console.info(res.detail.response.status);
   },
-  //Handler for run
+  // Handler for run
   handlePOST: function(obj) {
     var postObj = {
       op: obj.op,
-      principal: "anonymous",
-      roles: "[]",
+      principal: 'anonymous',
+      roles: '[]',
       data: obj.data,
-      ticket: "anonymous"
-    }
+      ticket: 'anonymous'
+    };
     this.set('wsData', postObj);
   }
 

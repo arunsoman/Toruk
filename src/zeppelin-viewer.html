@@ -7,10 +7,10 @@
 
     <template>
         <!-- <zeppelin-notebooks url="[[ zeppelinUrl ]]"></zeppelin-notebooks> -->
-        <ul>
-            <li on-tap="simpleView">Compact View</li>
-            <li on-tap="editorView">Editor View</li>
-        </ul>
+
+        <paper-icon-button icon="apps" on-tap="simpleView" title="Compact View"></paper-icon-button>
+        <paper-icon-button icon="dashboard" on-tap="editorView" title="Editor View"></paper-icon-button>
+
         <zeppelin-notebook ws="[[ WS ]]" notebook-id="2A94M5J1Z" editor="[[ editor ]]" class="noselect"></zeppelin-notebook>
         <!-- <zeppelin-paragraph url ="[[ zeppelinUrl ]]" notebook-id="2A94M5J1Z" paragraph-id="20150212-145404_867439529"></zeppelin-paragraph> -->
     </template>

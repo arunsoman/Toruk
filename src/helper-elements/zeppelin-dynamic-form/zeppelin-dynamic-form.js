@@ -3,17 +3,17 @@ Polymer({
 
   properties: {
 
-    //Forms
+    // Forms
     forms: {
       type: Object
     },
 
-    //Params
+    // Params
     params: {
       type: Object
     },
 
-    //Array from which inputs are created
+    // Array from which inputs are created
     formArray: {
       type: Array
     }
@@ -22,21 +22,20 @@ Polymer({
   observers: ['_formsObs(forms.*)'],
 
   _formsObs: function(formObj) {
-    var tempArray;
     if (formObj.path === 'forms') {
       this.set('formArray', this._map(formObj.value));
     }
   },
 
-  //Converts object into array
+  // Converts object into array
   _map: function(fromObj) {
     var arr = [];
-    for (var key in fromObj) {
+    fromObj.forEach(function(el, key) {
       arr.push({
         label: key,
         value: this.params[key]
       });
-    }
+    });
     return arr;
   }
 

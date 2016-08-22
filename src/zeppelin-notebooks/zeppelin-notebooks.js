@@ -1,13 +1,13 @@
 Polymer({
 
   is: 'zeppelin-notebooks',
-  properties:{
-    responseItems:{
-      type:Array
+  properties: {
+    responseItems: {
+      type: Array
     }
   },
-  
+
   handleResponse: function(response) {
-    this.set('responseItems',response.detail.response.body);
+    this.set('responseItems', response.detail.response.body);
   }
 });

@@ -1,4 +1,3 @@
 Polymer({
-
   is: 'browse-filesystem'
 });
