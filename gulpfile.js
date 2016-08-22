@@ -1,4 +1,4 @@
-var eslint        = require('eslint');
+const eslint = require('gulp-eslint');
 var gulp        = require('gulp');
 var browserSync = require('browser-sync').create();
 
@@ -14,7 +14,7 @@ gulp.task('browser-sync', function() {
 
 gulp.task('eslint', function () {
     return gulp.src([
-'src/*'
+'src/**/*.js*'
 
                      ])
         // eslint() attaches the lint output to the eslint property 
