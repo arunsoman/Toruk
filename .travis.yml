@@ -4,6 +4,5 @@ node_js:
 sudo: required
 
 before_script:
-  - npm install -g gulp
-  - npm install -g gulp-eslint
+  - npm install
 script: gulp
