@@ -6,3 +6,7 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+:host {
+  display: block;
+  height: auto;
+}
