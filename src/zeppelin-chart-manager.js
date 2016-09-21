@@ -32,10 +32,10 @@ Polymer({
 
       me.set('external', headerObj);
 
-      for (var i = 1; i < lines.length; i++) {
+      // lines.length - 1 is used because, last row is always just a '\n' with no data
+      for (var i = 1; i < lines.length - 1; i++) {
         var obj = [];
         var currentline = lines[i].split('\t');
-
         for (var j = 0; j < headers.length; j++) {
           var converted = me.convertData(currentline[j], headerObj[j].type);
           obj.push(converted);
@@ -45,6 +45,13 @@ Polymer({
       }
 
       this.set('source', result); // JavaScript object
+      // Avoid twoway binding with polymer-d3
+      // Too much data tangling
+      this.$$('polymer-d3').bootstrapCharts({
+        externals: this.external,
+        source: this.source,
+        mode: 'create' // Can be view and create
+      });
     }
   },
 
