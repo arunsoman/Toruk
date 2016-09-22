@@ -119,7 +119,8 @@ Polymer({
     this.paragraph.config.graph.polymerD3 = {
       selectedChart: polymerD3.selectedChart,
       settings: polymerD3.settings,
-      inputs: polymerD3.inputs
+      inputs: polymerD3.inputs,
+      legendSettings: polymerD3.legendSettings
     };
     this._commitParagraph();
   },
