@@ -109,6 +109,21 @@ Polymer({
     });
   },
 
+  // To save a pargraph
+  saveParagraph: function() {
+    var chartManager = this.$$('zeppelin-chart-manager');
+    var polymerD3 = chartManager.$$('polymer-d3');
+    if (!polymerD3) {
+      return false;
+    }
+    this.paragraph.config.graph.polymerD3 = {
+      selectedChart: polymerD3.selectedChart,
+      settings: polymerD3.settings,
+      inputs: polymerD3.inputs
+    };
+    this._commitParagraph();
+  },
+
   hideNumber: function() {
     this.set('editorShowLine', !this.editorShowLine);
     this.$$('editor-view').editor.renderer.setShowGutter(this.editorShowLine);
