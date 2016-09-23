@@ -59,7 +59,6 @@ Polymer({
       }
       // Avoid twoway binding with polymer-d3
       // Too much data tangling
-      debugger;
       this.$$('polymer-d3').bootstrapCharts(chartConf);
     }
   },
