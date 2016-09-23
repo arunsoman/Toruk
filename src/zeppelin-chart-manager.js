@@ -43,15 +43,24 @@ Polymer({
 
         result.push(obj);
       }
-
-      this.set('source', result); // JavaScript object
-      // Avoid twoway binding with polymer-d3
-      // Too much data tangling
-      this.$$('polymer-d3').bootstrapCharts({
+      this.set('source', result);
+      var polyD3 = this.data.config.graph.polymerD3;
+      var chartConf = {
         externals: this.external,
         source: this.source,
         mode: 'create' // Can be view and create
-      });
+      };
+      if (polyD3) {
+        chartConf.mode = 'edit';
+        chartConf.selectedChart = polyD3.selectedChart;
+        chartConf.legendSettings = polyD3.legendSettings;
+        chartConf.settings = polyD3.settings;
+        chartConf.inputs = polyD3.inputs;
+      }
+      // Avoid twoway binding with polymer-d3
+      // Too much data tangling
+      debugger;
+      this.$$('polymer-d3').bootstrapCharts(chartConf);
     }
   },
 

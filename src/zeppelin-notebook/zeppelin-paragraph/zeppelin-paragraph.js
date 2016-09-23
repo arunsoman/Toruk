@@ -40,10 +40,12 @@ Polymer({
     // Helps to determine and show what's the out put from zeppelin backend
     templatetype: {
       type: Object,
-      value: {
-        html: false,
-        text: false,
-        graph: false
+      value: function() {
+        return {
+          html: false,
+          text: false,
+          graph: false
+        };
       }
     },
 
@@ -68,6 +70,7 @@ Polymer({
   },
 
   _changeId: function(data) {
+    // TO learn what type of result
     if (this.paragraph.result) {
       this.fillTemplate(this.paragraph.result.type);
     }
