@@ -52,10 +52,11 @@ Polymer({
       };
       if (polyD3) {
         chartConf.mode = 'edit';
+        chartConf.availableCharts = polyD3.availableCharts;
         chartConf.selectedChart = polyD3.selectedChart;
-        chartConf.legendSettings = polyD3.legendSettings;
-        chartConf.settings = polyD3.settings;
-        chartConf.inputs = polyD3.inputs;
+        chartConf.legendSettings = polyD3.selectedChart.settings.legendSettings;
+        chartConf.settings = polyD3.selectedChart.settings.settings;
+        chartConf.inputs = polyD3.selectedChart.settings.inputs;
       }
       // Avoid twoway binding with polymer-d3
       // Too much data tangling
