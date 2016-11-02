@@ -115,6 +115,9 @@ Polymer({
   // To save a pargraph
   saveParagraph: function() {
     var chartManager = this.$$('zeppelin-chart-manager');
+    if (!chartManager) {
+      return false;
+    }
     var polymerD3 = chartManager.$$('polymer-d3');
     if (!polymerD3) {
       return false;
@@ -158,7 +161,7 @@ Polymer({
     var postData = {
       config: this.paragraph.config,
       id: this.paragraph.id,
-      paragraph: this.paragraph.text
+      paragraph: this.$$('editor-view').getText()
     };
     this.handlePOST({
       op: 'RUN_PARAGRAPH',
@@ -222,6 +225,10 @@ Polymer({
       ticket: 'anonymous'
     };
     this.set('wsData', postObj);
+  },
+
+  getParagraphText: function() {
+    debugger;
   }
 
 });

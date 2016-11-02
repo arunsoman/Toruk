@@ -3,11 +3,15 @@ Polymer({
   properties: {
     // paragrahp object
     paragraph: {
-      type: Object
+      type: function() {
+        return {};
+      }
     },
 
     settings: {
-      type: Object
+      type: function() {
+        return {};
+      }
     },
 
     // Instance of ACE editor
@@ -32,6 +36,9 @@ Polymer({
         me.set('me.paragraph.text', me.editor.getSession().getValue());
       });
     }
+  },
+  getText: function() {
+    return this.editor.getSession().getValue();
   }
 
 });
