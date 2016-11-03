@@ -106,6 +106,7 @@ Polymer({
       id: this.paragraph.id,
       paragraph: this.paragraph.text
     };
+    // postData.config.graph.polymerD3.availableCharts.forEach(c => {try{c.settings.area[6].callBack = 'xAxisCallback'; c.settings.area[7].callBack = 'xAxisCallback'}catch(e){console.log(e)}})
     this.handlePOST({
       op: 'COMMIT_PARAGRAPH',
       data: postData
@@ -225,10 +226,5 @@ Polymer({
       ticket: 'anonymous'
     };
     this.set('wsData', postObj);
-  },
-
-  getParagraphText: function() {
-    debugger;
   }
-
 });
