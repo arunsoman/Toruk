@@ -166,7 +166,8 @@ Polymer({
     };
     this.handlePOST({
       op: 'RUN_PARAGRAPH',
-      data: postData
+      data: postData,
+      params: {}
     });
   },
 

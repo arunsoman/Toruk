@@ -24,7 +24,7 @@
                             <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]">
                                 Pending
                             </template>
-                            <template is="dom-if" if="[[ eq(paragraph.status,'FINISHED') ]]">
+                            <template is="dom-if" if="[[ eq(paragraph.status,'FINISHED') || eq(paragraph.status,'READY')]]">
                                 <paper-icon-button icon="chevron-right" on-tap="runParagraph">Run</paper-icon-button>
                             </template>
                             <template is="dom-if" if="[[ eq(paragraph.status,'ERROR') ]]">

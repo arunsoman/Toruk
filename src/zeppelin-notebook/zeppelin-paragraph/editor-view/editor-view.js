@@ -27,15 +27,13 @@ Polymer({
   },
   attached: function() {
     var me = this;
-    if (me.paragraph.text) {
-      me.editor = window.ace.edit(me.paragraph.id);
-      me.editor.setValue(me.paragraph.text, 1);
-      me.editor.setTheme('ace/theme/eclipse');
-      me.editor.getSession().setMode('ace/mode/scala');
-      me.editor.on('change', function(a, b) {
-        me.set('me.paragraph.text', me.editor.getSession().getValue());
-      });
-    }
+    me.editor = window.ace.edit(me.paragraph.id);
+    me.editor.setValue(me.paragraph.text || '', 1);
+    me.editor.setTheme('ace/theme/eclipse');
+    me.editor.getSession().setMode('ace/mode/scala');
+    me.editor.on('change', function(a, b) {
+      me.set('me.paragraph.text', me.editor.getSession().getValue());
+    });
   },
   getText: function() {
     return this.editor.getSession().getValue();
