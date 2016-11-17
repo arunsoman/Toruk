@@ -80,5 +80,13 @@ Polymer({
     default:
       this.set('settings.progress', null);
     }
+  },
+  runAllParas: function() {
+    var paras = this.querySelectorAll('zeppelin-paragraph');
+    if (paras && paras.length) {
+      [].forEach.call(paras, function(para) {
+        para.runParagraph();
+      });
+    }
   }
 });

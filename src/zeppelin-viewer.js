@@ -22,6 +22,13 @@ Polymer({
 
   editorView: function() {
     this.set('editor', 'true');
+  },
+
+  runAllParas: function() {
+    var noteBook = this.$$('zeppelin-notebook');
+    if (noteBook) {
+      noteBook.runAllParas();
+    }
   }
 
 });
