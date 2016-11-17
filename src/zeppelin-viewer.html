@@ -14,7 +14,12 @@
                 <paper-icon-button icon="icons:refresh" on-tap="runAllParas" title="Run all paragraphs"></paper-icon-button>
                 <paper-icon-button icon="icons:file-download" on-tap="exportNotebook" title="Export Notebook"></paper-icon-button>
             </div>
-            <h3>Notebook: {{ noteBookName }}</h3>
+            <div class="name-wrap">
+                <h3 title="Click to edit" on-tap="editTitle">Notebook: {{ noteBookName }}</h3>
+                <paper-input value="{{_noteBookName}}"></paper-input>
+                <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveName"></paper-icon-button>
+                <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelRename"></paper-icon-button>
+            </div>
         </section>
         <!-- <zeppelin-notebook ws="[[ WS ]]" notebook-id="2A94M5J1Z" editor="[[ editor ]]" class="noselect"></zeppelin-notebook> -->
         <zeppelin-notebook ws="[[ WS ]]" notebook-id="2C1SNJ7BC" editor="[[ editor ]]" class="noselect" note-book-name="{{noteBookName}}"></zeppelin-notebook>

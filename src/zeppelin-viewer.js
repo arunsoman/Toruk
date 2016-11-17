@@ -32,7 +32,7 @@ Polymer({
 
   runAllParas: function() {
     if (this.noteBook) {
-      noteBook.runAllParas();
+      this.noteBook.runAllParas();
     }
   },
 
@@ -46,5 +46,21 @@ Polymer({
     if (this.noteBook) {
       this.noteBook.exportParagraph();
     }
+  },
+
+  editTitle: function() {
+    this._noteBookName = this.noteBookName;
+    this.$$('.name-wrap').classList.add('edit-mode');
+  },
+
+  saveName: function() {
+    this.set('noteBookName', this._noteBookName);
+    this.$$('.name-wrap').classList.remove('edit-mode');
+    this.noteBook.renameNoteBook();
+  },
+
+  cancelRename: function() {
+    this.set('_noteBookName', this.noteBookName);
+    this.$$('.name-wrap').classList.remove('edit-mode');
   }
 });

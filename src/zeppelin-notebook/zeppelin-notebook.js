@@ -32,7 +32,7 @@ Polymer({
     noteBookName: {
       type: String,
       value: function() {
-        return 'notebook' + new Date().getTime()
+        return 'notebook' + new Date().getTime();
       },
       notify: true
     }
@@ -69,7 +69,7 @@ Polymer({
   },
   handleResponse: function(response) {
     var op = response.detail.op;
-
+    this._noteBook = response.detail.data.note;
     switch (op) {
     case 'NOTE':
       this.set('responseItems', response.detail.data.note.paragraphs);
@@ -108,5 +108,19 @@ Polymer({
     dlAnchorElem.setAttribute('href', dataStr);
     dlAnchorElem.setAttribute('download', this.noteBookName + '.json');
     dlAnchorElem.click();
+  },
+  renameNoteBook: function() {
+    this.set('socketEnable', true);
+    var dummyObj = {
+      op: 'NOTE',
+      principal: 'anonymous',
+      roles: '[]',
+      data: {
+        note: this._noteBook
+      },
+      ticket: 'anonymous'
+    };
+    dummyObj.data.note.name = this.noteBookName;
+    this.$.socket.send(dummyObj);
   }
 });
