@@ -13,6 +13,12 @@ Polymer({
       type: Boolean,
       value: 'true',
       notify: true
+    },
+    noteBook: {
+      type: Object
+    },
+    noteBookName: {
+      type: String
     }
   },
 
@@ -25,10 +31,20 @@ Polymer({
   },
 
   runAllParas: function() {
-    var noteBook = this.$$('zeppelin-notebook');
-    if (noteBook) {
+    if (this.noteBook) {
       noteBook.runAllParas();
     }
-  }
+  },
 
+  attached: function() {
+    this.async(function() {
+      this.noteBook = this.$$('zeppelin-notebook');
+    }.bind(this));
+  },
+
+  exportNotebook: function() {
+    if (this.noteBook) {
+      this.noteBook.exportParagraph();
+    }
+  }
 });

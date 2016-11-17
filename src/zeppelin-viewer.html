@@ -7,13 +7,17 @@
 
     <template>
         <!-- <zeppelin-notebooks url="[[ zeppelinUrl ]]"></zeppelin-notebooks> -->
-
-        <paper-icon-button icon="apps" on-tap="simpleView" title="Compact View"></paper-icon-button>
-        <paper-icon-button icon="dashboard" on-tap="editorView" title="Editor View"></paper-icon-button>
-        <paper-icon-button icon="icons:refresh" on-tap="runAllParas" title="Run all paragraphs"></paper-icon-button>
-
+        <section class="title">
+            <div class="icons">
+                <paper-icon-button icon="apps" on-tap="simpleView" title="Compact View"></paper-icon-button>
+                <paper-icon-button icon="dashboard" on-tap="editorView" title="Editor View"></paper-icon-button>
+                <paper-icon-button icon="icons:refresh" on-tap="runAllParas" title="Run all paragraphs"></paper-icon-button>
+                <paper-icon-button icon="icons:file-download" on-tap="exportNotebook" title="Export Notebook"></paper-icon-button>
+            </div>
+            <h3>Notebook: {{ noteBookName }}</h3>
+        </section>
         <!-- <zeppelin-notebook ws="[[ WS ]]" notebook-id="2A94M5J1Z" editor="[[ editor ]]" class="noselect"></zeppelin-notebook> -->
-        <zeppelin-notebook ws="[[ WS ]]" notebook-id="2C1SNJ7BC" editor="[[ editor ]]" class="noselect"></zeppelin-notebook>
+        <zeppelin-notebook ws="[[ WS ]]" notebook-id="2C1SNJ7BC" editor="[[ editor ]]" class="noselect" note-book-name="{{noteBookName}}"></zeppelin-notebook>
         <!-- <zeppelin-paragraph url ="[[ zeppelinUrl ]]" notebook-id="2A94M5J1Z" paragraph-id="20150212-145404_867439529"></zeppelin-paragraph> -->
     </template>
     <script src="zeppelin-viewer.js">

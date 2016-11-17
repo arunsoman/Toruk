@@ -10,3 +10,12 @@
   display: block;
   height: auto;
 }
+
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title h3 {
+  margin: 8px;
+}

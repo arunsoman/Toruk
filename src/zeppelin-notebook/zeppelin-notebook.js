@@ -28,6 +28,13 @@ Polymer({
     },
     paragraphId: {
       type: String
+    },
+    noteBookName: {
+      type: String,
+      value: function() {
+        return 'notebook' + new Date().getTime()
+      },
+      notify: true
     }
   },
 
@@ -66,6 +73,7 @@ Polymer({
     switch (op) {
     case 'NOTE':
       this.set('responseItems', response.detail.data.note.paragraphs);
+      this.set('noteBookName', response.detail.data.note.name);
       break;
     case 'PARAGRAPH_UPDATE_OUTPUT':
       // debugger;
@@ -88,5 +96,17 @@ Polymer({
         para.runParagraph();
       });
     }
+  },
+
+  exportParagraph: function() {
+    // http://stackoverflow.com/a/30800715/5154397
+    var paras = {
+      paragraphs: this.responseItems
+    };
+    var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(paras));
+    var dlAnchorElem = this.querySelector('#downloadAnchorElem');
+    dlAnchorElem.setAttribute('href', dataStr);
+    dlAnchorElem.setAttribute('download', this.noteBookName + '.json');
+    dlAnchorElem.click();
   }
 });
