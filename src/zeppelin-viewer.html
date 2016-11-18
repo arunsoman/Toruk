@@ -22,8 +22,13 @@
             </div>
         </section>
         <!-- <zeppelin-notebook ws="[[ WS ]]" notebook-id="2A94M5J1Z" editor="[[ editor ]]" class="noselect"></zeppelin-notebook> -->
-        <zeppelin-notebook ws="[[ WS ]]" notebook-id="2C1SNJ7BC" editor="[[ editor ]]" class="noselect" note-book-name="{{noteBookName}}"></zeppelin-notebook>
+        <zeppelin-notebook ws="[[ WS ]]" notebook-id="[[ notebookId ]]" editor="[[ editor ]]" class="noselect" note-book-name="{{noteBookName}}"></zeppelin-notebook>
         <!-- <zeppelin-paragraph url ="[[ zeppelinUrl ]]" notebook-id="2A94M5J1Z" paragraph-id="20150212-145404_867439529"></zeppelin-paragraph> -->
+        <iron-ajax
+            meathod="POST"
+            url="zeppelin/notebook/job/[[notebookId]]"
+            handle-as="json"
+            on-response="noteRunnerHandler"></iron-ajax>
     </template>
     <script src="zeppelin-viewer.js">
     </script>

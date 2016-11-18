@@ -19,6 +19,10 @@ Polymer({
     },
     noteBookName: {
       type: String
+    },
+    notebookId: {
+      type: String,
+      value: '2C1SNJ7BC'
     }
   },
 
@@ -62,5 +66,9 @@ Polymer({
   cancelRename: function() {
     this.set('_noteBookName', this.noteBookName);
     this.$$('.name-wrap').classList.remove('edit-mode');
+  },
+
+  noteRunnerHandler: function(e) {
+    console.log(e);
   }
 });

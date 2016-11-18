@@ -31,8 +31,10 @@
     "eslint": "^3.1.1",
     "eslint-config-google": "^0.6.0",
     "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
     "polymer-cli": "^0.12.0",
-    "vulcanize": "^1.14.8",
-    "gulp-eslint": "^3.0.1"
+    "proxy-middleware": "^0.15.0",
+    "url": "^0.11.0",
+    "vulcanize": "^1.14.8"
   }
 }
