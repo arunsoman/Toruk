@@ -8,6 +8,10 @@ Polymer({
     external: {
       type: Array,
       value: []
+    },
+    viewMode: {
+      type: Boolean,
+      value: false
     }
   },
   observers: ['csvtoJSON(data.result.msg)'],

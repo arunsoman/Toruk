@@ -14,65 +14,67 @@
     <template>
         <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
             <article class$="card  editor-[[ editor ]]">
-                <template is="dom-if" if="[[ editor ]]" restamp>
-                    <!-- Title -->
-                    <header>
-                        <h2>[[paragraph.title]] Untitled</h2>
-                    </header>
-                    <ul class="topbar">
-                        <li>
-                            <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]">
-                                Pending
-                            </template>
-                            <template is="dom-if" if="[[ eq(paragraph.status,'FINISHED') || eq(paragraph.status,'READY')]]">
-                                <paper-icon-button icon="chevron-right" on-tap="runParagraph">Run</paper-icon-button>
-                            </template>
-                            <template is="dom-if" if="[[ eq(paragraph.status,'ERROR') ]]">
-                                <iron-icon icon="warning" title="Error"></iron-icon>
-                                <paper-icon-button icon="chevron-right" title="Run" on-tap="runParagraph"></paper-icon-button>
-                            </template>
-                            <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
-                            <iron-dropdown horizontal-align="right" noOverlap id="navdrop" vertical-align="top">
-                                <div class="dropdown-content">
-                                    <paper-icon-button icon="save" on-tap="saveParagraph"></paper-icon-button>
-                                    <paper-icon-button icon="arrow-upward" on-tap="moveUp" title="Move Up"></paper-icon-button>
-                                    <paper-icon-button icon="arrow-downward" on-tap="moveDown" title="Move Down"></paper-icon-button>
-                                    <paper-icon-button icon="list" on-tap="hideNumber" title="Toggle line number"></paper-icon-button>
-                                    <paper-icon-button icon="clear" on-tap="removeParagraph" title="Delete Paragraph"></paper-icon-button>
-                                    <paper-icon-button icon="add" on-tap="addParagraph" title="Add Paragraph"></paper-icon-button>
-                                    <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
-                                </div>
-                                <!-- <paper-dropdown-menu label="Grid">
-                                    <paper-menu attr-for-selected="value" selected="{{ paragraph.config.colWidth }}" class="dropdown-content">
-                                        <paper-item value="1">1</paper-item>
-                                        <paper-item value="2">2</paper-item>
-                                        <paper-item value="3">3</paper-item>
-                                        <paper-item value="4">4</paper-item>
-                                        <paper-item value="5">5</paper-item>
-                                        <paper-item value="6">6</paper-item>
-                                        <paper-item value="7">7</paper-item>
-                                        <paper-item value="8">8</paper-item>
-                                        <paper-item value="9">9</paper-item>
-                                        <paper-item value="10">10</paper-item>
-                                        <paper-item value="11">11</paper-item>
-                                        <paper-item value="12">12</paper-item>
-                                    </paper-menu>
-                                </paper-dropdown-menu> -->
-                            </iron-dropdown>
-                        </li>
-                    </ul>
-                    <!-- ACE Editor -->
-                    <!-- {{content}} -->
-                    <section class="ace-editor">
-                        <editor-view paragraph="[[ paragraph ]]" settings="[[ settings ]]" id="editor"></editor-view>
-                    </section>
-                    <div class="drag-me">
-                        <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
-                    </div>
-                </template>
-                <!-- Visualization of results -->
-                <template is="dom-if" if="[[ eq(settings.progress,paragraph.id) ]]">
-                    <paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
+                <template is="dom-if" if="{{!viewMode}}">
+                    <template is="dom-if" if="[[ editor ]]" restamp>
+                        <!-- Title -->
+                        <header>
+                            <h2>[[paragraph.title]]</h2>
+                        </header>
+                        <ul class="topbar">
+                            <li>
+                                <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]">
+                                    Pending
+                                </template>
+                                <template is="dom-if" if="[[ eq(paragraph.status,'FINISHED') || eq(paragraph.status,'READY')]]">
+                                    <paper-icon-button icon="chevron-right" on-tap="runParagraph">Run</paper-icon-button>
+                                </template>
+                                <template is="dom-if" if="[[ eq(paragraph.status,'ERROR') ]]">
+                                    <iron-icon icon="warning" title="Error"></iron-icon>
+                                    <paper-icon-button icon="chevron-right" title="Run" on-tap="runParagraph"></paper-icon-button>
+                                </template>
+                                <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
+                                <iron-dropdown horizontal-align="right" noOverlap id="navdrop" vertical-align="top">
+                                    <div class="dropdown-content">
+                                        <paper-icon-button icon="save" on-tap="saveParagraph"></paper-icon-button>
+                                        <paper-icon-button icon="arrow-upward" on-tap="moveUp" title="Move Up"></paper-icon-button>
+                                        <paper-icon-button icon="arrow-downward" on-tap="moveDown" title="Move Down"></paper-icon-button>
+                                        <paper-icon-button icon="list" on-tap="hideNumber" title="Toggle line number"></paper-icon-button>
+                                        <paper-icon-button icon="clear" on-tap="removeParagraph" title="Delete Paragraph"></paper-icon-button>
+                                        <paper-icon-button icon="add" on-tap="addParagraph" title="Add Paragraph"></paper-icon-button>
+                                        <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
+                                    </div>
+                                    <!-- <paper-dropdown-menu label="Grid">
+                                        <paper-menu attr-for-selected="value" selected="{{ paragraph.config.colWidth }}" class="dropdown-content">
+                                            <paper-item value="1">1</paper-item>
+                                            <paper-item value="2">2</paper-item>
+                                            <paper-item value="3">3</paper-item>
+                                            <paper-item value="4">4</paper-item>
+                                            <paper-item value="5">5</paper-item>
+                                            <paper-item value="6">6</paper-item>
+                                            <paper-item value="7">7</paper-item>
+                                            <paper-item value="8">8</paper-item>
+                                            <paper-item value="9">9</paper-item>
+                                            <paper-item value="10">10</paper-item>
+                                            <paper-item value="11">11</paper-item>
+                                            <paper-item value="12">12</paper-item>
+                                        </paper-menu>
+                                    </paper-dropdown-menu> -->
+                                </iron-dropdown>
+                            </li>
+                        </ul>
+                        <!-- ACE Editor -->
+                        <!-- {{content}} -->
+                        <section class="ace-editor">
+                            <editor-view paragraph="[[ paragraph ]]" settings="[[ settings ]]" id="editor"></editor-view>
+                        </section>
+                        <div class="drag-me">
+                            <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
+                        </div>
+                    </template>
+                    <!-- Visualization of results -->
+                    <template is="dom-if" if="[[ eq(settings.progress,paragraph.id) ]]">
+                        <paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
+                    </template>
                 </template>
                 <section class="visualization">
                     <!-- options -->
@@ -98,7 +100,7 @@
                         <!-- <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph ]]"></html-view> -->
                     </template>
                     <template is="dom-if" if="{{ templatetype.graph }}" restamp>
-                        <zeppelin-chart-manager data="{{ paragraph }}"></zeppelin-chart-manager>
+                        <zeppelin-chart-manager data="{{ paragraph }}" view-mode="{{viewMode}}"></zeppelin-chart-manager>
                     </template>
                 </section>
             </article>

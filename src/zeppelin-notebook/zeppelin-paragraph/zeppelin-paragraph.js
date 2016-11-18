@@ -12,6 +12,11 @@ Polymer({
       type: String,
       value: '2A94M5J1Z'
     },
+    // No editor, settings et al.
+    viewMode: {
+      type: Boolean,
+      value: false
+    },
     // import dependency charts
     charts: {
       type: Array,
