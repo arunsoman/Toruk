@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup": "npm install && bower install",
     "lint": "eslint 'src/**/*.js' ",
-    "server": "gulp browser-sync"
+    "server": "gulp browser-sync",
+    "start": "npm run server"
   },
   "repository": {
     "type": "git",
