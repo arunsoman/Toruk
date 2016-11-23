@@ -70,7 +70,7 @@ Polymer({
 
   getDataType: function(data) {
     var result = '';
-    if (data.match(/^\d+$/g)) {
+    if (data.match(/^\d*\.?\d*$/g)) {
       result = 'Number';
     } else if (Date.parse(data)) {
       result = 'Date';
@@ -84,7 +84,7 @@ Polymer({
     var result;
     switch (type) {
     case 'Number':
-      result = parseInt(data);
+      result = parseFloat(data);
       break;
     case 'Date':
       result = new Date(data);
