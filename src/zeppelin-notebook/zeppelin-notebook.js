@@ -38,6 +38,21 @@ Polymer({
     }
   },
 
+  attached: function() {
+    this.async(function() {
+      // for polling the server
+      setInterval(function() {
+        this.$.socket.send({
+          op: 'PING',
+          principal: 'anonymous',
+          ticket: 'anonymous',
+          roles: []
+        });
+      }.bind(this), 9000);
+    }.bind(this));
+  },
+
+
   observers: ['_wsDataChange(wsData)'],
   ready: function() {
     this.$.socket.open();
