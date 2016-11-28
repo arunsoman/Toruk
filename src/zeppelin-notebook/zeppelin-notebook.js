@@ -38,6 +38,20 @@ Polymer({
     }
   },
 
+  attached: function() {
+    this.async(function() {
+      // for polling the server
+      setInterval(function() {
+        this.$.socket.send({
+          op: 'PING',
+          principal: 'anonymous',
+          ticket: 'anonymous',
+          roles: []
+        });
+      }.bind(this), 9000);
+    }.bind(this));
+  },
+
   observers: ['_wsDataChange(wsData)'],
   ready: function() {
     this.$.socket.open();
@@ -122,5 +136,30 @@ Polymer({
     };
     dummyObj.data.note.name = this.noteBookName;
     this.$.socket.send(dummyObj);
+  },
+
+  // addNewPara: function() {
+  //   var newPara = this._newParaObj();
+  //   this.push('responseItems', newPara);
+  //   // this.runAllParas();
+  // },
+
+  // helper meathod to create new empty paragraph
+  _newParaObj: function() {
+    var date = new Date();
+    var epoch = date.getTime();
+    var dateStr = date.toString().replace(/\s*:\s*/, ':');
+    return {
+      config: {},
+      settings: {
+        params: {},
+        forms: {}
+      },
+      jobName: 'paragraph_' + epoch + dateStr,
+      id: dateStr + epoch,
+      dateCreated: date.toString(),
+      status: 'READY',
+      progressUpdateIntervalMs: 500
+    };
   }
 });

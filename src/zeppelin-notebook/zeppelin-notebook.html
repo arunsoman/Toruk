@@ -5,6 +5,12 @@
     :host {
       display: block;
     }
+    .fixed-btn {
+      bottom: 15px;
+      position: fixed;
+      right: 15px;
+      z-index: 9;
+    }
   </style>
   <template>
     <a id="downloadAnchorElem"></a>
@@ -14,6 +20,9 @@
         <!-- <zeppelin-chart-manager></zeppelin-chart-manager> -->
       </zeppelin-paragraph>
     </template>
+    <!-- <div class="fixed-btn">
+      <paper-fab icon="add" title="Add new paragraph" on-tap="addNewPara"></paper-fab>
+    </div> -->
   </template>
   <script src="zeppelin-notebook.js"></script>
 </dom-module>
