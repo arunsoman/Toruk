@@ -52,7 +52,6 @@ Polymer({
     }.bind(this));
   },
 
-
   observers: ['_wsDataChange(wsData)'],
   ready: function() {
     this.$.socket.open();
