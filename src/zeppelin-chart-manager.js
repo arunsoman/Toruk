@@ -48,7 +48,7 @@ Polymer({
         result.push(obj);
       }
       this.set('source', result);
-      if (this.data.result.type == 'TABLE') {
+      if (this.data.result.type === 'TABLE') {
         if (!this.data.config.graph) {
           this.data.config.graph = {};
         }
