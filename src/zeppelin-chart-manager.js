@@ -48,23 +48,28 @@ Polymer({
         result.push(obj);
       }
       this.set('source', result);
-      var polyD3 = this.data.config.graph.polymerD3;
-      var chartConf = {
-        externals: this.external,
-        source: this.source,
-        mode: 'create' // Can be view and create
-      };
-      if (polyD3) {
-        chartConf.mode = 'edit';
-        chartConf.availableCharts = polyD3.availableCharts;
-        chartConf.selectedChart = polyD3.selectedChart;
-        chartConf.legendSettings = polyD3.selectedChart.settings.legendSettings;
-        chartConf.settings = polyD3.selectedChart.settings.settings;
-        chartConf.inputs = polyD3.selectedChart.settings.inputs;
+      if (this.data.result.type == 'TABLE') {
+        if (!this.data.config.graph) {
+          this.data.config.graph = {};
+        }
+        var polyD3 = this.data.config.graph.polymerD3;
+        var chartConf = {
+          externals: this.external,
+          source: this.source,
+          mode: 'create' // Can be view and create
+        };
+        if (polyD3) {
+          chartConf.mode = 'edit';
+          chartConf.availableCharts = polyD3.availableCharts;
+          chartConf.selectedChart = polyD3.selectedChart;
+          chartConf.legendSettings = polyD3.selectedChart.settings.legendSettings;
+          chartConf.settings = polyD3.selectedChart.settings.settings;
+          chartConf.inputs = polyD3.selectedChart.settings.inputs;
+        }
+        // Avoid twoway binding with polymer-d3
+        // Too much data tangling
+        this.$$('polymer-d3').bootstrapCharts(chartConf);
       }
-      // Avoid twoway binding with polymer-d3
-      // Too much data tangling
-      this.$$('polymer-d3').bootstrapCharts(chartConf);
     }
   },
 
