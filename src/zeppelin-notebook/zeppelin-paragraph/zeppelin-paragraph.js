@@ -224,6 +224,7 @@ Polymer({
   },
   // Handler for run
   handlePOST: function(obj) {
+    obj.data.params = obj.params;
     var postObj = {
       op: obj.op,
       principal: 'anonymous',
