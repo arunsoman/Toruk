@@ -1,0 +1,62 @@
+<dom-module id="bar-chart">
+  <template>
+    <style>
+      :host {
+        margin: 14px;
+      }
+      .chartContainer {
+        max-width: 100%;
+      }
+      .draggable-areabtn-wrap {
+        position: relative;
+      }
+      .icons-wrap.right-icons,
+      .settings-icon {
+        position: absolute;
+        right: 1em;
+        top: 6px;
+      }
+      paper-icon-button {
+       color: #868686;
+       transition: all .3s ease;
+      }
+      paper-icon-button:hover {
+        color: #454545;
+      }
+    </style>
+    <!-- set true temporarly -->
+    <template is="dom-if" if="true">
+      <display-component settings="{{area}}"></display-component>
+      <div class="draggable-areabtn-wrap">
+        <draggable-input externals="[[externals]]" inputs="{{inputs}}"></draggable-input>
+        <paper-icon-button
+          class="settings-icon"
+          icon="icons:settings-overscan"
+          title="Area Settings"
+          on-tap="showAreaSettings"
+        ></paper-icon-button>
+      </div>
+      <template is="dom-if" if="{{legendSettingsFlag}}" restamp>
+        <legends-component opener="{{legendSettingsFlag}}" settings="{{legendSettings}}"></legends-component>
+      </template>
+    </template>
+    <!-- <h4>Bar Chart</h4> -->
+    <!-- <template is="dom-if" if="[[editMode]]">
+      <div class='mandatory'>
+        <display-component settings="{{inputs}}" external='[[external]]' draggable="true"></display-component>
+      </div>
+
+      <iron-icon on-tap="_toggleView" icon="icons:settings"></iron-icon>
+      <div class='optional' hidden="{{hideSettings}}">
+        <display-component settings="{{settings}}" external='[[external]]'></display-component>
+      </div>
+    </template> -->
+
+  </template>
+  <script src="bar-chart.js"></script>
+  <script src="difference.js"></script>
+  <script src="grouped.js"></script>
+  <script src="stacked.js"></script>
+  <script src="waterfall.js"></script>
+  <script src="heatmap.js"></script>
+</dom-module>

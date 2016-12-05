@@ -1,0 +1,81 @@
+<link rel="import" href="display-component/chart-selector.html">
+<link rel="import" href="display-component/chart-selector.html">
+<link rel="import" href="display-component/settings-component.html">
+<link rel="import" href="display-component/legends-component.html">
+<link rel="stylesheet" href="polymer-d3-global.css">
+<dom-module id="polymer-d3">
+  <template>
+    <style>
+      :host {
+        background-color: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        display: block;
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        margin: 2em;
+        padding: 1em;
+        transition: all .1s ease;
+      }
+      :host:hover {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
+      }
+      .tool-bar {
+        background-color: #EDEDED;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.16), 0 1px 1px rgba(0,0,0,0.23);
+        margin: .5em 1em;
+        padding: .5em;
+        position: relative;
+      }
+      .icons-wrap.right-icons,
+      .settings-icon {
+        position: absolute;
+        right: 0;
+        top: 6px;
+      }
+      .chartHolder {
+        text-align: center;
+      }
+      bar-chart {
+        display: inline-block;
+      }
+      paper-icon-button {
+       color: #868686;
+       transition: all .3s ease;
+      }
+      paper-icon-button:hover {
+        color: #454545;
+      }
+    </style>
+    <template is="dom-if" if="{{editMode}}" restamp>
+      <div class="tool-bar">
+        <chart-selector
+          charts="[[availableCharts]]"
+          selected="{{selectedChart}}"
+        ></chart-selector>
+        <div class="icons-wrap right-icons">
+          <paper-icon-button
+            icon="icons:settings"
+            title="Input Settings"
+            on-tap="showInputSettings"
+          ></paper-icon-button>
+        </div>
+      </div>
+    </template>
+    <!-- <template is="dom-if" if="{{settingsVisible}}" restamp>
+      <display-component settings="{{settings}}"></display-component>
+      <div class="draggable-areabtn-wrap">
+        <draggable-input externals="[[externals]]" inputs="{{inputs}}"></draggable-input>
+          <paper-icon-button
+            class="settings-icon"
+            icon="icons:settings-overscan"
+            title="Area Settings"
+            on-tap="showAreaSettings"
+          ></paper-icon-button>
+      </div>
+      <template is="dom-if" if="{{legendSettingsFlag}}" restamp>
+        <legends-component opener="{{legendSettingsFlag}}" settings="{{legendSettings}}"></legends-component>
+      </template>
+    </template> -->
+    <div class="chartHolder"></div>
+  </template>
+  <script src="polymer-d3.js"></script>
+</dom-module>
