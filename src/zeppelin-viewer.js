@@ -19,6 +19,10 @@ Polymer({
     },
     noteBookName: {
       type: String
+    },
+    noteBookId: {
+      type: String,
+      value: '2C2S8MFKV'
     }
   },
 
