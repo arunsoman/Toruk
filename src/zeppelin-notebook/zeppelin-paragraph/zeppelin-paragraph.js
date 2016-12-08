@@ -15,7 +15,7 @@ Polymer({
     // No editor, settings et al.
     viewMode: {
       type: Boolean,
-      value: false
+      value: true
     },
     // import dependency charts
     charts: {

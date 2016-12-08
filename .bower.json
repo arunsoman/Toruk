@@ -38,12 +38,11 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#^1.1.2",
     "web-socket": "*",
     "paper-progress": "PolymerElements/paper-progress#^1.0.10",
-    "polymer-d3": "https://github.com/arunsoman/polymer-d3.git#6ab68e"
+    "polymer-d3": "arunsoman/polymer-d3.git"
   },
   "resolutions": {
     "polymer-sortablejs": "master",
     "paper-styles": "~1.0.13",
-    "web-animations-js": "^2.2.0",
     "neon-animation": "v1.2.4"
   },
   "_release": "bab9683ac5",

@@ -13,9 +13,9 @@
     <link rel="import" type="css" href="zeppelin-paragraph.css">
     <template>
         <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
-            <article class$="card  editor-[[ editor ]]">
+            <article class$="card editor-card  editor-[[ !viewMode ]]">
                 <template is="dom-if" if="{{!viewMode}}">
-                    <template is="dom-if" if="[[ editor ]]" restamp>
+                    <template is="dom-if" if="[[ !viewMode ]]" restamp>
                         <!-- Title -->
                         <header>
                             <h2>[[paragraph.title]]</h2>
