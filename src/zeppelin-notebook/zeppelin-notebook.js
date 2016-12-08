@@ -9,11 +9,9 @@ Polymer({
       type: Boolean,
       value: false
     },
-    url: {
-      type: String
-    },
     WS: {
-      type: String
+      type: String,
+      value:'ws://localhost:8080/ws/'
     },
     settings: {
       type: Object,

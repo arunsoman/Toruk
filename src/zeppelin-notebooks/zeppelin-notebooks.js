@@ -8,9 +8,15 @@ Polymer({
     notebookId: {
       type: String,
       notify: true
+    },
+    viewMode: {
+      type: Boolean,
+      value: true,
+      notify:true
     }
   },
   observers: ['selectedChange(selectedItem)'],
+  behaviors: [ZEPPELIN_UI.DropdownFix],
 
   handleResponse: function(response) {
     // to pass id value as name if name is null or empty
@@ -24,13 +30,10 @@ Polymer({
   },
 
   selectedChange: function(item) {
-    // console.log(item);
     this.set('notebookId', item.id);
   },
-  viewNotebook: function() {
-
-  },
-  editNotebook: function() {
-
+  editNotebook: function(e) {
+    this.set('viewMode', false);
+    this.set('notebookId', e.target.dataArgs.id);
   }
 });

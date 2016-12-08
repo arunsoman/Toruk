@@ -35,7 +35,7 @@ Polymer({
     },
     viewMode: {
       type: Boolean,
-      value: false
+      value: true
     }
   },
 

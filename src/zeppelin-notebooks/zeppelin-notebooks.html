@@ -1,16 +1,16 @@
+<link rel="import" href="../drop-down-fix/drop-down-fix.html">
 <dom-module id="zeppelin-notebooks">
     <template>
-
         <style>
-      iron-data-table{
-		height: 100%;
-	    top: 0;
-    	bottom: 0;
-    	position: absolute;
-    	left: 0;
-    	right: 0;
-      }
-    </style>
+        iron-data-table {
+            height: 100%;
+            top: 0;
+            bottom: 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+        }
+        </style>
         <iron-ajax url="[[ url ]]api/notebook" auto handle-as="json" on-response="handleResponse" id="ajax"></iron-ajax>
         <iron-data-table items="[[ responseItems ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
             <data-table-column name="Job Name" filter-by="name" filter-type="text">
@@ -22,10 +22,8 @@
                     <paper-menu-button dynamic-align>
                         <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
                         <paper-menu class="dropdown-content">
-                            <paper-item on-tap="openProcesses" data-args="{{item}}">Processes</paper-item>
-                            <paper-item on-tap="editJob">Edit</paper-item>
-                            <paper-item on-tap="copyJob">Copy</paper-item>
-                            <paper-item on-tap="deleteJob">Delete</paper-item>
+                            <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
+                            <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
                         </paper-menu>
                     </paper-menu-button>
                 </template>

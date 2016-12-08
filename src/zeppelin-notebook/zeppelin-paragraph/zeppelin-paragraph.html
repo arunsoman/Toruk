@@ -15,7 +15,6 @@
         <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
             <article class$="card editor-card  editor-[[ !viewMode ]]">
                 <template is="dom-if" if="[[ !viewMode ]]" restamp>
-                    <template is="dom-if" if="[[ !viewMode ]]" >
                         <!-- Title -->
                         <header>
                             <h2>[[paragraph.title]]</h2>
@@ -70,7 +69,6 @@
                         <div class="drag-me">
                             <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
                         </div>
-                    </template>
                     <!-- Visualization of results -->
                     <template is="dom-if" if="[[ eq(settings.progress,paragraph.id) ]]">
                         <paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
@@ -78,6 +76,7 @@
                 </template>
                 <section class="visualization">
                     <!-- options -->
+                    <template is="dom-if" if="[[ !viewMode ]]" restamp>
                     <div class="options">
                         <template is="dom-repeat" items="{{ formObjects }}">
                             <template is="dom-if" if="[[ !item.options ]]">
@@ -94,6 +93,7 @@
                             </template>
                         </template>
                     </div>
+                    </template>
                     <!-- / options -->
                     <template is="dom-if" if="[[ templatetype.html ]]" restamp>
                         <html-view result="[[ paragraph.result.msg ]]"></html-view>

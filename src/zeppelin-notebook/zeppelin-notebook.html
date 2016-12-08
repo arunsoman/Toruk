@@ -5,6 +5,12 @@
     :host {
         display: block;
     }
+    .view-mode-true{
+      position: absolute;
+      left: 0;
+      right: 0;
+      background: #fff;
+    }
     </style>
     <template>
         <a id="downloadAnchorElem"></a>
@@ -24,12 +30,14 @@
                 </div>
             </section>
         </template>
-        <web-socket id="socket" url="[[ ws ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket>
+        <div class$="view-mode-[[ viewMode]]">
+        <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket>
         <template is="dom-repeat" items="{{ responseItems }}">
             <zeppelin-paragraph editor="[[ editor ]]" settings="[[ settings ]]" notebook-id="[[ notebookId ]]" ws="[[ ws ]]" ws-data="{{ wsData }}" paragraph="[[ item ]]" index="[[ index ]]" view-mode="[[ viewMode ]]">
                 <!-- <zeppelin-chart-manager></zeppelin-chart-manager> -->
             </zeppelin-paragraph>
         </template>
+        </div>
     </template>
     <script src="zeppelin-notebook.js"></script>
 </dom-module>
