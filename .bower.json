@@ -38,7 +38,7 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#^1.1.2",
     "web-socket": "*",
     "paper-progress": "PolymerElements/paper-progress#^1.0.10",
-    "polymer-d3": "arunsoman/polymer-d3.git"
+    "polymer-d3": "https://github.com/arunsoman/polymer-d3.git"
   },
   "resolutions": {
     "polymer-sortablejs": "master",
