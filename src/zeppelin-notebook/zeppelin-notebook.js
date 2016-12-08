@@ -11,7 +11,7 @@ Polymer({
     },
     WS: {
       type: String,
-      value:'ws://localhost:8080/ws/'
+      value: 'ws://localhost:8080/ws/'
     },
     settings: {
       type: Object,

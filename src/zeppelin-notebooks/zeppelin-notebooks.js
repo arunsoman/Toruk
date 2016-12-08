@@ -12,7 +12,7 @@ Polymer({
     viewMode: {
       type: Boolean,
       value: true,
-      notify:true
+      notify: true
     }
   },
   observers: ['selectedChange(selectedItem)'],
