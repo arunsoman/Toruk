@@ -35,26 +35,34 @@ Polymer({
         return 'notebook' + new Date().getTime();
       },
       notify: true
+    },
+    notebookId: {
+      type: String
     }
   },
 
   attached: function() {
     this.async(function() {
-      // for polling the server
-      setInterval(function() {
-        this.$.socket.send({
-          op: 'PING',
-          principal: 'anonymous',
-          ticket: 'anonymous',
-          roles: []
-        });
-      }.bind(this), 9000);
+      this.$.socket.open();
     }.bind(this));
   },
+  detached: function(){
+    this.$.socket.close();
+  },
 
-  observers: ['_wsDataChange(wsData)'],
-  ready: function() {
-    this.$.socket.open();
+  observers: ['_wsDataChange(wsData)', 'restartSocket(notebookId)'],
+
+  restartSocket: function() {
+
+    // for polling the server
+    setInterval(function() {
+      this.$.socket.send({
+        op: 'PING',
+        principal: 'anonymous',
+        ticket: 'anonymous',
+        roles: []
+      });
+    }.bind(this), 9000);
   },
 
   _wsDataChange: function(data) {
@@ -85,22 +93,22 @@ Polymer({
     var op = response.detail.op;
     this._noteBook = response.detail.data.note;
     switch (op) {
-    case 'NOTE':
-      this.set('responseItems', response.detail.data.note.paragraphs);
-      this.set('noteBookName', response.detail.data.note.name);
-      break;
-    case 'PARAGRAPH_UPDATE_OUTPUT':
-      // debugger;
-      break;
-    case 'PARAGRAPH_APPEND_OUTPUT':
-      this.set('settings.progress', null);
-      break;
-    case 'PROGRESS':
-      // do something
-      this.set('settings.progress', response.detail.data.id);
-      break;
-    default:
-      this.set('settings.progress', null);
+      case 'NOTE':
+        this.set('responseItems', response.detail.data.note.paragraphs);
+        this.set('noteBookName', response.detail.data.note.name);
+        break;
+      case 'PARAGRAPH_UPDATE_OUTPUT':
+        // debugger;
+        break;
+      case 'PARAGRAPH_APPEND_OUTPUT':
+        this.set('settings.progress', null);
+        break;
+      case 'PROGRESS':
+        // do something
+        this.set('settings.progress', response.detail.data.id);
+        break;
+      default:
+        this.set('settings.progress', null);
     }
   },
   runAllParas: function() {
