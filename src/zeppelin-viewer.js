@@ -22,16 +22,16 @@ Polymer({
     },
     noteBookId: {
       type: String,
-      value:false
-      // value: '2C6C1TYPP'
+      value: false
+        // value: '2C6C1TYPP'
     },
-    zeppelinUrl:{
-      type:String,
-      value:'http://localhost:8080/'
+    zeppelinUrl: {
+      type: String,
+      value: 'http://localhost:8080/'
     },
-    viewNotebook:{
-      type:Boolean,
-      value:false
+    viewNotebook: {
+      type: Boolean,
+      value: false
     }
   },
 
