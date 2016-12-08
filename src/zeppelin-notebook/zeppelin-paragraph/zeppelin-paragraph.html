@@ -14,8 +14,8 @@
     <template>
         <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
             <article class$="card editor-card  editor-[[ !viewMode ]]">
-                <template is="dom-if" if="{{!viewMode}}">
-                    <template is="dom-if" if="[[ !viewMode ]]" restamp>
+                <template is="dom-if" if="[[ !viewMode ]]" restamp>
+                    <template is="dom-if" if="[[ !viewMode ]]" >
                         <!-- Title -->
                         <header>
                             <h2>[[paragraph.title]]</h2>
@@ -96,11 +96,10 @@
                     </div>
                     <!-- / options -->
                     <template is="dom-if" if="[[ templatetype.html ]]" restamp>
-                        [[ paragraph.result.msg ]]
-                        <!-- <html-view editor-id="[[ paragraph.id ]]" result="[[ paragraph ]]"></html-view> -->
+                        <html-view result="[[ paragraph.result.msg ]]"></html-view>
                     </template>
                     <template is="dom-if" if="{{ templatetype.graph }}" restamp>
-                        <zeppelin-chart-manager data="{{ paragraph }}" view-mode="{{viewMode}}"></zeppelin-chart-manager>
+                        <zeppelin-chart-manager data="{{ paragraph }}" view-mode="{{ viewMode }}"></zeppelin-chart-manager>
                     </template>
                 </section>
             </article>

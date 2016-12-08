@@ -38,6 +38,10 @@ Polymer({
     },
     notebookId: {
       type: String
+    },
+    viewMode: {
+      type: Boolean,
+      value: true
     }
   },
 

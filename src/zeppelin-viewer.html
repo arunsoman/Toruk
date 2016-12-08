@@ -1,30 +1,14 @@
 <dom-module id="zeppelin-viewer">
-
-<link rel="import" href="zeppelin-notebooks/zeppelin-notebooks.html">
-<link rel="import" href="zeppelin-notebook/zeppelin-notebook.html">
-<link rel="import" href="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.html">
-<link rel="import" type="css" href="zeppelin-viewer.css">
-
+    <link rel="import" href="zeppelin-notebooks/zeppelin-notebooks.html">
+    <link rel="import" href="zeppelin-notebook/zeppelin-notebook.html">
+    <link rel="import" href="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.html">
+    <link rel="import" type="css" href="zeppelin-viewer.css">
     <template>
         <template is="dom-if" if="{{ !noteBookId }}" restamp>
             <zeppelin-notebooks url="[[ zeppelinUrl ]]" notebook-id="{{ noteBookId }}"></zeppelin-notebooks>
         </template>
         <template is="dom-if" if="{{ noteBookId }}" restamp>
-        <section class="title">
-            <div class="icons">
-                <paper-icon-button icon="apps" on-tap="simpleView" title="Compact View"></paper-icon-button>
-                <paper-icon-button icon="dashboard" on-tap="editorView" title="Editor View"></paper-icon-button>
-                <paper-icon-button icon="icons:refresh" on-tap="runAllParas" title="Run all paragraphs"></paper-icon-button>
-                <paper-icon-button icon="icons:file-download" on-tap="exportNotebook" title="Export Notebook"></paper-icon-button>
-            </div>
-            <div class="name-wrap">
-                <h3 title="Click to edit" on-tap="editTitle">Notebook: {{ noteBookName }}</h3>
-                <paper-input value="{{_noteBookName}}"></paper-input>
-                <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveName"></paper-icon-button>
-                <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelRename"></paper-icon-button>
-            </div>
-        </section>
-            <zeppelin-notebook ws="[[ WS ]]" notebook-id="[[ noteBookId ]]" editor="[[ editor ]]" class="noselect" note-book-name="{{noteBookName}}"></zeppelin-notebook>
+            <zeppelin-notebook ws="[[ WS ]]" notebook-id="[[ noteBookId ]]" editor="[[ editor ]]" class="noselect" note-book-name="{{noteBookName}}" view-mode="[[ viewMode ]]"></zeppelin-notebook>
         </template>
     </template>
     <script src="zeppelin-viewer.js">

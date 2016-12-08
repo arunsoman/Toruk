@@ -11,7 +11,7 @@ Polymer({
     },
     editor: {
       type: Boolean,
-      value: 'true',
+      value: true,
       notify: true
     },
     noteBook: {
@@ -32,15 +32,15 @@ Polymer({
     viewNotebook: {
       type: Boolean,
       value: false
+    },
+    viewMode: {
+      type: Boolean,
+      value: false
     }
   },
 
-  simpleView: function() {
-    this.set('editor', null);
-  },
-
   editorView: function() {
-    this.set('editor', 'true');
+    // this.set('editor', true);
   },
 
   runAllParas: function() {
