@@ -4,12 +4,14 @@
     <link rel="import" href="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.html">
     <link rel="import" type="css" href="zeppelin-viewer.css">
     <template>
-        <template is="dom-if" if="{{ !noteBookId }}" restamp>
-            <zeppelin-notebooks url="[[ zeppelinUrl ]]" notebook-id="{{ noteBookId }}" view-mode="{{ viewMode }}"></zeppelin-notebooks>
-        </template>
-        <template is="dom-if" if="{{ noteBookId }}" restamp>
-            <zeppelin-notebook ws="[[ WS ]]" notebook-id="[[ noteBookId ]]" class="noselect" view-mode="[[ viewMode ]]"></zeppelin-notebook>
-        </template>
+        <div class="table-wrapper">
+            <template is="dom-if" if="{{ !noteBookId }}" restamp>
+                <zeppelin-notebooks url="[[ zeppelinUrl ]]" notebook-id="{{ noteBookId }}" view-mode="{{ viewMode }}"></zeppelin-notebooks>
+            </template>
+            <template is="dom-if" if="{{ noteBookId }}" restamp>
+                <zeppelin-notebook ws="[[ WS ]]" notebook-id="[[ noteBookId ]]" class="noselect" view-mode="[[ viewMode ]]"></zeppelin-notebook>
+            </template>
+        </div>
     </template>
     <script src="zeppelin-viewer.js">
     </script>

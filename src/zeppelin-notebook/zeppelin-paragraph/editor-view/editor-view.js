@@ -31,6 +31,7 @@ Polymer({
     me.editor.setValue(me.paragraph.text || '', 1);
     me.editor.setTheme('ace/theme/eclipse');
     me.editor.getSession().setMode('ace/mode/scala');
+    me.editor.getSession().setUseWrapMode(true);
     me.editor.on('change', function(a, b) {
       me.set('me.paragraph.text', me.editor.getSession().getValue());
     });

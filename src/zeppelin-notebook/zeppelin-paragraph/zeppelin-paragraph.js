@@ -150,8 +150,10 @@ Polymer({
   // Selects template type to fill.
   fillTemplate: function(resultType) {
     switch (resultType) {
-    case 'HTML':
     case 'TEXT':
+      this.set('templatetype.text', true);
+      break;
+    case 'HTML':
     case 'ANGULAR':
       this.set('templatetype.html', true);
       break;

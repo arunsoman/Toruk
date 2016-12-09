@@ -14,11 +14,10 @@
     <template>
         <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
             <article class$="card editor-card  editor-[[ !viewMode ]]">
-                <template is="dom-if" if="[[ !viewMode ]]" restamp>
-                        <!-- Title -->
-                        <header>
-                            <h2>[[paragraph.title]]</h2>
-                        </header>
+                <!-- Title -->
+                <header class="layout horizontal">
+                    <h4>[[ paragraph.title ]]Some title Goes here</h4>
+                    <template is="dom-if" if="[[ !viewMode ]]" restamp>
                         <ul class="topbar">
                             <li>
                                 <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]">
@@ -31,7 +30,7 @@
                                     <iron-icon icon="warning" title="Error"></iron-icon>
                                     <paper-icon-button icon="chevron-right" title="Run" on-tap="runParagraph"></paper-icon-button>
                                 </template>
-                                <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
+                                <paper-icon-button icon="settings" on-tap="showDropDown"></paper-icon-button>
                                 <iron-dropdown horizontal-align="right" noOverlap id="navdrop" vertical-align="top">
                                     <div class="dropdown-content">
                                         <paper-icon-button icon="save" on-tap="saveParagraph"></paper-icon-button>
@@ -61,14 +60,17 @@
                                 </iron-dropdown>
                             </li>
                         </ul>
-                        <!-- ACE Editor -->
-                        <!-- {{content}} -->
-                        <section class="ace-editor">
-                            <editor-view paragraph="[[ paragraph ]]" settings="[[ settings ]]" id="editor"></editor-view>
-                        </section>
-                        <div class="drag-me">
-                            <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
-                        </div>
+                    </template>
+                </header>
+                <template is="dom-if" if="[[ !viewMode ]]" restamp>
+                    <!-- ACE Editor -->
+                    <!-- {{content}} -->
+                    <section class="ace-editor">
+                        <editor-view paragraph="[[ paragraph ]]" settings="[[ settings ]]" id="editor"></editor-view>
+                    </section>
+                    <div class="drag-me">
+                        <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
+                    </div>
                     <!-- Visualization of results -->
                     <template is="dom-if" if="[[ eq(settings.progress,paragraph.id) ]]">
                         <paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
@@ -77,24 +79,28 @@
                 <section class="visualization">
                     <!-- options -->
                     <template is="dom-if" if="[[ !viewMode ]]" restamp>
-                    <div class="options">
-                        <template is="dom-repeat" items="{{ formObjects }}">
-                            <template is="dom-if" if="[[ !item.options ]]">
-                                <paper-input label="[[ item.name ]]" value="[[ item.defaultValue ]]"></paper-input>
+                        <div class="options">
+                            <template is="dom-repeat" items="{{ formObjects }}">
+                                <template is="dom-if" if="[[ !item.options ]]">
+                                    <paper-input label="[[ item.name ]]" value="[[ item.defaultValue ]]"></paper-input>
+                                </template>
+                                <template is="dom-if" if="[[ item.options ]]">
+                                    <paper-dropdown-menu label="[[ item.name ]]">
+                                        <paper-menu attr-for-selected="value" class="dropdown-content">
+                                            <template is="dom-repeat" items="[[ item.options ]]">
+                                                <paper-item value="[[ item.value ]]">[[ item.value ]]</paper-item>
+                                            </template>
+                                        </paper-menu>
+                                    </paper-dropdown-menu>
+                                </template>
                             </template>
-                            <template is="dom-if" if="[[ item.options ]]">
-                                <paper-dropdown-menu label="[[ item.name ]]">
-                                    <paper-menu attr-for-selected="value" class="dropdown-content">
-                                        <template is="dom-repeat" items="[[ item.options ]]">
-                                            <paper-item value="[[ item.value ]]">[[ item.value ]]</paper-item>
-                                        </template>
-                                    </paper-menu>
-                                </paper-dropdown-menu>
-                            </template>
-                        </template>
-                    </div>
+                        </div>
                     </template>
                     <!-- / options -->
+                    <template is="dom-if" if="[[ templatetype.text ]]" restamp>
+                        <pre class="pre-style">[[ paragraph.result.msg ]]</pre>
+                    </template>
+                    
                     <template is="dom-if" if="[[ templatetype.html ]]" restamp>
                         <html-view result="[[ paragraph.result.msg ]]"></html-view>
                     </template>

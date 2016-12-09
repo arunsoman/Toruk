@@ -15,7 +15,7 @@ Polymer({
       notify: true
     },
     noteBook: {
-      type: Object
+      type: Object,
     },
     noteBookName: {
       type: String

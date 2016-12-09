@@ -4,39 +4,55 @@
     <style>
     :host {
         display: block;
+        margin-top: 2em;
     }
-    .view-mode-true{
-      position: absolute;
-      left: 0;
-      right: 0;
-      background: #fff;
+    
+    section {
+        background: #ececec;
+        margin: 0 -1em 1em;
+        padding: 2em 2em 1.5em;
+        border-bottom: solid 1px #fff;
+        box-shadow: 1px -9px 3px rgba(0, 0, 0, 0.03) inset;
+        display: flex;
+    }
+    
+    section h3 {
+        margin-top: 11px;
+    }
+    
+    .name-wrap {
+        flex-grow: 1;
+    }
+    
+    .notebook-settings {
+        display: flex;
     }
     </style>
     <template>
         <a id="downloadAnchorElem"></a>
         <template is="dom-if" if="{{ !viewMode }}" restamp>
             <section class="title">
-                <div class="icons">
+                <div class="name-wrap">
+                    <h3 title="Click to edit" on-tap="editTitle">Notebook: {{ noteBookName }}</h3>
+                    <!-- <paper-input value="{{_noteBookName}}"></paper-input> -->
+                    <!-- <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveName"></paper-icon-button> -->
+                    <!-- <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelRename"></paper-icon-button> -->
+                </div>
+                <div class="icons notebook-settings">
                     <paper-icon-button icon="apps" on-tap="simpleView" title="Compact View"></paper-icon-button>
                     <paper-icon-button icon="dashboard" on-tap="editorView" title="Editor View"></paper-icon-button>
                     <paper-icon-button icon="icons:refresh" on-tap="runAllParas" title="Run all paragraphs"></paper-icon-button>
                     <paper-icon-button icon="icons:file-download" on-tap="exportNotebook" title="Export Notebook"></paper-icon-button>
                 </div>
-                <div class="name-wrap">
-                    <h3 title="Click to edit" on-tap="editTitle">Notebook: {{ noteBookName }}</h3>
-                    <paper-input value="{{_noteBookName}}"></paper-input>
-                    <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveName"></paper-icon-button>
-                    <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelRename"></paper-icon-button>
-                </div>
             </section>
         </template>
         <div class$="view-mode-[[ viewMode]]">
-        <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket>
-        <template is="dom-repeat" items="{{ responseItems }}">
-            <zeppelin-paragraph editor="[[ editor ]]" settings="[[ settings ]]" notebook-id="[[ notebookId ]]" ws="[[ ws ]]" ws-data="{{ wsData }}" paragraph="[[ item ]]" index="[[ index ]]" view-mode="[[ viewMode ]]">
-                <!-- <zeppelin-chart-manager></zeppelin-chart-manager> -->
-            </zeppelin-paragraph>
-        </template>
+            <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket>
+            <template is="dom-repeat" items="{{ responseItems }}">
+                <zeppelin-paragraph editor="[[ editor ]]" settings="[[ settings ]]" notebook-id="[[ notebookId ]]" ws="[[ ws ]]" ws-data="{{ wsData }}" paragraph="[[ item ]]" index="[[ index ]]" view-mode="[[ viewMode ]]">
+                    <!-- <zeppelin-chart-manager></zeppelin-chart-manager> -->
+                </zeppelin-paragraph>
+            </template>
         </div>
     </template>
     <script src="zeppelin-notebook.js"></script>

@@ -4,14 +4,24 @@
         <style>
         iron-data-table {
             height: 100%;
-            top: 0;
+            top: 5em;
             bottom: 0;
             position: absolute;
             left: 0;
             right: 0;
         }
+        .top-panel{
+          margin-top: 1em;
+        }
         </style>
         <iron-ajax url="[[ url ]]api/notebook" auto handle-as="json" on-response="handleResponse" id="ajax"></iron-ajax>
+        <div class="layout horizontal top-panel">
+                    <h3 class="headingPage flex">Notebooks</h3>
+                    <div class="addButton">
+                        <paper-button on-tap="createNoteBook">Create new note</paper-button>
+                    </div>
+                </div>
+
         <iron-data-table items="[[ responseItems ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
             <data-table-column name="Job Name" filter-by="name" filter-type="text">
                 <template is="header">Note books</template>
