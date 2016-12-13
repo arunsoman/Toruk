@@ -1,15 +1,17 @@
 Polymer({
   is: 'editor-view',
   properties: {
-    // paragrahp object
+    // paragraph object
     paragraph: {
-      type: function() {
+      type: Object,
+      value: function() {
         return {};
       }
     },
 
     settings: {
-      type: function() {
+      type: Object,
+      value: function() {
         return {};
       }
     },
@@ -19,12 +21,6 @@ Polymer({
       type: Object
     }
   },
-  observers: ['_editorChange(settings.*)'],
-
-  _editorChange: function(settings) {
-    // debugger;
-    // this.appendContent();
-  },
   attached: function() {
     var me = this;
     me.editor = window.ace.edit(me.paragraph.id);
@@ -32,7 +28,7 @@ Polymer({
     me.editor.setTheme('ace/theme/eclipse');
     me.editor.getSession().setMode('ace/mode/scala');
     me.editor.getSession().setUseWrapMode(true);
-    me.editor.on('change', function(a, b) {
+    me.editor.on('change', function() {
       me.set('me.paragraph.text', me.editor.getSession().getValue());
     });
   },

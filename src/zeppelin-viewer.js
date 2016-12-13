@@ -7,7 +7,7 @@ Polymer({
     // Websocket Url for zeppelin
     WS: {
       type: String,
-      value: 'ws://localhost:8080/ws/'
+      value: '/ws-zeppelin'
     },
     editor: {
       type: Boolean,
@@ -27,7 +27,7 @@ Polymer({
     },
     zeppelinUrl: {
       type: String,
-      value: 'http://localhost:8080/'
+      value: '/zeppelin'
     },
     viewNotebook: {
       type: Boolean,
