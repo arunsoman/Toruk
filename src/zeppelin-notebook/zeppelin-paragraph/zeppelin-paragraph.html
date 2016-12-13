@@ -16,8 +16,20 @@
             <article class$="card editor-card  editor-[[ !viewMode ]]">
                 <!-- Title -->
                 <header class="layout horizontal">
-                    <h4>[[ paragraph.title ]]Some title Goes here</h4>
+                    <template is="dom-if" if="[[ viewMode ]]">
+                        <h4>[[ paragraphTitle ]]</h4>
+                    </template>
                     <template is="dom-if" if="[[ !viewMode ]]" restamp>
+                        <h4> 
+                    <template is="dom-if" if="[[ editTitle ]]" restamp>
+                        <paper-input value="{{ paragraphTitle }}"></paper-input>
+                        <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveTitle"></paper-icon-button>
+                        <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelTitle"></paper-icon-button>
+                    </template>
+                    <template is="dom-if" if="[[ !editTitle ]]">
+                        <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button> [[ paragraphTitle ]] </span>
+                    </template>
+                    </h4>
                         <ul class="topbar">
                             <li>
                                 <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]">
@@ -100,7 +112,6 @@
                     <template is="dom-if" if="[[ templatetype.text ]]" restamp>
                         <pre class="pre-style">[[ paragraph.result.msg ]]</pre>
                     </template>
-                    
                     <template is="dom-if" if="[[ templatetype.html ]]" restamp>
                         <html-view result="[[ paragraph.result.msg ]]"></html-view>
                     </template>

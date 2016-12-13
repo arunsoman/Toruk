@@ -60,6 +60,10 @@ Polymer({
         external: [],
         source: []
       }
+    },
+    editTitle: {
+      type: Boolean,
+      value: false
     }
   },
   observers: ['_changeId(paragraph)', '_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)'],
@@ -73,11 +77,32 @@ Polymer({
   showDropDown: function() {
     this.$$('#navdrop').open();
   },
-
+  setEditTitle: function() {
+    this.set('editTitle', true);
+  },
+  saveTitle: function() {
+    this.set('paragraphTitle', this.paragraphTitle);
+    var postData = {
+      config: this.paragraph.config,
+      id: this.paragraph.id,
+      paragraph: this.$$('editor-view').getText(),
+      title: this.paragraphTitle
+    };
+    this.handlePOST({
+      op: 'COMMIT_PARAGRAPH',
+      data: postData,
+      params: {}
+    });
+    this.cancelTitle();
+  },
+  cancelTitle: function() {
+    this.set('editTitle', false);
+  },
   _changeId: function(data) {
     // TO learn what type of result
     if (this.paragraph.result) {
       this.fillTemplate(this.paragraph.result.type);
+      this.set('paragraphTitle', this.paragraph.title || 'Untitled');
     }
     // this.push('settings.order',this.paragraph.id);
   },
