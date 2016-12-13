@@ -66,7 +66,7 @@ Polymer({
           chartConf.settings = polyD3.selectedChart.settings.settings;
           chartConf.inputs = polyD3.selectedChart.settings.inputs;
         }
-        if (this.viewMode == true) {
+        if (this.viewMode) {
           chartConf.mode = 'view';
         }
         // Avoid twoway binding with polymer-d3
