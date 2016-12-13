@@ -33,10 +33,14 @@
         <template is="dom-if" if="{{ !viewMode }}" restamp>
             <section class="title">
                 <div class="name-wrap">
-                    <h3 title="Click to edit" on-tap="editTitle">Notebook: {{ noteBookName }}</h3>
-                    <!-- <paper-input value="{{_noteBookName}}"></paper-input> -->
-                    <!-- <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveName"></paper-icon-button> -->
-                    <!-- <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelRename"></paper-icon-button> -->
+                    <template is="dom-if" if="[[ !editNotebook ]]">
+                        <h3 title="Click to edit" on-tap="renameNotebook">Notebook: {{ noteBookName }}</h3>
+                    </template>
+                    <template is="dom-if" if="[[ editNotebook ]]">
+                        <paper-input value="{{ noteBookName }}"></paper-input>
+                        <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveNoteBookName"></paper-icon-button>
+                        <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelRename"></paper-icon-button>
+                    </template>
                 </div>
                 <div class="icons notebook-settings">
                     <paper-icon-button icon="apps" on-tap="simpleView" title="Compact View"></paper-icon-button>

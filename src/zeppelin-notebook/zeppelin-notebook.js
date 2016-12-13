@@ -40,6 +40,10 @@ Polymer({
     viewMode: {
       type: Boolean,
       value: true
+    },
+    editNotebook: {
+      type: Boolean,
+      value: false
     }
   },
 
@@ -131,18 +135,31 @@ Polymer({
     dlAnchorElem.setAttribute('download', this.noteBookName + '.json');
     dlAnchorElem.click();
   },
-  renameNoteBook: function() {
+  renameNotebook: function() {
+    this.set('oldBookName', this.noteBookName);
+    this.set('editNotebook', true);
+  },
+  cancelRename: function() {
+    this.set('noteBookName', this.oldBookName);
+    this.set('editNotebook', false);
+  },
+  saveNoteBookName: function() {
     this.set('socketEnable', true);
+    // this.set('noteBookName',this.setNoteBookname);
     var dummyObj = {
-      op: 'NOTE',
+      op: 'NOTE_UPDATE',
       principal: 'anonymous',
       roles: '[]',
       data: {
-        note: this._noteBook
+        config: {
+          looknfeel: 'default'
+        },
+        id: this.notebookId,
+        name: this.noteBookName
       },
       ticket: 'anonymous'
     };
-    dummyObj.data.note.name = this.noteBookName;
+    this.set('editNotebook', false);
     this.$.socket.send(dummyObj);
   }
 });
