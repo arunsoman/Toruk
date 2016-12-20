@@ -5,9 +5,19 @@ Polymer({
     responseItems: {
       type: Array
     },
-    notebookId: {
+    notebooks: {
+      type: Object
+    },
+    WS: {
       type: String,
+      value: 'ws://localhost/ws-zeppelin'
+    },
+    wsData: {
+      type: Object,
       notify: true
+    },
+    notebookId: {
+      type: String
     },
     viewMode: {
       type: Boolean,
@@ -15,12 +25,14 @@ Polymer({
       notify: true
     }
   },
-  observers: ['selectedChange(selectedItem)'],
+  observers: ['selectedChange(selectedItem)', 'showList(notebooks)'],
   behaviors: [ZEPPELIN_UI.DropdownFix],
-
-  handleResponse: function(response) {
+  dettached: function() {
+    this.dialog.close();
+  },
+  showList: function(response) {
     // to pass id value as name if name is null or empty
-    var mapItem = response.detail.response.body.map(item => {
+    var mapItem = response.map(item => {
       return {
         id: item.id,
         name: (item.name === '' ? item.id : item.name)
@@ -29,11 +41,49 @@ Polymer({
     this.set('responseItems', mapItem);
   },
 
+  createNoteBook: function() {
+    var data = {
+      op: 'NEW_NOTE',
+      principal: 'anonymous',
+      roles: '[]',
+      data: {
+        name: this.get('noteBookName')
+      },
+      ticket: 'anonymous'
+    };
+    this.set('wsData', data);
+  },
+  deleteNotebook: function(e) {
+    var data = {
+      op: 'DEL_NOTE',
+      principal: 'anonymous',
+      roles: '[]',
+      data: {
+        id: e.target.dataArgs.id
+      },
+      ticket: 'anonymous'
+    };
+    this.set('wsData', data);
+  },
+  showCreateView: function() {
+    this.$.dialog.open();
+  },
   selectedChange: function(item) {
-    this.set('notebookId', item.id);
+    var data = {
+      op: 'GET_NOTE',
+      principal: 'anonymous',
+      roles: '[]',
+      data: {
+        id: item.id
+      },
+      ticket: 'anonymous'
+    };
+    this.set('wsData', data);
   },
   editNotebook: function(e) {
     this.set('viewMode', false);
-    this.set('notebookId', e.target.dataArgs.id);
+    this.selectedChange({
+      id: e.target.dataArgs.id
+    });
   }
 });

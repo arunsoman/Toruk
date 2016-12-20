@@ -2,17 +2,17 @@ Polymer({
 
   is: 'zeppelin-notebook',
   properties: {
-    responseItems: {
-      type: Array
+    notebook: {
+      type: Object
     },
     socketEnable: {
       type: Boolean,
       value: false
     },
-    WS: {
-      type: String,
-      value: 'ws://localhost:8080/ws/'
-    },
+    // WS: {
+    //   type: String,
+    //   value: 'ws://localhost/ws-zeppelin'
+    // },
     settings: {
       type: Object,
       value: {
@@ -22,16 +22,14 @@ Polymer({
     },
 
     wsData: {
-      type: Object
+      type: Object,
+      notify: true
     },
     paragraphId: {
       type: String
     },
     noteBookName: {
       type: String,
-      value: function() {
-        return 'notebook' + new Date().getTime();
-      },
       notify: true
     },
     notebookId: {
@@ -47,16 +45,7 @@ Polymer({
     }
   },
 
-  attached: function() {
-    this.async(function() {
-      this.$.socket.open();
-    }.bind(this));
-  },
-  detached: function() {
-    this.$.socket.close();
-  },
-
-  observers: ['_wsDataChange(wsData)', 'restartSocket(notebookId)'],
+  // observers: ['restartSocket(notebookId)'],
 
   restartSocket: function() {
     // for polling the server
@@ -70,36 +59,36 @@ Polymer({
     }.bind(this), 9000);
   },
 
-  _wsDataChange: function(data) {
-    if (!this.socketEnable) {
-      this.$.socket.open();
-    }
-    this.$.socket.send(data);
-  },
+  // _wsDataChange: function(data) {
+  //   if (!this.socketEnable) {
+  //     this.$.socket.open();
+  //   }
+  //   this.$.socket.send(data);
+  // },
 
-  _onOpen: function() {
-    var me = this;
-    me.set('socketEnable', true);
-    var dummyObj = {
-      op: 'GET_NOTE',
-      principal: 'anonymous',
-      roles: '[]',
-      data: {
-        id: me.notebookId
-      },
-      ticket: 'anonymous'
-    };
-    me.$.socket.send(dummyObj);
-  },
-  _onClose: function() {
-    this.set('socketEnable', false);
-  },
+  // _onOpen: function() {
+  //   var me = this;
+  //   me.set('socketEnable', true);
+  //   var dummyObj = {
+  //     op: 'GET_NOTE',
+  //     principal: 'anonymous',
+  //     roles: '[]',
+  //     data: {
+  //       id: me.notebookId
+  //     },
+  //     ticket: 'anonymous'
+  //   };
+  //   me.$.socket.send(dummyObj);
+  // },
+  // _onClose: function() {
+  //   this.set('socketEnable', false);
+  // },
   handleResponse: function(response) {
     var op = response.detail.op;
     this._noteBook = response.detail.data.note;
     switch (op) {
     case 'NOTE':
-      this.set('responseItems', response.detail.data.note.paragraphs);
+      this.set('notebook', response.detail.data.note.paragraphs);
       this.set('noteBookName', response.detail.data.note.name);
       break;
     case 'PARAGRAPH_UPDATE_OUTPUT':
@@ -127,7 +116,7 @@ Polymer({
   exportParagraph: function() {
     // http://stackoverflow.com/a/30800715/5154397
     var paras = {
-      paragraphs: this.responseItems
+      paragraphs: this.notebook.paragraphs
     };
     var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(paras));
     var dlAnchorElem = this.querySelector('#downloadAnchorElem');
@@ -136,17 +125,15 @@ Polymer({
     dlAnchorElem.click();
   },
   renameNotebook: function() {
-    this.set('oldBookName', this.noteBookName);
+    this.set('oldBookName', this.notebook.name);
     this.set('editNotebook', true);
   },
   cancelRename: function() {
-    this.set('noteBookName', this.oldBookName);
+    this.set('notebook.name', this.oldBookName);
     this.set('editNotebook', false);
   },
   saveNoteBookName: function() {
-    this.set('socketEnable', true);
-    // this.set('noteBookName',this.setNoteBookname);
-    var dummyObj = {
+    var data = {
       op: 'NOTE_UPDATE',
       principal: 'anonymous',
       roles: '[]',
@@ -154,12 +141,12 @@ Polymer({
         config: {
           looknfeel: 'default'
         },
-        id: this.notebookId,
-        name: this.noteBookName
+        id: this.notebook.id,
+        name: this.notebook.name
       },
       ticket: 'anonymous'
     };
     this.set('editNotebook', false);
-    this.$.socket.send(dummyObj);
+    this.set('wsData', data);
   }
 });

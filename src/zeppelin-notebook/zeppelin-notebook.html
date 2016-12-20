@@ -34,10 +34,10 @@
             <section class="title">
                 <div class="name-wrap">
                     <template is="dom-if" if="[[ !editNotebook ]]">
-                        <h3 title="Click to edit" on-tap="renameNotebook">Notebook: {{ noteBookName }}</h3>
+                        <h3 title="Click to edit" on-tap="renameNotebook">Notebook: {{ notebook.name }}</h3>
                     </template>
                     <template is="dom-if" if="[[ editNotebook ]]">
-                        <paper-input value="{{ noteBookName }}"></paper-input>
+                        <paper-input value="{{ notebook.name }}"></paper-input>
                         <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveNoteBookName"></paper-icon-button>
                         <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelRename"></paper-icon-button>
                     </template>
@@ -51,8 +51,8 @@
             </section>
         </template>
         <div class$="view-mode-[[ viewMode]]">
-            <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket>
-            <template is="dom-repeat" items="{{ responseItems }}">
+            <!-- <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket> -->
+            <template is="dom-repeat" items="{{ notebook.paragraphs }}">
                 <zeppelin-paragraph editor="[[ editor ]]" settings="[[ settings ]]" notebook-id="[[ notebookId ]]" ws="[[ ws ]]" ws-data="{{ wsData }}" paragraph="[[ item ]]" index="[[ index ]]" view-mode="[[ viewMode ]]">
                     <!-- <zeppelin-chart-manager></zeppelin-chart-manager> -->
                 </zeppelin-paragraph>

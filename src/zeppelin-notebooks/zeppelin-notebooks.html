@@ -10,18 +10,30 @@
             left: 0;
             right: 0;
         }
-        .top-panel{
-          margin-top: 1em;
+        
+        .top-panel {
+            margin-top: 1em;
         }
         </style>
-        <iron-ajax url="[[ url ]]api/notebook" auto handle-as="json" on-response="handleResponse" id="ajax"></iron-ajax>
+        <!-- <iron-ajax url="[[ url ]]api/notebook" auto handle-as="json" on-response="handleResponse" id="ajax"></iron-ajax> -->
         <div class="layout horizontal top-panel">
-                    <h3 class="headingPage flex">Notebooks</h3>
-                    <div class="addButton">
-                        <paper-button on-tap="createNoteBook">Create new note</paper-button>
-                    </div>
+            <!-- <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket> -->
+            <h3 class="headingPage flex">Notebooks</h3>
+            <paper-dialog modal id="dialog" dynamic-align>
+                <h2>Create Note Book</h2>
+                <paper-dialog-scrollable>
+                    <p>Use '/' to create folders. Example: /NoteDirA/Notebook1</p>
+                    <paper-input value="{{ noteBookName }}" required placeholder="Note Name"></paper-input>
+                </paper-dialog-scrollable>
+                <div class="buttons">
+                    <paper-button class="cancel" dialog-dismiss>Cancel</paper-button>
+                    <paper-button on-tap="createNoteBook">Save</paper-button>
                 </div>
-
+            </paper-dialog>
+            <div class="addButton">
+                <paper-button on-tap="showCreateView">Create new note</paper-button>
+            </div>
+        </div>
         <iron-data-table items="[[ responseItems ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
             <data-table-column name="Job Name" filter-by="name" filter-type="text">
                 <template is="header">Note books</template>

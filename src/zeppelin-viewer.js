@@ -4,30 +4,30 @@ Polymer({
 
   properties: {
 
-    // Websocket Url for zeppelin
-    WS: {
-      type: String,
-      value: '/ws-zeppelin'
-    },
     editor: {
       type: Boolean,
       value: true,
       notify: true
     },
+    WS: {
+      type: String,
+      value: 'ws://localhost/ws-zeppelin'
+    },
     noteBook: {
+      type: Object
+    },
+    wsData: {
       type: Object
     },
     noteBookName: {
       type: String
     },
-    noteBookId: {
+    notebooks: {
+      type: Object
+    },
+    notebookId: {
       type: String,
       value: false
-        // value: '2C6C1TYPP'
-    },
-    zeppelinUrl: {
-      type: String,
-      value: '/zeppelin'
     },
     viewNotebook: {
       type: Boolean,
@@ -36,6 +36,48 @@ Polymer({
     viewMode: {
       type: Boolean,
       value: true
+    }
+  },
+  observers: ['sendData(wsData)'],
+  _onOpen: function() {
+    var me = this;
+    me.set('socketEnable', true);
+    var dummyObj = {
+      op: 'LIST_NOTES',
+      principal: 'anonymous',
+      roles: '[]',
+      ticket: 'anonymous'
+    };
+    me.$.socket.send(dummyObj);
+  },
+  sendData: function(message) {
+    this.$.socket.send(message);
+  },
+  _onClose: function() {
+    this.set('socketEnable', false);
+  },
+
+  handleSocketResponse: function(response) {
+    var op = response.detail.op;
+    switch (op) {
+    case 'NOTE':
+      this.set('notebook', response.detail.data.note);
+      this.set('notebookId', response.detail.data.note.id);
+      // this.set('noteBookName', response.detail.data.note.name);
+      break;
+    case 'NEW_NOTE':
+      this.set('notebook', response.detail.data.note);
+      this.set('notebookId', response.detail.data.note.id);
+      break;
+    case 'NOTES_INFO':
+      this.set('notebooks', response.detail.data.notes);
+      break;
+    case 'GET_NOTE':
+      this.set('notebookId', response.detail.data.id);
+      break;
+    default:
+      break;
+      // this.set('settings.progress', null);
     }
   },
 
@@ -51,7 +93,8 @@ Polymer({
 
   attached: function() {
     this.async(function() {
-      this.noteBook = this.$$('zeppelin-notebook');
+      this.$.socket.open();
+      // this.noteBook = this.$$('zeppelin-notebook');
     }.bind(this));
   },
 

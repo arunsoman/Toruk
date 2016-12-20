@@ -78,24 +78,25 @@ Polymer({
     this.$$('#navdrop').open();
   },
   setEditTitle: function() {
+    this.set('prevTitle', this.paragraph.title);
     this.set('editTitle', true);
   },
   saveTitle: function() {
-    this.set('paragraphTitle', this.paragraphTitle);
     var postData = {
       config: this.paragraph.config,
       id: this.paragraph.id,
       paragraph: this.$$('editor-view').getText(),
-      title: this.paragraphTitle
+      title: this.paragraph.title
     };
     this.handlePOST({
       op: 'COMMIT_PARAGRAPH',
       data: postData,
       params: {}
     });
-    this.cancelTitle();
+    this.set('editTitle', false);
   },
   cancelTitle: function() {
+    this.set('paragraph.title', this.prevTitle);
     this.set('editTitle', false);
   },
   _changeId: function(data) {
@@ -146,14 +147,11 @@ Polymer({
   // To save a pargraph
   saveParagraph: function() {
     var chartManager = this.$$('zeppelin-chart-manager');
-    if (!chartManager) {
-      return false;
+    this.set('paragraph.text', this.$$('editor-view').getText());
+    if (chartManager) {
+      var polymerD3 = chartManager.$$('polymer-d3');
+      this.paragraph.config.graph.polymerD3 = polymerD3.getSettings();
     }
-    var polymerD3 = chartManager.$$('polymer-d3');
-    if (!polymerD3) {
-      return false;
-    }
-    this.paragraph.config.graph.polymerD3 = polymerD3.getSettings();
     this._commitParagraph();
   },
 

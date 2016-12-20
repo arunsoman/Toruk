@@ -15,17 +15,17 @@
                 <!-- Title -->
                 <header class="layout horizontal">
                     <template is="dom-if" if="[[ viewMode ]]">
-                        <h4>[[ paragraphTitle ]]</h4>
+                        <h4>[[ paragraph.title ]]</h4>
                     </template>
                     <template is="dom-if" if="[[ !viewMode ]]" restamp>
                         <h4> 
                     <template is="dom-if" if="[[ editTitle ]]" restamp>
-                        <paper-input value="{{ paragraphTitle }}"></paper-input>
+                        <paper-input value="{{ paragraph.title }}"></paper-input>
                         <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveTitle"></paper-icon-button>
                         <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelTitle"></paper-icon-button>
                     </template>
                     <template is="dom-if" if="[[ !editTitle ]]">
-                        <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button> [[ paragraphTitle ]] </span>
+                        <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button> [[ paragraph.title ]] </span>
                     </template>
                     </h4>
                         <ul class="topbar">
