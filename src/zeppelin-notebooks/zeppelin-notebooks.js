@@ -31,6 +31,14 @@ Polymer({
     this.dialog.close();
   },
   showList: function(response) {
+    var folders = {};
+    var misc = {
+        folder: 'miscellaneous',
+        items: []
+    };
+    var responseArray =[];
+
+    
     // to pass id value as name if name is null or empty
     var mapItem = response.map(item => {
       return {
@@ -38,7 +46,26 @@ Polymer({
         name: (item.name === '' ? item.id : item.name)
       };
     });
-    this.set('responseItems', mapItem);
+    mapItem.forEach((item, i) => {
+      var splitted = item.name.split('/');
+      if (splitted.length > 1) {
+        if (!folders[splitted[0]]) {
+          folders[splitted[0]] = {};
+          folders[splitted[0]].folder = splitted[0];
+          folders[splitted[0]].items = [];
+        }
+        folders[splitted[0]].items.push(item);
+      } else {
+        misc.items.push(item);
+      }
+    });
+
+    responseArray.push(misc);
+    for (key in folders) {
+      responseArray.push(folders[key]);
+    }
+
+    this.set('responseItems', responseArray);
   },
 
   createNoteBook: function() {

@@ -2,17 +2,42 @@
 <dom-module id="zeppelin-notebooks">
     <template>
         <style>
-        iron-data-table {
-            height: 100%;
+        iron-data-table #container{
+          /*  height: 100%;
             top: 5em;
             bottom: 0;
             position: absolute;
             left: 0;
-            right: 0;
+            right: 0;*/
+            width: 100%!important;
         }
         
         .top-panel {
             margin-top: 1em;
+        }
+        .details{
+            opacity: 0;
+            pointer-events: none;
+            position: relative;
+            height: 0;
+            overflow-x:hidden;
+        }
+        .folder-check{
+            display: none;
+        }
+        .folder-check:checked+.details{
+            opacity: 1;
+            pointer-events: initial;
+            height: auto;
+        }
+        .folder-icon{
+            position: relative;
+            z-index: 999;
+            display: block;
+            background: #fff;
+            padding: 1em;
+            cursor: pointer;
+            margin-top: 5px;
         }
         </style>
         <!-- <iron-ajax url="[[ url ]]api/notebook" auto handle-as="json" on-response="handleResponse" id="ajax"></iron-ajax> -->
@@ -34,23 +59,38 @@
                 <paper-button on-tap="showCreateView">Create new note</paper-button>
             </div>
         </div>
-        <iron-data-table items="[[ responseItems ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
-            <data-table-column name="Job Name" filter-by="name" filter-type="text">
-                <template is="header">Note books</template>
-                <template>[[ item.name ]]</template>
-            </data-table-column>
-            <data-table-column flex="0" width="3.5em">
-                <template>
-                    <paper-menu-button dynamic-align>
-                        <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
-                        <paper-menu class="dropdown-content">
-                            <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
-                            <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
-                        </paper-menu>
-                    </paper-menu-button>
-                </template>
-            </data-table-column>
-        </iron-data-table>
+        <template is="dom-repeat" items="[[ responseItems ]]" index-as="index">
+            <div class="folders">
+            
+            <label for$="folder-check[[index]]" class="folder-icon"><paper-icon-button icon="icons:folder" title="[[item.folder]]"></paper-icon-button><strong>[[item.folder]]</strong></label>
+            <input type="checkbox" class="folder-check" id$="folder-check[[index]]">
+            <div class="details">
+                <iron-data-table items="[[ item.items ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
+                    <data-table-column name="jobs" filter-by="name" filter-type="text">
+                        <template>[[ item.name ]]</template>
+                    </data-table-column>
+                    <data-table-column flex="0" width="3.5em">
+                        <template>
+                            <paper-menu-button dynamic-align>
+                                <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
+                                <paper-menu class="dropdown-content">
+                                    <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
+                                    <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
+                                </paper-menu>
+                            </paper-menu-button>
+                        </template>
+                    </data-table-column>
+                </iron-data-table>
+                </div>
+            </div>
+        </template>
+
+        
+
+
+        
+
+
     </template>
     <script src="zeppelin-notebooks.js"></script>
 </dom-module>
