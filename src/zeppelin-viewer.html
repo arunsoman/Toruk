@@ -1,8 +1,8 @@
+<link rel="import" href="zeppelin-notebooks/zeppelin-notebooks.html">
+<link rel="import" href="zeppelin-notebook/zeppelin-notebook.html">
+<link rel="import" href="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.html">
+<link rel="import" type="css" href="zeppelin-viewer.css">
 <dom-module id="zeppelin-viewer">
-    <link rel="import" href="zeppelin-notebooks/zeppelin-notebooks.html">
-    <link rel="import" href="zeppelin-notebook/zeppelin-notebook.html">
-    <link rel="import" href="zeppelin-notebook/zeppelin-paragraph/zeppelin-paragraph.html">
-    <link rel="import" type="css" href="zeppelin-viewer.css">
     <template>
         <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
         <div class="table-wrapper">
