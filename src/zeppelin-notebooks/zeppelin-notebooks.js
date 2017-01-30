@@ -33,20 +33,18 @@ Polymer({
   showList: function(response) {
     var folders = {};
     var misc = {
-        folder: 'miscellaneous',
-        items: []
+      folder: 'miscellaneous',
+      items: []
     };
-    var responseArray =[];
-
-    
+    var responseArray = [];
     // to pass id value as name if name is null or empty
-    var mapItem = response.map(item => {
+    var mapItem = response.map(function(item) {
       return {
         id: item.id,
         name: (item.name === '' ? item.id : item.name)
       };
     });
-    mapItem.forEach((item, i) => {
+    mapItem.forEach(function(item) {
       var splitted = item.name.split('/');
       if (splitted.length > 1) {
         if (!folders[splitted[0]]) {
@@ -61,9 +59,11 @@ Polymer({
     });
 
     responseArray.push(misc);
-    for (key in folders) {
+    /* eslint-disable */
+    for (key in folders) { 
       responseArray.push(folders[key]);
     }
+    /* eslint-disable */
 
     this.set('responseItems', responseArray);
   },
