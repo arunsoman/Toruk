@@ -25,7 +25,7 @@
     "ace-builds": "^1.2.4",
     "polymer": "^1.6.0",
     "iron-ajax": "^1.4.3",
-    "polymer-sortablejs": "^0.1.3",
+    "polymer-sortablejs": "https://github.com/SortableJS/polymer-sortablejs.git#5b7f08a",
     "iron-icon": "^1.0.9",
     "paper-input": "^1.1.15",
     "iron-form": "^1.1.1",
@@ -41,9 +41,9 @@
     "polymer-d3": "https://github.com/arunsoman/polymer-d3.git"
   },
   "resolutions": {
-    "polymer-sortablejs": "master",
     "paper-styles": "~1.0.13",
     "web-animations-js": "^2.2.0",
-    "neon-animation": "v1.2.4"
+    "neon-animation": "v1.2.4",
+    "polymer-sortablejs": "5b7f08a"
   }
 }
