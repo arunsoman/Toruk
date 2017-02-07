@@ -80,11 +80,7 @@ Polymer({
       this.set('notebookId', response.detail.data.id);
       break;
     case 'PROGRESS':
-      var getIndex = _.findIndex(this.notebook.paragraphs, {
-        id: response.detail.data.id
-      });
-      this.set('notebook.paragraphs.' + getIndex + '.progressVal', response.detail.data.progress);
-      this.set('notebookId', response.detail.data.id);
+      // wip for progress event
       break;
     default:
       break;
