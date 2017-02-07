@@ -13,8 +13,8 @@ Polymer({
       type: String,
       value: '/ws-zeppelin'
     },
-    hostName:{
-      type:String
+    hostName: {
+      type: String
     },
     noteBook: {
       type: Object
@@ -80,8 +80,10 @@ Polymer({
       this.set('notebookId', response.detail.data.id);
       break;
     case 'PROGRESS':
-      var getIndex = _.findIndex(this.notebook.paragraphs,{id:response.detail.data.id});
-      this.set('notebook.paragraphs.'+getIndex+'.progressVal',response.detail.data.progress);
+      var getIndex = _.findIndex(this.notebook.paragraphs, {
+        id: response.detail.data.id
+      });
+      this.set('notebook.paragraphs.' + getIndex + '.progressVal', response.detail.data.progress);
       this.set('notebookId', response.detail.data.id);
       break;
     default:
@@ -107,7 +109,7 @@ Polymer({
       // this.noteBook = this.$$('zeppelin-notebook');
     }.bind(this));
   },
-  detached: function(){
+  detached: function() {
     this.$.socket.close();
   },
   exportNotebook: function() {
