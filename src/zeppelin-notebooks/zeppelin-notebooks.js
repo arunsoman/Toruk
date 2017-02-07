@@ -8,10 +8,6 @@ Polymer({
     notebooks: {
       type: Object
     },
-    WS: {
-      type: String,
-      value: 'ws://localhost/ws-zeppelin'
-    },
     wsData: {
       type: Object,
       notify: true
@@ -29,6 +25,25 @@ Polymer({
   behaviors: [ZEPPELIN_UI.DropdownFix],
   dettached: function() {
     this.dialog.close();
+  },
+  dropDownListener: function() {
+    var me = this;
+    var ironLists = document.querySelectorAll('iron-list');
+    for (var i = 0; i < ironLists.length; i++) {
+      me.addListener(ironLists[i]);
+    }
+  },
+  // Adds iron overlay open and close events for specific datatable in the page
+  addListener: function(list) {
+    var me = this;
+    list.addEventListener('iron-overlay-opened', function(e) {
+      var row = me.getParentByTagName(e.target, 'data-table-row');
+      row.parentElement.style.zIndex = 1;
+    });
+    list.addEventListener('iron-overlay-closed', function(e) {
+      var row = me.getParentByTagName(e.target, 'data-table-row');
+      row.parentElement.style.zIndex = '';
+    });
   },
   showList: function(response) {
     var folders = {};
@@ -66,6 +81,10 @@ Polymer({
     /* eslint-disable */
 
     this.set('responseItems', responseArray);
+    setTimeout(function(){
+      this.dropDownListener();
+    }.bind(this),200)
+    
   },
 
   createNoteBook: function() {

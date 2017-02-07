@@ -87,6 +87,8 @@ iron-dropdown {
     white-space: pre-wrap;
     word-break: break-all!important;
     word-wrap: break-word!important;
+    max-height: 150px;
+    overflow-x: auto; 
 }
 
 .drag-me {

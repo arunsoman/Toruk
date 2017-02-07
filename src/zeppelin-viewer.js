@@ -11,7 +11,10 @@ Polymer({
     },
     WS: {
       type: String,
-      value: 'ws://localhost/ws-zeppelin'
+      value: '/ws-zeppelin'
+    },
+    hostName:{
+      type:String
     },
     noteBook: {
       type: Object
@@ -54,7 +57,8 @@ Polymer({
     this.$.socket.send(message);
   },
   _onClose: function() {
-    this.set('socketEnable', false);
+    this.$.socket.open();
+    // this.set('socketEnable', false);
   },
 
   handleSocketResponse: function(response) {
@@ -75,6 +79,11 @@ Polymer({
     case 'GET_NOTE':
       this.set('notebookId', response.detail.data.id);
       break;
+    case 'PROGRESS':
+      var getIndex = _.findIndex(this.notebook.paragraphs,{id:response.detail.data.id});
+      this.set('notebook.paragraphs.'+getIndex+'.progressVal',response.detail.data.progress);
+      this.set('notebookId', response.detail.data.id);
+      break;
     default:
       break;
       // this.set('settings.progress', null);
@@ -92,12 +101,15 @@ Polymer({
   },
 
   attached: function() {
+    this.hostName = window.location.hostname;
     this.async(function() {
       this.$.socket.open();
       // this.noteBook = this.$$('zeppelin-notebook');
     }.bind(this));
   },
-
+  detached: function(){
+    this.$.socket.close();
+  },
   exportNotebook: function() {
     if (this.noteBook) {
       this.noteBook.exportParagraph();

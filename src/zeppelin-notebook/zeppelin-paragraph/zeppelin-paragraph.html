@@ -25,21 +25,41 @@
                         <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelTitle"></paper-icon-button>
                     </template>
                     <template is="dom-if" if="[[ !editTitle ]]">
-                        <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button> [[ paragraph.title ]] </span>
+                        <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button> 
+                        <template is="dom-if" if="[[ !paragraph.title ]]">
+                            Untitled
+                        </template>
+                        <template is="dom-if" if="[[ paragraph.title ]]">
+                            [[ paragraph.title ]] 
+                        </template>
+                        </span>
                     </template>
                     </h4>
                         <ul class="topbar">
                             <li>
-                                <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]">
-                                    Pending
-                                </template>
-                                <template is="dom-if" if="[[ eq(paragraph.status,'FINISHED') || eq(paragraph.status,'READY')]]">
-                                    <paper-icon-button icon="chevron-right" on-tap="runParagraph">Run</paper-icon-button>
-                                </template>
+                                
                                 <template is="dom-if" if="[[ eq(paragraph.status,'ERROR') ]]">
-                                    <iron-icon icon="warning" title="Error"></iron-icon>
-                                    <paper-icon-button icon="chevron-right" title="Run" on-tap="runParagraph"></paper-icon-button>
+                                    <iron-label>
+                                        <small>Error</small>
+                                        <iron-icon icon="warning" title="Error"></iron-icon>
+                                    </iron-label>
+                                    <!-- <paper-icon-button icon="chevron-right" title="Run" on-tap="runParagraph"></paper-icon-button> -->
                                 </template>
+                                
+                                    <iron-label>
+                                        <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]" restamp>
+                                            <small>Pending</small>
+                                        </template>
+                                        <template is="dom-if" if="[[ eq(paragraph.status,'RUNNING') ]]" restamp>
+                                            <small>Running</small>
+                                            <paper-icon-button icon="icons:cancel" on-tap="pauseParagraph"></paper-icon-button>
+                                        </template>
+                                        <template is="dom-if" if="[[ contains(paragraph.status,'ERROR','READY') ]]" restamp>
+                                            <small>Run</small>
+                                            <paper-icon-button icon="icons:send" on-tap="runParagraph"></paper-icon-button>
+                                        </template>
+                                    </iron-label>
+
                                 <paper-icon-button icon="settings" on-tap="showDropDown"></paper-icon-button>
                                 <iron-dropdown horizontal-align="right" noOverlap id="navdrop" vertical-align="top">
                                     <div class="dropdown-content">
@@ -107,9 +127,15 @@
                         </div>
                     </template>
                     <!-- / options -->
-                    <template is="dom-if" if="[[ templatetype.text ]]" restamp>
-                        <pre class="pre-style">[[ paragraph.result.msg ]]</pre>
+                    <template is="dom-if" if="[[ not(paragraph.status,'RUNNING') ]]">
+                        <template is="dom-if" if="[[ templatetype.text ]]" restamp>
+                            <pre class="pre-style">[[ paragraph.text ]]</pre>
+                        </template>
                     </template>
+                    <template is="dom-if" if="[[ eq(paragraph.status,'RUNNING') ]]">
+                        <pre class="pre-style">running....</pre>
+                    </template>
+                    
                     <template is="dom-if" if="[[ templatetype.html ]]" restamp>
                         <html-view result="[[ paragraph.result.msg ]]"></html-view>
                     </template>
