@@ -99,8 +99,8 @@ Polymer({
   },
 
   attached: function() {
-    var protocol = window.location.hostname =='https' ? 'wss' : 'ws';
-    this.hostName = protocol+'://'+window.location.hostname;
+    var protocol = window.location.hostname === 'https' ? 'wss' : 'ws';
+    this.hostName = protocol + '://' + window.location.hostname;
     // this.hostName = '192.168.14.100:8080';
     this.async(function() {
       this.$.socket.open();
