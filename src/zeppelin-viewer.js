@@ -11,7 +11,10 @@ Polymer({
     },
     WS: {
       type: String,
-      value: 'ws://localhost/ws-zeppelin'
+      value: 'ws'
+    },
+    hostName: {
+      type: String
     },
     noteBook: {
       type: Object
@@ -54,7 +57,8 @@ Polymer({
     this.$.socket.send(message);
   },
   _onClose: function() {
-    this.set('socketEnable', false);
+    this.$.socket.open();
+    // this.set('socketEnable', false);
   },
 
   handleSocketResponse: function(response) {
@@ -75,6 +79,9 @@ Polymer({
     case 'GET_NOTE':
       this.set('notebookId', response.detail.data.id);
       break;
+    case 'PROGRESS':
+      // wip for progress event
+      break;
     default:
       break;
       // this.set('settings.progress', null);
@@ -92,12 +99,17 @@ Polymer({
   },
 
   attached: function() {
+    var protocol = window.location.hostname =='https' ? 'wss' : 'ws';
+    this.hostName = protocol+'://'+window.location.hostname;
+    // this.hostName = '192.168.14.100:8080';
     this.async(function() {
       this.$.socket.open();
       // this.noteBook = this.$$('zeppelin-notebook');
     }.bind(this));
   },
-
+  detached: function() {
+    this.$.socket.close();
+  },
   exportNotebook: function() {
     if (this.noteBook) {
       this.noteBook.exportParagraph();

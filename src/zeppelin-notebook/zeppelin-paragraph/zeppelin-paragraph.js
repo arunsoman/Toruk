@@ -124,6 +124,9 @@ Polymer({
   not: function(a, b) {
     return a !== b;
   },
+  contains: function(a, b, c) {
+    return [b, c].indexOf(a) !== -1;
+  },
 
   _gridChange: function(obj) {
     if (obj.path === 'paragraph.config.colWidth') {
@@ -194,9 +197,18 @@ Polymer({
       id: this.paragraph.id,
       paragraph: this.$$('editor-view').getText()
     };
+    // this.set('paragraph.result.msg','Loading..')
+    // this.set('paragraph.text','Loading..')
     this.handlePOST({
       op: 'RUN_PARAGRAPH',
       data: postData,
+      params: {}
+    });
+  },
+  pauseParagraph: function() {
+    this.handlePOST({
+      op: 'CANCEL_PARAGRAPH',
+      data: this.paragraph.id,
       params: {}
     });
   },

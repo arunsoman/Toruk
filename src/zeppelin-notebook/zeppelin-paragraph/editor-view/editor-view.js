@@ -25,7 +25,7 @@ Polymer({
     var me = this;
     me.editor = window.ace.edit(me.paragraph.id);
     me.editor.setValue(me.paragraph.text || '', 1);
-    me.editor.setTheme('ace/theme/eclipse');
+    me.editor.setTheme('ace/theme/dawn');
     me.editor.getSession().setMode('ace/mode/scala');
     me.editor.getSession().setUseWrapMode(true);
     me.editor.on('change', function() {
