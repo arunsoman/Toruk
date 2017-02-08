@@ -4,7 +4,7 @@
 <link rel="import" type="css" href="zeppelin-viewer.css">
 <dom-module id="zeppelin-viewer">
     <template>
-        <web-socket id="socket" url="ws://[[hostName]]/[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
+        <web-socket id="socket" url="[[hostName]]:8096/[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
         <div class="table-wrapper">
             <template is="dom-if" if="{{ !notebookId }}" restamp>
                 <zeppelin-notebooks notebooks="[[ notebooks ]]" ws-data="{{ wsData }}" view-mode="{{ viewMode }}"></zeppelin-notebooks>
