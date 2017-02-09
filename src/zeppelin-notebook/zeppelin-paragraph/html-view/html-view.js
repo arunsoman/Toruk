@@ -19,6 +19,22 @@ Polymer({
   // Attaching directly to div#html_content not works some times-
   // because the dom-if couldn't render the `html-view` element
   _resultObs: function(result) {
-    this.innerHTML = result;
+    this.innerHTML = '';
+    var newdiv = document.createElement('div');
+    newdiv.innerHTML = result;
+    this.appendChild(newdiv);
+    // To run scipt blocks in HTML-MODE
+    // catch all script tags and execute what's inside
+    var scriptTags = this.querySelectorAll('script');
+    [].forEach.call(scriptTags, function(tag) {
+      try {
+        this.async(function() {
+          /* eslint no-eval: 0 */
+          eval(tag.innerHTML); // eval is evil!
+        });
+      } catch (e) {
+        console.warn(e);
+      }
+    }.bind(this));
   }
 });
