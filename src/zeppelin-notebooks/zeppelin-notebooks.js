@@ -19,10 +19,31 @@ Polymer({
       type: Boolean,
       value: true,
       notify: true
+    },
+    error: {
+      type: Boolean,
+      value: false,
+      notify: true
+    },
+    showTemplates: {
+      type: Object,
+      value: {
+        show: false,
+        tableData: Object
+      }
     }
+
   },
   observers: ['selectedChange(selectedItem)', 'showList(notebooks)'],
   behaviors: [ZEPPELIN_UI.DropdownFix],
+  setView: function(event) {
+    this.set('showTemplates.show', true);
+    var lists = event.model.get('item.items');
+    this.set('showTemplates.tableData', lists);
+  },
+  hideTemplates: function() {
+    this.set('showTemplates.show', false);
+  },
   dettached: function() {
     this.dialog.close();
   },
@@ -48,7 +69,7 @@ Polymer({
   showList: function(response) {
     var folders = {};
     var misc = {
-      folder: 'miscellaneous',
+      folder: 'Others',
       items: []
     };
     var responseArray = [];
@@ -110,6 +131,7 @@ Polymer({
       ticket: 'anonymous'
     };
     this.set('wsData', data);
+    this.set('showTemplates.show',false);
   },
   showCreateView: function() {
     this.$.dialog.open();

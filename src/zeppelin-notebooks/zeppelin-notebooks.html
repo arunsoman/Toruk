@@ -1,5 +1,6 @@
 <link rel="import" href="../drop-down-fix/drop-down-fix.html">
 <dom-module id="zeppelin-notebooks">
+    <link rel="import" type="css" href="zeppelin-notebooks.css">
     <template>
         <style>
         iron-data-table #container{
@@ -53,10 +54,10 @@
             <!-- <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket> -->
             <h3 class="headingPage flex">Categories of analytical models</h3>
             <paper-dialog modal id="dialog" dynamic-align>
-                <h2>Create Note Book</h2>
+                <h2>Create Model</h2>
                 <paper-dialog-scrollable>
-                    <p>Use '/' to create folders. Example: /NoteDirA/Notebook1</p>
-                    <paper-input value="{{ noteBookName }}" required placeholder="Note Name"></paper-input>
+                    <p>Use '/' to create folders. Example: /NoteDirA/Model1</p>
+                    <paper-input value="{{ noteBookName }}" required placeholder="Model Name"></paper-input>
                 </paper-dialog-scrollable>
                 <div class="buttons">
                     <paper-button class="cancel" dialog-dismiss>Cancel</paper-button>
@@ -64,13 +65,48 @@
                 </div>
             </paper-dialog>
             <div class="addButton">
-                <paper-button on-tap="showCreateView">Create new note</paper-button>
+                <paper-button on-tap="showCreateView">Create new model</paper-button>
             </div>
         </div>
-        <template is="dom-repeat" items="[[ responseItems ]]" index-as="index">
-            <div class="folders">
+        <template is="dom-if" if="[[ !showTemplates.show ]]" restamp>
             
-            <label for$="folder-check[[index]]" class="folder-icon"><paper-icon-button icon="icons:folder" title="[[item.folder]]"></paper-icon-button><strong>[[item.folder]]</strong></label>
+        <template is="dom-repeat" items="[[ responseItems ]]" index-as="index">
+            <paper-card on-tap="setView">
+            <div class="card-content layout vertical">
+                <div class="heading">
+                   <div class="categoryName">[[ item.folder ]]</div>
+                </div>
+                <div class="icon-holder">
+                    <iron-image sizing="contain" src$="images/models/[[item.folder]].svg"></iron-image>
+                </div>
+            </div>
+            <!-- <div class="card-actions layout horizontal">
+                <div class="layout horizontal flex">
+                    <a href="#/clv-max/life-cycle-marketing/campaign/[[ item.id ]]/templates" class="campaignDiv">
+                        <span class="flex">templates</span>
+                    </a>
+                    <span class="count">10</span>
+                </div>
+                <div class="v-separator"></div>
+                <div class="layout horizontal flex">
+                    <a href="#/clv-max/life-cycle-marketing/[[ item.id ]]" class="campaignDiv">
+                        <span class="flex">Custom</span>
+                    </a>
+                    <span class="count">0</span>
+                </div>
+                
+            </div> -->
+        </paper-card>
+
+
+
+
+            <!-- <div class="folders">
+            
+            <label for$="folder-check[[index]]" class="folder-icon">
+            <strong>[[item.folder]]</strong>
+            <iron-image src$="images/models/[[item.folder]].svg" error="{{error}}"></iron-image>
+            </label>
             <input type="checkbox" class="folder-check" id$="folder-check[[index]]">
             <div class="details">
                 <iron-data-table items="[[ item.items ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
@@ -90,7 +126,28 @@
                     </data-table-column>
                 </iron-data-table>
                 </div>
-            </div>
+            </div> -->
+        </template>
+        </template>
+        <template is="dom-if" if="[[ showTemplates.show ]]" restamp>
+        <paper-button class="btn-back" on-tap="hideTemplates">
+                <iron-icon icon="chevron-left"></iron-icon>Back to model listing</paper-button>
+            <iron-data-table items="[[ showTemplates.tableData ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
+                    <data-table-column name="jobs" filter-by="name" filter-type="text">
+                        <template>[[ item.name ]]</template>
+                    </data-table-column>
+                    <data-table-column flex="0" width="3.5em">
+                        <template>
+                            <paper-menu-button dynamic-align>
+                                <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
+                                <paper-menu class="dropdown-content">
+                                    <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
+                                    <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
+                                </paper-menu>
+                            </paper-menu-button>
+                        </template>
+                    </data-table-column>
+                </iron-data-table>
         </template>
 
         
