@@ -14,7 +14,8 @@ Polymer({
       value: 'ws'
     },
     hostName: {
-      type: String
+      type: String,
+      // value: 'ws://localhost:8080/ws'
     },
     noteBook: {
       type: Object
