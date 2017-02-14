@@ -129,7 +129,7 @@
                     <!-- / options -->
                     <template is="dom-if" if="[[ not(paragraph.status,'RUNNING') ]]">
                         <template is="dom-if" if="[[ templatetype.text ]]" restamp>
-                            <pre class="pre-style">[[ paragraph.text ]]</pre>
+                            <pre class="pre-style">[[ paragraph.result.msg ]]</pre>
                         </template>
                     </template>
                     <template is="dom-if" if="[[ eq(paragraph.status,'RUNNING') ]]">
