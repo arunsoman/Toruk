@@ -54,7 +54,7 @@
                                             <small>Running</small>
                                             <paper-icon-button icon="icons:cancel" on-tap="pauseParagraph"></paper-icon-button>
                                         </template>
-                                        <template is="dom-if" if="[[ contains(paragraph.status,'ERROR','READY') ]]" restamp>
+                                        <template is="dom-if" if="[[ contains(paragraph.status,'ERROR','READY','FINISHED') ]]" restamp>
                                             <small>Run</small>
                                             <paper-icon-button icon="icons:send" on-tap="runParagraph"></paper-icon-button>
                                         </template>

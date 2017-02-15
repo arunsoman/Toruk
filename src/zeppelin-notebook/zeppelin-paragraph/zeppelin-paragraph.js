@@ -124,8 +124,8 @@ Polymer({
   not: function(a, b) {
     return a !== b;
   },
-  contains: function(a, b, c) {
-    return [b, c].indexOf(a) !== -1;
+  contains: function(a, b, c, d) {
+    return [b, c, d].indexOf(a) !== -1;
   },
 
   _gridChange: function(obj) {
