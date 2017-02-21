@@ -5,7 +5,7 @@
         <web-socket id="socket" url="[[hostName]]:8096/[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
         <div class="table-wrapper">
             <template is="dom-if" if="{{ !notebookId }}" restamp>
-                <zeppelin-notebooks notebooks="[[ notebooks ]]" ws-data="{{ wsData }}" view-mode="{{ viewMode }}"></zeppelin-notebooks>
+                <zeppelin-notebooks notebooks="{{ notebooks }}" ws-data="{{ wsData }}" view-mode="{{ viewMode }}"></zeppelin-notebooks>
             </template>
             <template is="dom-if" if="{{ notebookId }}" restamp>
                 <zeppelin-notebook notebook="[[ notebook ]]" ws-data="{{ wsData }}" class="noselect" view-mode="[[ viewMode ]]"></zeppelin-notebook>

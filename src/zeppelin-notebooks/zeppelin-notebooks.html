@@ -57,7 +57,11 @@
                 <h2>Create Model</h2>
                 <paper-dialog-scrollable>
                     <p>Use '/' to create folders. Example: NoteDirA/Model1</p>
-                    <paper-input value="{{ noteBookName }}" required placeholder="Model Name"></paper-input>
+                    <paper-input value="{{ noteBookName }}" required placeholder="Model Name">
+                    <template is="dom-if" if="[[ showTemplates.show ]]">
+                        <div prefix>[[ showTemplates.folder ]] / &nbsp; </div>
+                    </template>
+                    </paper-input>
                 </paper-dialog-scrollable>
                 <div class="buttons">
                     <paper-button class="cancel" dialog-dismiss>Cancel</paper-button>

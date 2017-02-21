@@ -6,7 +6,8 @@ Polymer({
       type: Array
     },
     notebooks: {
-      type: Object
+      type: Object,
+      notify: true
     },
     wsData: {
       type: Object,
@@ -43,11 +44,14 @@ Polymer({
     var folderName = event.model.get('item.folder');
     this.set('showTemplates.tableData', lists);
     this.set('showTemplates.folder', folderName);
-    setTimeout(function(){
+    setTimeout(function() {
       this.dropDownListener();
-    }.bind(this),10)
+    }.bind(this), 10);
   },
   hideTemplates: function() {
+    this.set('showTemplates.show', false);
+  },
+  attached: function() {
     this.set('showTemplates.show', false);
   },
   dettached: function() {
@@ -115,12 +119,14 @@ Polymer({
   },
 
   createNoteBook: function() {
+    var noteName = this.get('noteBookName');
+    var newNoteName = this.showTemplates.show ? this.showTemplates.folder+'/'+ noteName : noteName;
     var data = {
       op: 'NEW_NOTE',
       principal: 'anonymous',
       roles: '[]',
       data: {
-        name: this.get('noteBookName')
+        name: newNoteName
       },
       ticket: 'anonymous'
     };
