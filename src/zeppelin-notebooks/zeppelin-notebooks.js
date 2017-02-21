@@ -40,6 +40,9 @@ Polymer({
     this.set('showTemplates.show', true);
     var lists = event.model.get('item.items');
     this.set('showTemplates.tableData', lists);
+    setTimeout(function(){
+      this.dropDownListener();
+    }.bind(this),10)
   },
   hideTemplates: function() {
     this.set('showTemplates.show', false);
