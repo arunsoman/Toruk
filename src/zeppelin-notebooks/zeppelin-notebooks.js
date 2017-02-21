@@ -29,7 +29,8 @@ Polymer({
       type: Object,
       value: {
         show: false,
-        tableData: Object
+        tableData: Object,
+        folder: String
       }
     }
 
@@ -39,7 +40,9 @@ Polymer({
   setView: function(event) {
     this.set('showTemplates.show', true);
     var lists = event.model.get('item.items');
+    var folderName = event.model.get('item.folder');
     this.set('showTemplates.tableData', lists);
+    this.set('showTemplates.folder', folderName);
     setTimeout(function(){
       this.dropDownListener();
     }.bind(this),10)
@@ -72,7 +75,7 @@ Polymer({
   showList: function(response) {
     var folders = {};
     var misc = {
-      folder: 'Others',
+      folder: 'My Models',
       items: []
     };
     var responseArray = [];

@@ -133,7 +133,7 @@
         <paper-button class="btn-back" on-tap="hideTemplates">
                 <iron-icon icon="chevron-left"></iron-icon>Back to model listing</paper-button>
             <iron-data-table items="[[ showTemplates.tableData ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
-                    <data-table-column name="jobs" filter-by="name" filter-type="text">
+                    <data-table-column name="[[showTemplates.folder]]" filter-by="name" filter-type="text">
                         <template>[[ item.name ]]</template>
                     </data-table-column>
                     <data-table-column flex="0" width="3.5em">

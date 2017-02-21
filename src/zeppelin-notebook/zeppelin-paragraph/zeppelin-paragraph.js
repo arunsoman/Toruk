@@ -195,6 +195,7 @@ Polymer({
     var postData = {
       config: this.paragraph.config,
       id: this.paragraph.id,
+      title: this.paragraph.title,
       paragraph: this.$$('editor-view').getText()
     };
     // this.set('paragraph.result.msg','Loading..')
