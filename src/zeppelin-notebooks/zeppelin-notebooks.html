@@ -68,9 +68,11 @@
                     <paper-button on-tap="createNoteBook">Save</paper-button>
                 </div>
             </paper-dialog>
+            <template is="dom-if" if="[[ showTemplates.show ]]">
             <div class="addButton">
                 <paper-button on-tap="showCreateView">Create new model</paper-button>
             </div>
+            </template>
         </div>
         <template is="dom-if" if="[[ !showTemplates.show ]]" restamp>
             
