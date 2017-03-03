@@ -3,8 +3,8 @@
     <link rel="import" type="css" href="zeppelin-notebooks.css">
     <template>
         <style>
-        iron-data-table #container{
-          /*  height: 100%;
+        iron-data-table #container {
+            /*  height: 100%;
             top: 5em;
             bottom: 0;
             position: absolute;
@@ -16,22 +16,26 @@
         .top-panel {
             margin-top: 1em;
         }
-        .details{
+        
+        .details {
             opacity: 0;
             pointer-events: none;
             position: relative;
             height: 0;
-            overflow-x:hidden;
+            overflow-x: hidden;
         }
-        .folder-check{
+        
+        .folder-check {
             display: none;
         }
-        .folder-check:checked+.details{
+        
+        .folder-check:checked+.details {
             opacity: 1;
             pointer-events: initial;
             height: auto;
         }
-        .folder-icon{
+        
+        .folder-icon {
             position: relative;
             z-index: 999;
             display: block;
@@ -40,27 +44,26 @@
             cursor: pointer;
             margin-top: 5px;
         }
+        
         .folders {
             float: left;
             margin: 5px;
-            box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
             width: 48%;
             position: relative;
             z-index: 1;
         }
         </style>
-        <!-- <iron-ajax url="[[ url ]]api/notebook" auto handle-as="json" on-response="handleResponse" id="ajax"></iron-ajax> -->
         <div class="layout horizontal top-panel">
-            <!-- <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket> -->
             <h3 class="headingPage flex">Categories of analytical models</h3>
             <paper-dialog modal id="dialog" dynamic-align>
                 <h2>Create Model</h2>
                 <paper-dialog-scrollable>
                     <p>Use '/' to create folders. Example: NoteDirA/Model1</p>
                     <paper-input value="{{ noteBookName }}" required placeholder="Model Name">
-                    <template is="dom-if" if="[[ showTemplates.show ]]">
-                        <div prefix>[[ showTemplates.folder ]] / &nbsp; </div>
-                    </template>
+                        <template is="dom-if" if="[[ showTemplates.show ]]">
+                            <div prefix>[[ showTemplates.folder ]] / &nbsp; </div>
+                        </template>
                     </paper-input>
                 </paper-dialog-scrollable>
                 <div class="buttons">
@@ -69,99 +72,45 @@
                 </div>
             </paper-dialog>
             <template is="dom-if" if="[[ showTemplates.show ]]">
-            <div class="addButton">
-                <paper-button on-tap="showCreateView">Create new model</paper-button>
-            </div>
+                <div class="addButton">
+                    <paper-button on-tap="showCreateView">Create new model</paper-button>
+                </div>
             </template>
         </div>
         <template is="dom-if" if="[[ !showTemplates.show ]]" restamp>
-            
-        <template is="dom-repeat" items="[[ responseItems ]]" index-as="index">
-            <paper-card on-tap="setView">
-            <div class="card-content layout vertical">
-                <div class="heading">
-                   <div class="categoryName">[[ item.folder ]]</div>
-                </div>
-                <div class="icon-holder">
-                    <iron-image sizing="contain" src$="images/models/[[item.folder]].svg"></iron-image>
-                </div>
-            </div>
-            <!-- <div class="card-actions layout horizontal">
-                <div class="layout horizontal flex">
-                    <a href="#/clv-max/life-cycle-marketing/campaign/[[ item.id ]]/templates" class="campaignDiv">
-                        <span class="flex">templates</span>
-                    </a>
-                    <span class="count">10</span>
-                </div>
-                <div class="v-separator"></div>
-                <div class="layout horizontal flex">
-                    <a href="#/clv-max/life-cycle-marketing/[[ item.id ]]" class="campaignDiv">
-                        <span class="flex">Custom</span>
-                    </a>
-                    <span class="count">0</span>
-                </div>
-                
-            </div> -->
-        </paper-card>
-
-
-
-
-            <!-- <div class="folders">
-            
-            <label for$="folder-check[[index]]" class="folder-icon">
-            <strong>[[item.folder]]</strong>
-            <iron-image src$="images/models/[[item.folder]].svg" error="{{error}}"></iron-image>
-            </label>
-            <input type="checkbox" class="folder-check" id$="folder-check[[index]]">
-            <div class="details">
-                <iron-data-table items="[[ item.items ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
-                    <data-table-column name="jobs" filter-by="name" filter-type="text">
-                        <template>[[ item.name ]]</template>
-                    </data-table-column>
-                    <data-table-column flex="0" width="3.5em">
-                        <template>
-                            <paper-menu-button dynamic-align>
-                                <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
-                                <paper-menu class="dropdown-content">
-                                    <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
-                                    <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
-                                </paper-menu>
-                            </paper-menu-button>
-                        </template>
-                    </data-table-column>
-                </iron-data-table>
-                </div>
-            </div> -->
-        </template>
+            <template is="dom-repeat" items="[[ responseItems ]]" index-as="index">
+                <paper-card on-tap="setView">
+                    <div class="card-content layout vertical">
+                        <div class="heading">
+                            <div class="categoryName">[[ item.folder ]]</div>
+                        </div>
+                        <div class="icon-holder">
+                            <iron-image sizing="contain" src$="images/models/[[item.folder]].svg"></iron-image>
+                        </div>
+                    </div>
+                </paper-card>
+            </template>
         </template>
         <template is="dom-if" if="[[ showTemplates.show ]]" restamp>
-        <paper-button class="btn-back" on-tap="hideTemplates">
+            <paper-button class="btn-back" on-tap="hideTemplates">
                 <iron-icon icon="chevron-left"></iron-icon>Back to model listing</paper-button>
             <iron-data-table items="[[ showTemplates.tableData ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
-                    <data-table-column name="[[showTemplates.folder]]" filter-by="name" filter-type="text">
-                        <template>[[ item.name ]]</template>
-                    </data-table-column>
-                    <data-table-column flex="0" width="3.5em">
-                        <template>
-                            <paper-menu-button dynamic-align>
-                                <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
-                                <paper-menu class="dropdown-content">
-                                    <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
-                                    <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
-                                </paper-menu>
-                            </paper-menu-button>
-                        </template>
-                    </data-table-column>
-                </iron-data-table>
+                <data-table-column name="[[showTemplates.folder]]" filter-by="name" filter-type="text">
+                    <template>[[ item.name ]]</template>
+                </data-table-column>
+                <data-table-column flex="0" width="3.5em">
+                    <template>
+                        <paper-menu-button dynamic-align>
+                            <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
+                            <paper-menu class="dropdown-content">
+                                <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
+                                <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
+                            </paper-menu>
+                        </paper-menu-button>
+                    </template>
+                </data-table-column>
+            </iron-data-table>
         </template>
-
-        
-
-
-        
-
-
     </template>
     <script src="zeppelin-notebooks.js"></script>
 </dom-module>

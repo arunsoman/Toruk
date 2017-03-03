@@ -43,22 +43,28 @@
                     </template>
                 </div>
                 <div class="icons notebook-settings">
-                    <paper-icon-button icon="apps" on-tap="simpleView" title="Compact View"></paper-icon-button>
-                    <paper-icon-button icon="dashboard" on-tap="editorView" title="Editor View"></paper-icon-button>
-                    <paper-icon-button icon="icons:refresh" on-tap="runAllParas" title="Run all paragraphs"></paper-icon-button>
-                    <paper-icon-button icon="icons:file-download" on-tap="exportNotebook" title="Export Notebook"></paper-icon-button>
+                    <paper-icon-button icon="icons:done-all" on-tap="runAllParas" title="Run all paragraphs"></paper-icon-button>
+                    <template is="dom-if" if="[[ expandAll ]]">
+                        <paper-icon-button icon="dashboard" on-tap="showToggle" title="Collapse All"></paper-icon-button>
+                    </template>
+                    <template is="dom-if" if="[[ !expandAll ]]">
+                        <paper-icon-button icon="apps" on-tap="showToggle" title="Expand All"></paper-icon-button>
+                    </template>
+                    <!-- <paper-icon-button icon="icons:file-download" on-tap="exportNotebook" title="Export Notebook"></paper-icon-button> -->
                 </div>
             </section>
         </template>
         <div class$="view-mode-[[ viewMode]]">
             <template is="dom-if" if="{{ viewMode }}" restamp>
-            <h3>{{ notebook.name }}</h3>
+                <h3>{{ notebook.name }}</h3>
             </template>
             <!-- <web-socket id="socket" url="[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleResponse" on-error="_onError"></web-socket> -->
             <template is="dom-repeat" items="{{ notebook.paragraphs }}">
-                <zeppelin-paragraph editor="[[ editor ]]" settings="[[ settings ]]" notebook-id="[[ notebookId ]]" ws="[[ ws ]]" ws-data="{{ wsData }}" paragraph="[[ item ]]" index="[[ index ]]" view-mode="[[ viewMode ]]">
-                    <!-- <zeppelin-chart-manager></zeppelin-chart-manager> -->
-                </zeppelin-paragraph>
+                <template is="dom-if" if="[[ visibleCheck(item.config,expandAll) ]]">
+                    <zeppelin-paragraph editor="[[ editor ]]" settings="[[ settings ]]" notebook-id="[[ notebookId ]]" ws="[[ ws ]]" ws-data="{{ wsData }}" paragraph="{{ item }}" index="[[ index ]]" view-mode="[[ viewMode ]]">
+                        <!-- <zeppelin-chart-manager></zeppelin-chart-manager> -->
+                    </zeppelin-paragraph>
+                </template>
             </template>
         </div>
     </template>

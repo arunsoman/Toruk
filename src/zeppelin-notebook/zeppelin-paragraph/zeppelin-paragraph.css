@@ -35,6 +35,9 @@
     margin-right: 15px;
     overflow: hidden;
 }
+.card.opac-false{
+    background: transparent;
+}
 
 .topbar {
     position: absolute;
@@ -64,7 +67,7 @@ header {
 }
 
 .editor-true header {
-    padding: 2em 2em 1.5em;
+    padding: 2em;
 }
 
 header h4 {

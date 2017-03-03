@@ -43,6 +43,7 @@ Polymer({
     }
   },
   observers: ['sendData(wsData)'],
+  connected: false,
   _onOpen: function() {
     var me = this;
     me.set('socketEnable', true);
@@ -53,15 +54,20 @@ Polymer({
       ticket: 'anonymous'
     };
     me.$.socket.send(dummyObj);
+    this.set('connected', true);
   },
   sendData: function(message) {
     this.$.socket.send(message);
   },
   _onClose: function() {
-    this.$.socket.open();
-    // this.set('socketEnable', false);
+    if (this.connected) {
+      this.$.socket.open();
+    }
   },
-
+  _onError: function() {
+    this.$.socket.close();
+    this.set('connected', false);
+  },
   handleSocketResponse: function(response) {
     var op = response.detail.op;
     switch (op) {
@@ -73,6 +79,7 @@ Polymer({
     case 'NEW_NOTE':
       this.set('notebook', response.detail.data.note);
       this.set('notebookId', response.detail.data.note.id);
+      this.set('viewMode', false);
       break;
     case 'NOTES_INFO':
       this.set('notebooks', response.detail.data.notes);
@@ -83,9 +90,10 @@ Polymer({
     case 'PROGRESS':
       // wip for progress event
       break;
+    case 'PARAGRAPH':
+      break;
     default:
       break;
-      // this.set('settings.progress', null);
     }
   },
 

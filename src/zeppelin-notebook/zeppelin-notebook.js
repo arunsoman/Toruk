@@ -3,7 +3,8 @@ Polymer({
   is: 'zeppelin-notebook',
   properties: {
     notebook: {
-      type: Object
+      type: Object,
+      notify: true
     },
     socketEnable: {
       type: Boolean,
@@ -42,10 +43,14 @@ Polymer({
     editNotebook: {
       type: Boolean,
       value: false
+    },
+    expandAll: {
+      type: Boolean,
+      value: false
     }
   },
 
-  // observers: ['restartSocket(notebookId)'],
+  // observers: ['paragraphChange(notebook)'],
 
   restartSocket: function() {
     // for polling the server
@@ -59,51 +64,6 @@ Polymer({
     }.bind(this), 9000);
   },
 
-  // _wsDataChange: function(data) {
-  //   if (!this.socketEnable) {
-  //     this.$.socket.open();
-  //   }
-  //   this.$.socket.send(data);
-  // },
-
-  // _onOpen: function() {
-  //   var me = this;
-  //   me.set('socketEnable', true);
-  //   var dummyObj = {
-  //     op: 'GET_NOTE',
-  //     principal: 'anonymous',
-  //     roles: '[]',
-  //     data: {
-  //       id: me.notebookId
-  //     },
-  //     ticket: 'anonymous'
-  //   };
-  //   me.$.socket.send(dummyObj);
-  // },
-  // _onClose: function() {
-  //   this.set('socketEnable', false);
-  // },
-  // handleResponse: function(response) {
-  //   var op = response.detail.op;
-  //   this._noteBook = response.detail.data.note;
-  //   switch (op) {
-  //   case 'NOTE':
-  //     this.set('notebook', response.detail.data.note.paragraphs);
-  //     this.set('noteBookName', response.detail.data.note.name);
-  //     break;
-  //   case 'PARAGRAPH_UPDATE_OUTPUT':
-  //     break;
-  //   case 'PARAGRAPH_APPEND_OUTPUT':
-  //     this.set('settings.progress', null);
-  //     break;
-  //   case 'PROGRESS':
-  //     // do something
-  //     this.set('settings.progress', response.detail.data.id);
-  //     break;
-  //   default:
-  //     this.set('settings.progress', null);
-  //   }
-  // },
   runAllParas: function() {
     var paras = this.querySelectorAll('zeppelin-paragraph');
     if (paras && paras.length) {
@@ -111,6 +71,10 @@ Polymer({
         para.runParagraph();
       });
     }
+  },
+
+  visibleCheck: function(a, b) {
+    return (a.hasOwnProperty('visible') ? a.visible : true) || b;
   },
 
   exportParagraph: function() {
@@ -123,6 +87,9 @@ Polymer({
     dlAnchorElem.setAttribute('href', dataStr);
     dlAnchorElem.setAttribute('download', this.noteBookName + '.json');
     dlAnchorElem.click();
+  },
+  showToggle: function() {
+    this.set('expandAll', !this.expandAll);
   },
   renameNotebook: function() {
     this.set('oldBookName', this.notebook.name);

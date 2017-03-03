@@ -6,7 +6,8 @@ Polymer({
 
     // Paragraph object
     paragraph: {
-      type: Object
+      type: Object,
+      notify: true
     },
     notebookId: {
       type: String,
@@ -81,18 +82,12 @@ Polymer({
     this.set('prevTitle', this.paragraph.title);
     this.set('editTitle', true);
   },
+  toggleTitle: function() {
+    this.set('paragraph.config.showTitle', !this.paragraph.config.showTitle);
+    this._commitParagraph();
+  },
   saveTitle: function() {
-    var postData = {
-      config: this.paragraph.config,
-      id: this.paragraph.id,
-      paragraph: this.$$('editor-view').getText(),
-      title: this.paragraph.title
-    };
-    this.handlePOST({
-      op: 'COMMIT_PARAGRAPH',
-      data: postData,
-      params: {}
-    });
+    this._commitParagraph();
     this.set('editTitle', false);
   },
   cancelTitle: function() {
@@ -138,13 +133,18 @@ Polymer({
     var postData = {
       config: this.paragraph.config,
       id: this.paragraph.id,
-      paragraph: this.paragraph.text
+      paragraph: this.paragraph.text,
+      title: this.paragraph.title
     };
     // postData.config.graph.polymerD3.availableCharts.forEach(c => {try{c.settings.area[6].callBack = 'xAxisCallback'; c.settings.area[7].callBack = 'xAxisCallback'}catch(e){console.log(e)}})
     this.handlePOST({
       op: 'COMMIT_PARAGRAPH',
       data: postData
     });
+  },
+  toggleParagraph: function() {
+    this.set('paragraph.config.visible', !this.paragraph.config.visible);
+    this._commitParagraph();
   },
 
   // To save a pargraph
