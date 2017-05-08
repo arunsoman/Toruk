@@ -67,14 +67,8 @@ Polymer({
       value: false
     }
   },
-  observers: ['_changeId(paragraph)', '_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)'],
+  observers: ['_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)'],
 
-  __attached: function() {
-    if (this.paragraph.result) {
-      this.fillTemplate(this.paragraph.result.type);
-    }
-    this.push('settings.order', this.paragraph.id);
-  },
   showDropDown: function() {
     this.$$('#navdrop').open();
   },
@@ -94,14 +88,7 @@ Polymer({
     this.set('paragraph.title', this.prevTitle);
     this.set('editTitle', false);
   },
-  _changeId: function(data) {
-    // TO learn what type of result
-    if (this.paragraph.result) {
-      this.fillTemplate(this.paragraph.result.type);
-      this.set('paragraphTitle', this.paragraph.title || 'Untitled');
-    }
-    // this.push('settings.order',this.paragraph.id);
-  },
+
   _convertObjects: function(item) {
     this.formObjects = [];
     if (item) {
@@ -168,27 +155,6 @@ Polymer({
     var res = response.detail.response.body;
     this.set('paragraph', res);
     this.set('grid', res.config.colWidth);
-    if (res.result) {
-      this.fillTemplate(res.result.type);
-    }
-  },
-
-  // Selects template type to fill.
-  fillTemplate: function(resultType) {
-    switch (resultType) {
-    case 'TEXT':
-      this.set('templatetype.text', true);
-      break;
-    case 'HTML':
-    case 'ANGULAR':
-      this.set('templatetype.html', true);
-      break;
-    case 'TABLE':
-      this.set('templatetype.graph', true);
-      break;
-    default:
-      throw Error('no implementation found');
-    }
   },
 
   runParagraph: function() {
@@ -265,10 +231,7 @@ Polymer({
     obj.data.params = obj.params;
     var postObj = {
       op: obj.op,
-      principal: 'anonymous',
-      roles: '[]',
       data: obj.data,
-      ticket: 'anonymous'
     };
     this.set('wsData', postObj);
   }

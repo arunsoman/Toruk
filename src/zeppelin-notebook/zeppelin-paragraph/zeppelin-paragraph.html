@@ -13,28 +13,68 @@
         <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
             <article class$="card opac-[[ paragraph.config.visible ]] editor-card  editor-[[ !viewMode ]]">
                 <!-- Title -->
+                <template is="dom-if" if="[[ !viewMode ]]" restamp>
+                    <div class="settings-wrapper">
+                        <ul class="toolbar left">
+                            <li>
+                                <iron-label>
+                                    <template is="dom-if" if="[[ contains(paragraph.status,'ERROR','READY','FINISHED') ]]" restamp>
+                                        <paper-icon-button icon="icons:send" on-tap="runParagraph"></paper-icon-button> Run
+                                    </template>
+                                    <template is="dom-if" if="[[ eq(paragraph.status,'RUNNING') ]]" restamp>
+                                        <paper-icon-button icon="icons:cancel" on-tap="pauseParagraph"></paper-icon-button> Running
+                                    </template>
+                                </iron-label>
+                                <iron-label>
+                                    <paper-icon-button icon="save" on-tap="saveParagraph" title="Save"></paper-icon-button> Save
+                                </iron-label>
+                                <iron-label>
+                                    <paper-icon-button icon="delete" on-tap="removeParagraph" title="Delete Paragraph"></paper-icon-button>
+                                    Delete
+                                </iron-label>
+                                <iron-label>
+                                    <paper-icon-button icon="add" on-tap="addParagraph" title="Add Paragraph"></paper-icon-button>
+                                    Add
+                                </iron-label>
+                            </li>
+                        </ul>
+                        <ul class="toolbar">
+                            <li>
+                                <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
+                                <iron-dropdown horizontal-align="right" id="navdrop" vertical-align="top">
+                                    <div class="dropdown-content">
+                                        <paper-icon-button icon="select-all" on-tap="toggleParagraph" title="Show / Hide Paragraph"></paper-icon-button>
+                                        <paper-icon-button icon="picture-in-picture" on-tap="toggleTitle" title="Show / Hide Title"></paper-icon-button>
+                                        <paper-icon-button icon="arrow-upward" on-tap="moveUp" title="Move Up"></paper-icon-button>
+                                        <paper-icon-button icon="arrow-downward" on-tap="moveDown" title="Move Down"></paper-icon-button>
+                                        <paper-icon-button icon="list" on-tap="hideNumber" title="Toggle line number"></paper-icon-button>
+                                        <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
+                                    </div>
+                                </iron-dropdown>
+                            </li>
+                        </ul>
+                    </div>
+                </template>
                 <header class="layout horizontal">
-                    
                     <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
                         <h4>
-                            <template is="dom-if" if="[[ !viewMode]]">
-                                <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button></span>
-                            </template>
+                        <template is="dom-if" if="[[ !viewMode]]">
+                            <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button></span>
+                        </template>
 
-                            <template is="dom-if" if="[[ !editTitle ]]">
-                                [[ paragraph.title ]]
-                            </template>
+                        <template is="dom-if" if="[[ !editTitle ]]">
+                            [[ paragraph.title ]]
+                        </template>
 
-                            <template is="dom-if" if="[[ editTitle ]]">
-                                <paper-input value="{{ paragraph.title }}"></paper-input>
-                                <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveTitle"></paper-icon-button>
-                                <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelTitle"></paper-icon-button>
-                            </template>
-                        </h4>
+                        <template is="dom-if" if="[[ editTitle ]]">
+                            <paper-input value="{{ paragraph.title }}"></paper-input>
+                            <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveTitle"></paper-icon-button>
+                            <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelTitle"></paper-icon-button>
+                        </template>
+                    </h4>
                     </template>
-                
-                <!-- <template is="dom-if" if="[[ eq(viewMode,paragraph.config.showTitle) ]]">
-                </template> -->
+                    <!-- <template is="dom-if" if="[[ eq(viewMode,paragraph.config.showTitle) ]]">
+            </template> -->
                     <!-- <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
                         <h4> 
                     <template is="dom-if" if="[[ editTitle ]]" restamp>
@@ -50,64 +90,7 @@
                         </template>
                     </template>
                     </h4>
-                    </template> -->
-                    
-                    <template is="dom-if" if="[[ !viewMode ]]" restamp>
-                        <ul class="topbar">
-                            <li>
-                                <template is="dom-if" if="[[ eq(paragraph.status,'ERROR') ]]">
-                                    <iron-label>
-                                        <small>Error</small>
-                                        <iron-icon icon="warning" title="Error"></iron-icon>
-                                    </iron-label>
-                                    <!-- <paper-icon-button icon="chevron-right" title="Run" on-tap="runParagraph"></paper-icon-button> -->
-                                </template>
-                                <iron-label>
-                                    <template is="dom-if" if="[[ eq(paragraph.status,'PENDING') ]]" restamp>
-                                        <small>Pending</small>
-                                    </template>
-                                    <template is="dom-if" if="[[ eq(paragraph.status,'RUNNING') ]]" restamp>
-                                        <small>Running</small>
-                                        <paper-icon-button icon="icons:cancel" on-tap="pauseParagraph"></paper-icon-button>
-                                    </template>
-                                    <template is="dom-if" if="[[ contains(paragraph.status,'ERROR','READY','FINISHED') ]]" restamp>
-                                        <small>Run</small>
-                                        <paper-icon-button icon="icons:send" on-tap="runParagraph"></paper-icon-button>
-                                    </template>
-                                </iron-label>
-                                <paper-icon-button icon="settings" on-tap="showDropDown"></paper-icon-button>
-                                <iron-dropdown horizontal-align="right" noOverlap id="navdrop" vertical-align="top">
-                                    <div class="dropdown-content">
-                                        <paper-icon-button icon="save" on-tap="saveParagraph" title="Save"></paper-icon-button>
-                                        <paper-icon-button icon="select-all" on-tap="toggleParagraph" title="Show / Hide Paragraph"></paper-icon-button>
-                                        <paper-icon-button icon="picture-in-picture" on-tap="toggleTitle" title="Show / Hide Title"></paper-icon-button>
-                                        <paper-icon-button icon="arrow-upward" on-tap="moveUp" title="Move Up"></paper-icon-button>
-                                        <paper-icon-button icon="arrow-downward" on-tap="moveDown" title="Move Down"></paper-icon-button>
-                                        <paper-icon-button icon="list" on-tap="hideNumber" title="Toggle line number"></paper-icon-button>
-                                        <paper-icon-button icon="clear" on-tap="removeParagraph" title="Delete Paragraph"></paper-icon-button>
-                                        <paper-icon-button icon="add" on-tap="addParagraph" title="Add Paragraph"></paper-icon-button>
-                                        <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
-                                    </div>
-                                    <!-- <paper-dropdown-menu label="Grid">
-                                        <paper-menu attr-for-selected="value" selected="{{ paragraph.config.colWidth }}" class="dropdown-content">
-                                            <paper-item value="1">1</paper-item>
-                                            <paper-item value="2">2</paper-item>
-                                            <paper-item value="3">3</paper-item>
-                                            <paper-item value="4">4</paper-item>
-                                            <paper-item value="5">5</paper-item>
-                                            <paper-item value="6">6</paper-item>
-                                            <paper-item value="7">7</paper-item>
-                                            <paper-item value="8">8</paper-item>
-                                            <paper-item value="9">9</paper-item>
-                                            <paper-item value="10">10</paper-item>
-                                            <paper-item value="11">11</paper-item>
-                                            <paper-item value="12">12</paper-item>
-                                        </paper-menu>
-                                    </paper-dropdown-menu> -->
-                                </iron-dropdown>
-                            </li>
-                        </ul>
-                    </template>
+                </template> -->
                 </header>
                 <template is="dom-if" if="[[ !viewMode ]]" restamp>
                     <!-- ACE Editor -->
@@ -144,7 +127,26 @@
                         </div>
                     </template>
                     <!-- / options -->
-                    <template is="dom-if" if="[[ not(paragraph.status,'RUNNING') ]]">
+                    <div class="response-wrapper">
+                        <!-- check for response type -->
+                        <template is="dom-if" if="{{ eq(paragraph.status,'PROGRESS') }}">
+                            <paper-progress indeterminate class="blue"></paper-progress>
+                            <pre class="pre-style">[[ paragraph.progress.data ]]</pre>
+                        </template>
+                            <template is="dom-repeat" items="[[ paragraph.results.msg ]]" index-as="index">
+                                <!-- show html template -->
+                                <template is="dom-if" if="[[ eq(item.type,'HTML') ]]" restamp>
+                                    <html-view result="[[ item.data ]]"></html-view>
+                                </template>
+                                <template is="dom-if" if="[[ eq(item.type,'TEXT') ]]" restamp>
+                                    <pre class="pre-style">[[ item.data ]]</pre>
+                                </template>
+                                <template is="dom-if" if="[[ eq(item.type,'TABLE') ]]" restamp>
+                                    <zeppelin-chart-manager tabular-data="[[ item.data ]]" data="{{ paragraph }}" view-mode="{{ viewMode }}"></zeppelin-chart-manager>
+                                </template>
+                            </template>
+                    </div>
+                    <!-- <template is="dom-if" if="[[ not(paragraph.status,'RUNNING') ]]">
                         <template is="dom-if" if="[[ templatetype.text ]]" restamp>
                             <pre class="pre-style">[[ paragraph.result.msg ]]</pre>
                         </template>
@@ -157,7 +159,7 @@
                     </template>
                     <template is="dom-if" if="{{ templatetype.graph }}" restamp>
                         <zeppelin-chart-manager data="{{ paragraph }}" view-mode="{{ viewMode }}"></zeppelin-chart-manager>
-                    </template>
+                    </template> -->
                 </section>
             </article>
         </div>

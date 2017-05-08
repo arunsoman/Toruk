@@ -52,18 +52,6 @@ Polymer({
 
   // observers: ['paragraphChange(notebook)'],
 
-  restartSocket: function() {
-    // for polling the server
-    setInterval(function() {
-      this.$.socket.send({
-        op: 'PING',
-        principal: 'anonymous',
-        ticket: 'anonymous',
-        roles: []
-      });
-    }.bind(this), 9000);
-  },
-
   runAllParas: function() {
     var paras = this.querySelectorAll('zeppelin-paragraph');
     if (paras && paras.length) {
@@ -99,19 +87,26 @@ Polymer({
     this.set('notebook.name', this.oldBookName);
     this.set('editNotebook', false);
   },
+  showInterpreters: function() {
+    this.$.interPreterDialog.open();
+    var data = {
+      op: 'GET_INTERPRETER_BINDINGS',
+      data: {
+        noteId: this.notebook.id
+      }
+    };
+    this.set('wsData', data);
+  },
   saveNoteBookName: function() {
     var data = {
       op: 'NOTE_UPDATE',
-      principal: 'anonymous',
-      roles: '[]',
       data: {
         config: {
           looknfeel: 'default'
         },
         id: this.notebook.id,
         name: this.notebook.name
-      },
-      ticket: 'anonymous'
+      }
     };
     this.set('editNotebook', false);
     this.set('wsData', data);

@@ -93,9 +93,9 @@
         </template>
         <template is="dom-if" if="[[ showTemplates.show ]]" restamp>
             <paper-button class="btn-back" on-tap="hideTemplates">
-                <iron-icon icon="chevron-left"></iron-icon>Back to model listing</paper-button>
-            <iron-data-table items="[[ showTemplates.tableData ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
-                <data-table-column name="[[showTemplates.folder]]" filter-by="name" filter-type="text">
+            <iron-icon icon="chevron-left"></iron-icon>Back to model listing</paper-button>
+            <iron-data-table items="[[ showTemplates.data.items ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
+                <data-table-column name="[[showTemplates.data.folder]]" filter-by="name" filter-type="text">
                     <template>[[ item.name ]]</template>
                 </data-table-column>
                 <data-table-column flex="0" width="3.5em">

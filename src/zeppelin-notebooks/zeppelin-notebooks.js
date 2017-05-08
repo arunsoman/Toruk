@@ -30,23 +30,15 @@ Polymer({
       type: Object,
       value: {
         show: false,
-        tableData: Object,
-        folder: String
+        data: Object
       }
-    }
+    },
 
   },
   observers: ['selectedChange(selectedItem)', 'showList(notebooks)'],
   behaviors: [ZEPPELIN_UI.DropdownFix],
   setView: function(event) {
-    this.set('showTemplates.show', true);
-    var lists = event.model.get('item.items');
-    var folderName = event.model.get('item.folder');
-    this.set('showTemplates.tableData', lists);
-    this.set('showTemplates.folder', folderName);
-    setTimeout(function() {
-      this.dropDownListener();
-    }.bind(this), 10);
+    this.setActiveFolder(event.model.item.folder);
   },
   hideTemplates: function() {
     this.set('showTemplates.show', false);
@@ -104,7 +96,7 @@ Polymer({
       }
     });
 
-    responseArray.push(misc);
+    // responseArray.push(misc);
     /* eslint-disable */
     for (key in folders) { 
       responseArray.push(folders[key]);
@@ -112,35 +104,43 @@ Polymer({
     /* eslint-disable */
 
     this.set('responseItems', responseArray);
+    if(this.folderName){
+      this.setActiveFolder(this.folderName);
+      if(this.modelId){
+        this.editNotebook(this.modelId);
+      }
+    }
     setTimeout(function(){
       this.dropDownListener();
     }.bind(this),200)
     
   },
+  setActiveFolder: function(folder){
+    var getItem = this.responseItems.find(function(item){return item.folder==folder});
+    this.set('showTemplates.show',true);
+    this.set('showTemplates.data', getItem);
+    setTimeout(function() {
+      this.dropDownListener();
+    }.bind(this), 10);
 
+  },
   createNoteBook: function() {
     var noteName = this.get('noteBookName');
     var newNoteName = this.showTemplates.show ? this.showTemplates.folder+'/'+ noteName : noteName;
     var data = {
       op: 'NEW_NOTE',
-      principal: 'anonymous',
-      roles: '[]',
       data: {
         name: newNoteName
-      },
-      ticket: 'anonymous'
+      }
     };
     this.set('wsData', data);
   },
   deleteNotebook: function(e) {
     var data = {
       op: 'DEL_NOTE',
-      principal: 'anonymous',
-      roles: '[]',
       data: {
         id: e.target.dataArgs.id
-      },
-      ticket: 'anonymous'
+      }
     };
     this.set('wsData', data);
     this.set('showTemplates.show',false);
@@ -151,19 +151,17 @@ Polymer({
   selectedChange: function(item) {
     var data = {
       op: 'GET_NOTE',
-      principal: 'anonymous',
-      roles: '[]',
       data: {
         id: item.id
-      },
-      ticket: 'anonymous'
+      }
     };
     this.set('wsData', data);
   },
   editNotebook: function(e) {
+    var getId = typeof(e)=="string" ? e : e.target.dataArgs.id;
     this.set('viewMode', false);
     this.selectedChange({
-      id: e.target.dataArgs.id
+      id: getId
     });
   }
 });

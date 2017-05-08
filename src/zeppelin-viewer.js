@@ -9,13 +9,9 @@ Polymer({
       value: true,
       notify: true
     },
-    WS: {
-      type: String,
-      value: 'ws'
-    },
-    hostName: {
+    socketUrl: {
       type: String
-      // value: 'ws://localhost:8080/ws'
+        // value: 'ws://localhost:8080/ws'
     },
     noteBook: {
       type: Object
@@ -42,22 +38,38 @@ Polymer({
       value: true
     }
   },
-  observers: ['sendData(wsData)'],
+  observers: ['sendData(wsData)', 'authChange(authObj)'],
   connected: false,
+  handleResponse: function(response) {
+    this.set('authObj', response.detail.response.body);
+  },
+  authChange: function() {
+    this.$.socket.open();
+  },
   _onOpen: function() {
-    var me = this;
-    me.set('socketEnable', true);
-    var dummyObj = {
-      op: 'LIST_NOTES',
-      principal: 'anonymous',
-      roles: '[]',
-      ticket: 'anonymous'
-    };
-    me.$.socket.send(dummyObj);
+    this.pingSocket();
+    this.set('socketEnable', true);
+    this.getNoteList();
     this.set('connected', true);
   },
+  getNoteList: function() {
+    var dummyObj = {
+      op: 'LIST_NOTES'
+    };
+    this.set('wsData', dummyObj);
+  },
+  pingSocket: function() {
+    // for polling the server
+    setInterval(function() {
+      var dummyObj = {
+        'op': 'PING'
+      };
+      this.set('wsData', dummyObj);
+    }.bind(this), 45000);
+  },
   sendData: function(message) {
-    this.$.socket.send(message);
+    var constructMessage = Object.assign(message, this.authObj);
+    this.$.socket.send(constructMessage);
   },
   _onClose: function() {
     if (this.connected) {
@@ -70,31 +82,55 @@ Polymer({
   },
   handleSocketResponse: function(response) {
     var op = response.detail.op;
+    var data = response.detail.data;
     switch (op) {
     case 'NOTE':
-      this.set('notebook', response.detail.data.note);
-      this.set('notebookId', response.detail.data.note.id);
-      // this.set('noteBookName', response.detail.data.note.name);
+      this.set('notebook', data.note);
+      this.set('notebookId', data.note.id);
       break;
     case 'NEW_NOTE':
-      this.set('notebook', response.detail.data.note);
-      this.set('notebookId', response.detail.data.note.id);
+      this.set('notebook', data.note);
+      this.set('notebookId', data.note.id);
       this.set('viewMode', false);
       break;
     case 'NOTES_INFO':
-      this.set('notebooks', response.detail.data.notes);
+      this.set('notebooks', data.notes);
       break;
     case 'GET_NOTE':
-      this.set('notebookId', response.detail.data.id);
+      this.set('notebookId', data.id);
       break;
     case 'PROGRESS':
-      // wip for progress event
+      this.set('notebook.paragraphs.' + this.getObjectIndex(data.id) + '.status', 'PROGRESS');
+      break;
+    case 'PARAGRAPH_APPEND_OUTPUT':
+      this.set('notebook.paragraphs.' + this.getObjectIndex(data.paragraphId) + '.progress', data);
       break;
     case 'PARAGRAPH':
+      this.set('notebook.paragraphs.' + this.getObjectIndex(data.paragraph.id), data.paragraph);
+      break;
+    case 'PARAGRAPH_MOVED':
+      var getObj = this.splice('notebook.paragraphs', this.getObjectIndex(data.id), 1);
+      this.splice('notebook.paragraphs', data.index, 0, getObj[0]);
+      break;
+    case 'PARAGRAPH_REMOVED':
+      this.splice('notebook.paragraphs', this.getObjectIndex(data.id), 1);
+      break;
+    case 'PARAGRAPH_ADDED':
+      this.splice('notebook.paragraphs', data.index, 0, data.paragraph);
+      break;
+    case 'INTERPRETER_BINDINGS' :
+      this.set('notebook.interpreters', data.interpreterBindings);
       break;
     default:
       break;
     }
+  },
+  getObjectIndex: function(id) {
+    var getObj = this.notebook.paragraphs.find(function(item) {
+      return item.id == id;
+    });
+    var getIndex = this.notebook.paragraphs.indexOf(getObj);
+    return getIndex;
   },
 
   editorView: function() {
@@ -108,13 +144,8 @@ Polymer({
   },
 
   attached: function() {
-    var protocol = window.location.hostname === 'https' ? 'wss' : 'ws';
-    this.hostName = protocol + '://' + window.location.hostname;
-    // this.hostName = '192.168.14.100:8080';
-    this.async(function() {
-      this.$.socket.open();
-      // this.noteBook = this.$$('zeppelin-notebook');
-    }.bind(this));
+    var protocol = window.location.hostname === 'https:' ? 'wss' : 'ws';
+    this.socketUrl = protocol + '://' + window.location.hostname;
   },
   detached: function() {
     this.$.socket.close();

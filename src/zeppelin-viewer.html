@@ -2,13 +2,14 @@
 <link rel="import" type="css" href="zeppelin-viewer.css">
 <dom-module id="zeppelin-viewer">
     <template>
-        <web-socket id="socket" url="[[hostName]]:8096/[[ WS ]]" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
+        <iron-ajax auto url="http://localhost/zeppelin/api/login?password=password1&userName=admin" method="POST" on-response="handleResponse" handle-as="json" debounce-duration="300"></iron-ajax>
+        <web-socket id="socket" url="[[socketUrl]]/zeppelin/ws" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
         <div class="table-wrapper">
             <template is="dom-if" if="{{ !notebookId }}" restamp>
-                <zeppelin-notebooks notebooks="{{ notebooks }}" ws-data="{{ wsData }}" view-mode="{{ viewMode }}"></zeppelin-notebooks>
+                <zeppelin-notebooks notebooks="{{ notebooks }}" ws-data="{{ wsData }}" view-mode="{{ viewMode }}" folder-name="[[ foldername ]]" model-id="[[ modelId ]]"></zeppelin-notebooks>
             </template>
             <template is="dom-if" if="{{ notebookId }}" restamp>
-                <zeppelin-notebook notebook="[[ notebook ]]" ws-data="{{ wsData }}" class="noselect" view-mode="[[ viewMode ]]"></zeppelin-notebook>
+                <zeppelin-notebook notebook="[[ notebook ]]" ws-data="{{ wsData }}" class="noselect" auth-obj ="{{ authObj }}" view-mode="[[ viewMode ]]"></zeppelin-notebook>
             </template>
         </div>
     </template>

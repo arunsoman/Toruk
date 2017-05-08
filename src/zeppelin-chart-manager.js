@@ -12,15 +12,19 @@ Polymer({
     viewMode: {
       type: Boolean,
       value: false
+    },
+    tabularData: {
+      type: String
     }
   },
-  observers: ['csvtoJSON(data.result.msg)'],
+  observers: ['csvtoJSON(tabularData)'],
 
-  csvtoJSON: function(csv) {
+  csvtoJSON: function(data) {
     var me = this;
-    if (csv) {
+    if (data) {
+      data = data.replace();
       var headerObj = [];
-      var lines = csv.split('\n');
+      var lines = data.split('\n');
       var result = [];
       var headers = lines[0].split('\t');
       var firstRow = lines[1].split('\t');
@@ -37,7 +41,7 @@ Polymer({
       me.set('external', headerObj);
 
       // lines.length - 1 is used because, last row is always just a '\n' with no data
-      for (var i = 1; i < lines.length - 1; i++) {
+      for (var i = 1; i < lines.length; i++) {
         var obj = [];
         var currentline = lines[i].split('\t');
         for (var j = 0; j < headers.length; j++) {
@@ -48,31 +52,29 @@ Polymer({
         result.push(obj);
       }
       this.set('source', result);
-      if (this.data.result.type === 'TABLE') {
-        if (!this.data.config.graph) {
-          this.data.config.graph = {};
-        }
-        var polyD3 = this.data.config.graph.polymerD3;
-        var chartConf = {
-          externals: this.external,
-          source: this.source,
-          mode: 'create' // Can be view and create
-        };
-        if (polyD3) {
-          chartConf.mode = 'edit';
-          chartConf.availableCharts = polyD3.availableCharts;
-          chartConf.selectedChart = polyD3.selectedChart;
-          chartConf.legendSettings = polyD3.selectedChart.settings.legendSettings;
-          chartConf.settings = polyD3.selectedChart.settings.settings;
-          chartConf.inputs = polyD3.selectedChart.settings.inputs;
-        }
-        if (this.viewMode) {
-          chartConf.mode = 'view';
-        }
-        // Avoid twoway binding with polymer-d3
-        // Too much data tangling
-        this.$$('polymer-d3').bootstrapCharts(chartConf);
+      if (!this.data.config.graph) {
+        this.data.config.graph = {};
       }
+      var polyD3 = this.data.config.graph.polymerD3;
+      var chartConf = {
+        externals: this.external,
+        source: this.source,
+        mode: 'create' // Can be view and create
+      };
+      if (polyD3) {
+        chartConf.mode = 'edit';
+        chartConf.availableCharts = polyD3.availableCharts;
+        chartConf.selectedChart = polyD3.selectedChart;
+        chartConf.legendSettings = polyD3.selectedChart.settings.legendSettings;
+        chartConf.settings = polyD3.selectedChart.settings.settings;
+        chartConf.inputs = polyD3.selectedChart.settings.inputs;
+      }
+      if (this.viewMode) {
+        chartConf.mode = 'view';
+      }
+      // Avoid twoway binding with polymer-d3
+      // Too much data tangling
+      this.$$('polymer-d3').bootstrapCharts(chartConf);
     }
   },
 

@@ -9,14 +9,14 @@
 }
 
 .editor-true {
-    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.2);
 }
 
 .editor-card {
     margin: 0.5rem 0 1rem 0;
 }
 
-.card:after {
+/*.card:after {
     content: '';
     position: absolute;
     right: 0;
@@ -25,29 +25,51 @@
     height: 50px;
     overflow: hidden;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6;
+}*/
+.settings-wrapper{
+    position: relative;
+    min-height: 50px;
+    background: #ffffff;
+    /*box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.5);*/
+    margin-top: 1px;
+    border-bottom: solid 1px #f1ebeb;
+}
+.response-wrapper{
+    padding: 0 1em;
 }
 
 .card {
     background-color: white;
-    padding: 2em;
+    padding: 0;
     position: relative;
     margin-left: 15px;
     margin-right: 15px;
     overflow: hidden;
+    /*padding-bottom: 3em;*/
 }
 .card.opac-false{
     background: transparent;
 }
 
-.topbar {
+.toolbar {
     position: absolute;
-    right: 19px;
-    top: 20px;
+    right: 10px;
+    bottom: 5px;
     margin: 0;
     padding: 0;
+    z-index: 99;
+}
+.toolbar.left {
+    right: auto;
+    left: 10px;
+}
+.toolbar iron-label{
+    color: #777;
+    font-family: arial;
+    font-size: 0.8em;
 }
 
-.topbar li {
+.toolbar li {
     list-style: none;
 }
 
@@ -56,18 +78,19 @@
 }
 
 header {
-    border-bottom: solid 1px #efecec;
-    margin-bottom: 1em;
+    /*border-bottom: solid 1px #cecece;*/
+/*    margin-bottom: 1em;
     padding-bottom: 1em;
     margin-left: -2em;
     margin-right: -2em;
-    margin-top: -2em;
+    margin-top: -1em;
     padding: 1em 2em;
-    position: relative;
+    position: relative;*/
 }
 
 .editor-true header {
-    padding: 2em;
+    padding: 0;
+    background: #efefef;
 }
 
 header h4 {
@@ -76,6 +99,7 @@ header h4 {
 }
 
 paper-icon-button {
+    max-width: 2.6em;
     color: #c3c3c3;
 }
 
@@ -92,7 +116,12 @@ iron-dropdown {
     word-break: break-all!important;
     word-wrap: break-word!important;
     max-height: 150px;
-    overflow-x: auto; 
+    overflow-x: auto;
+    font-size: 11px;
+    color: #bf8c2e;
+    background: #fffde4;
+    border: solid 1px #efddbd;
+    padding: 1em;
 }
 
 .drag-me {
@@ -101,7 +130,7 @@ iron-dropdown {
     top: 0;
     right: 0;
     bottom: 0;
-    border: dotted 1px #ccc;
+    /*border: dotted 1px #ccc;*/
     pointer-events: none;
     z-index: 5;
 }
