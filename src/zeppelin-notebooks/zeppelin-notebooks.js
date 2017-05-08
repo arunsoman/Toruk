@@ -32,7 +32,7 @@ Polymer({
         show: false,
         data: Object
       }
-    },
+    }
 
   },
   observers: ['selectedChange(selectedItem)', 'showList(notebooks)'],

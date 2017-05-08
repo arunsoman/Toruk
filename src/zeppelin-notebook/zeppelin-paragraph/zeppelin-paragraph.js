@@ -231,7 +231,7 @@ Polymer({
     obj.data.params = obj.params;
     var postObj = {
       op: obj.op,
-      data: obj.data,
+      data: obj.data
     };
     this.set('wsData', postObj);
   }

@@ -62,7 +62,7 @@ Polymer({
     // for polling the server
     setInterval(function() {
       var dummyObj = {
-        'op': 'PING'
+        op: 'PING'
       };
       this.set('wsData', dummyObj);
     }.bind(this), 45000);
@@ -127,7 +127,7 @@ Polymer({
   },
   getObjectIndex: function(id) {
     var getObj = this.notebook.paragraphs.find(function(item) {
-      return item.id == id;
+      return item.id === id;
     });
     var getIndex = this.notebook.paragraphs.indexOf(getObj);
     return getIndex;
