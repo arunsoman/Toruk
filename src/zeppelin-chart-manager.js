@@ -45,7 +45,7 @@ Polymer({
       me.set('external', headerObj);
 
       // lines.length - 1 is used because, last row is always just a '\n' with no data
-      for (var i = 1; i < (lines.length-1); i++) {
+      for (var i = 1; i < lines.length - 1; i++) {
         var obj = [];
         var currentline = lines[i].split('\t');
         for (var j = 0; j < headers.length; j++) {

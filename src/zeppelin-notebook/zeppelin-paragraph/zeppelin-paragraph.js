@@ -77,8 +77,9 @@ Polymer({
     this.$$('#navdrop').open();
   },
   runResponse: function(data) {
-    if (data.value = '') {
-      debugger;
+    if (data.value === '') {
+      // WIP
+      return true;
       // this.runParagraph(data);
     }
   },
@@ -168,7 +169,7 @@ Polymer({
   },
 
   runParagraph: function(data) {
-    var paragraphCode = (typeof data =='object') ? this.$$('editor-view').getText() : data;
+    var paragraphCode = (typeof data === 'object') ? this.$$('editor-view').getText() : data;
     var postData = {
       config: this.paragraph.config,
       id: this.paragraph.id,
