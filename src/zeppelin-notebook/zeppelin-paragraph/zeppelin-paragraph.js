@@ -65,12 +65,22 @@ Polymer({
     editTitle: {
       type: Boolean,
       value: false
+    },
+    response: {
+      type: String,
+      value: ''
     }
   },
-  observers: ['_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)'],
+  observers: ['_convertObjects(paragraph.settings.forms)', '_gridChange(paragraph.config.*)', 'runResponse(response.*)'],
 
   showDropDown: function() {
     this.$$('#navdrop').open();
+  },
+  runResponse: function(data) {
+    if (data.value = '') {
+      debugger;
+      // this.runParagraph(data);
+    }
   },
   setEditTitle: function() {
     this.set('prevTitle', this.paragraph.title);
@@ -157,19 +167,24 @@ Polymer({
     this.set('grid', res.config.colWidth);
   },
 
-  runParagraph: function() {
+  runParagraph: function(data) {
+    var paragraphCode = (typeof data =='object') ? this.$$('editor-view').getText() : data;
     var postData = {
       config: this.paragraph.config,
       id: this.paragraph.id,
       title: this.paragraph.title,
-      paragraph: this.$$('editor-view').getText()
+      paragraph: paragraphCode
     };
     // this.set('paragraph.result.msg','Loading..')
     // this.set('paragraph.text','Loading..')
+    var formPostParams = {};
+    this.formObjects.forEach(function(data) {
+      formPostParams[data.name] = data.defaultValue;
+    });
     this.handlePOST({
       op: 'RUN_PARAGRAPH',
       data: postData,
-      params: {}
+      params: formPostParams
     });
   },
   pauseParagraph: function() {

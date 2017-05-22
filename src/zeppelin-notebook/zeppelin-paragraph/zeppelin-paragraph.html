@@ -112,7 +112,7 @@
                         <div class="options">
                             <template is="dom-repeat" items="{{ formObjects }}">
                                 <template is="dom-if" if="[[ !item.options ]]">
-                                    <paper-input label="[[ item.name ]]" value="[[ item.defaultValue ]]"></paper-input>
+                                    <paper-input label="[[ item.name ]]" value="{{ item.defaultValue }}"></paper-input>
                                 </template>
                                 <template is="dom-if" if="[[ item.options ]]">
                                     <paper-dropdown-menu label="[[ item.name ]]">
@@ -142,7 +142,7 @@
                                     <pre class="pre-style">[[ item.data ]]</pre>
                                 </template>
                                 <template is="dom-if" if="[[ eq(item.type,'TABLE') ]]" restamp>
-                                    <zeppelin-chart-manager tabular-data="[[ item.data ]]" data="{{ paragraph }}" view-mode="{{ viewMode }}"></zeppelin-chart-manager>
+                                    <zeppelin-chart-manager tabular-data="[[ item.data ]]" data="{{ paragraph }}" view-mode="{{ viewMode }}" chart-response="{{response}}"></zeppelin-chart-manager>
                                 </template>
                             </template>
                     </div>
