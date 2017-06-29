@@ -19,8 +19,8 @@
       overflow: hidden;
     }
     </style>
-    <iron-ajax auto url="[[url]]/zeppelin/api/login?password=password1&userName=admin" method="POST" on-response="handleResponse" handle-as="json" debounce-duration="300"></iron-ajax>
-    <web-socket id="socket" url="[[socketUrl]]/zeppelin/ws" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
+    <iron-ajax url="[[ajaxUrl]]/api/login?password=password1&userName=admin" method="POST" on-response="handleResponse" handle-as="json" debounce-duration="300" id="ajaxUrl"></iron-ajax>
+    <web-socket id="socket" url="[[socketUrl]]/ws" json on-open="_onOpen" on-close="_onClose" on-message="handleSocketResponse" on-error="_onError"></web-socket>
     <div class="table-wrapper">
       <template is="dom-if" if="{{ eq(view,'group') }}" restamp>
         <zeppelin-groups></zeppelin-groups>
@@ -40,9 +40,11 @@
     }
     static get properties() {
       return {
-        url:{
-          type:String,
-          value:'http://localhost'
+        hostIp:{
+          type:String
+        },
+        hostPort:{
+          type:String
         },
         socketUrl: {
           type: String
@@ -62,7 +64,14 @@
       };
     }
     static get observers() {
-      return ['sendData(wsData)', 'authChange(authObj)']
+      return ['sendData(wsData)', 'authChange(authObj)','createUrl(hostIp)']
+    }
+    createUrl(host){
+      if(!host) return;
+      var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      this.socketUrl = protocol + '//' + this.hostIp+':'+this.hostPort;
+      this.set('ajaxUrl',window.location.protocol+'//'+this.hostIp+':'+this.hostPort);
+      this.$.ajaxUrl.generateRequest();
     }
     add() {
       this.dispatch({
@@ -127,8 +136,6 @@
 
     constructor() {
       super()
-      var protocol = window.location.hostname === 'https:' ? 'wss' : 'ws';
-      this.socketUrl = protocol + '://' + window.location.hostname;
     }
     detached() {
       this.$.socket.close();
