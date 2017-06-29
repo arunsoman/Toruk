@@ -17,13 +17,33 @@
     .pre-styled.open {
       max-height: auto;
     }
+    paper-badge {
+        --paper-badge-margin-left: -12px;
+        --paper-badge-margin-top: -12px;
+    }
     </style>
-    <pre class="pre-styled">[[result]]</pre>
+    <paper-icon-button icon="icons:warning" id="warning" on-click="toggleConsole"></paper-icon-button>
+    <paper-badge label="1" for="warning"></paper-badge>
+    
+    <template is="dom-if" if="[[ showConsole ]]">
+      <pre class="pre-styled">[[result]]</pre>
+    </template>
   </template>
   <script>
   class zeppelinLogViewer extends Polymer.Element {
     static get is() {
       return 'zeppelin-log-viewer'
+    }
+    static get properties(){
+      return{
+        showConsole:{
+          type:Boolean,
+          value:false
+        }
+      }
+    }
+    toggleConsole(){
+      this.showConsole = !this.showConsole
     }
   }
   window.customElements.define(zeppelinLogViewer.is, zeppelinLogViewer);
