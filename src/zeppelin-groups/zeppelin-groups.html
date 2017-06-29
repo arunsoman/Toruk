@@ -1,0 +1,96 @@
+<dom-module id="zeppelin-groups">
+  <template>
+    <style>
+    .container {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+    }
+    
+    paper-card {
+      @apply(--layout-flex);
+      margin: 0.5em;
+      @apply(--layout-self-center);
+    }
+    </style>
+    <div class="container">
+      <template is="dom-repeat" items="{{ groups }}" index-as="index">
+        <paper-card on-click="setSelected">
+          <div class="card-content layout vertical">
+            <div class="heading">
+              <div class="categoryName">[[ item.folder ]]</div>
+            </div>
+            <div class="icon-holder">
+              <iron-image sizing="contain" src$="images/models/[[item.folder]].svg"></iron-image>
+            </div>
+          </div>
+        </paper-card>
+      </template>
+    </div>
+  </template>
+  <script>
+  class ZeppelinGroups extends ZeppelinReduxMixin(Polymer.Element) {
+    static get is() {
+      return 'zeppelin-groups'
+    }
+    static get properties() {
+      return {
+        items: {
+          type: Object,
+          statePath: 'notes'
+        }
+      }
+    }
+    static get observers() {
+      return ['groupItems(items)']
+    }
+    setSelected(e) {
+      this.dispatch({
+        type: 'SELECTED_GROUP',
+        payload: e.model.item
+      })
+      this.dispatch({
+        type: 'CHANGE_VIEW',
+        payload: 'lists'
+      });
+    }
+
+    // group items based on total items by its name 
+    groupItems(items) {
+      // return if nothing is inside items array
+      if (!items) return;
+
+      let folderObj = {};
+      var misc = {
+        folder: 'My Models',
+        items: []
+      };
+      let responseArray = [];
+
+      items.forEach(item => {
+        // split item by character '/'
+        let SplitChar = item.name.split('/');
+        // check if the item has parent
+        if (SplitChar.length > 0) {
+          let folderName = SplitChar[0];
+          if (!folderObj[folderName]) {
+            folderObj[folderName] = {
+              items: [],
+              folder: SplitChar[0]
+            }
+          }
+
+          folderObj[folderName]['items'].push(item)
+        } else {
+          misc.items.push(item)
+        }
+      });
+
+      // convert object to an array
+      let folders = Object.keys(folderObj).map(key => folderObj[key]);
+      this.set('groups', folders);
+    }
+
+  }
+  window.customElements.define(ZeppelinGroups.is, ZeppelinGroups);
+  </script>
+</dom-module>

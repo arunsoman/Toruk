@@ -1,0 +1,159 @@
+<link rel="import" href="../../app/bower_components/polymer-redux/polymer-redux.html">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.min.js"></script>
+<script>
+const Model = {
+  notes: [],
+  notebook: {},
+  view: 'group',
+  selectedItem: '',
+  ws: {}
+}
+
+const reducer = (state, action) => {
+  state = state || Model;
+
+
+  // let mutateFunc= ( actionType) =>  {
+  //   let temp = Object.assign({},state)
+  //   defaultFunc= function(){
+  //     if(action.type && action.type===type){
+  //         return action.payload;
+  //       return temp
+  //     }
+  //     return temp
+  //   };
+
+  //   NOTE=function(){
+  //     temp.notebook= action.payload.note;
+  //     return temp;
+  //   };
+
+  //   PARAGRAPH=function(){
+  //     temp.notebook.paragraphs[0] = action.payload.paragraph
+  //     return temp;
+  //   };
+
+  //   NOTES_INFO=function(){
+
+  //   };
+  //   // CHANGE_VIEW=SET_AUTH = WS_POST= defaultFunc;
+  //    return this[actionType].call()
+  //   }
+
+
+
+  // return mutateFunc(action.type)()
+
+
+
+  let reducerObj = {
+    notes: notesReducer(state.notes, action),
+    notebook: noteBookReducer(state.notebook, action),
+    view: defaultReducer(state.view, action, 'CHANGE_VIEW'),
+    selectedItem: defaultReducer(state.selectedItem, action, 'SELECTED_GROUP'),
+    ws: {
+      auth: defaultReducer(state.ws.auth, action, 'SET_AUTH'),
+      post: defaultReducer(state.ws.post, action, 'WS_POST')
+    }
+  }
+  return reducerObj;
+};
+
+function noteBookReducer(state, action) {
+  switch (action.type) {
+    case 'NOTE':
+      return action.payload.note;
+
+    case 'PARAGRAPH':
+      return Object.assign({},state,{paragraphs:state.paragraphs.map(item=>item.id==action.payload.paragraph.id ? Object.assign({},item,action.payload.paragraph) : item)})
+
+    case 'PARAGRAPH_ADDED':
+
+      var objectIndex = action.payload.index;
+      return Object.assign({}, state, {
+        paragraphs: [
+          ...state.paragraphs.slice(0, objectIndex),
+          action.payload.paragraph,
+          ...state.paragraphs.slice(objectIndex)
+        ]
+      })
+
+    case 'PARAGRAPH_REMOVED':
+
+      var objectIndex = _getObjIndex(state, action.payload.id);
+      return Object.assign({}, state, {
+        paragraphs: [
+          ...state.paragraphs.slice(0, objectIndex),
+          ...state.paragraphs.slice(objectIndex + 1)
+        ]
+      });
+
+
+    case 'PARAGRAPH_APPEND_OUTPUT':
+
+      return Object.assign({}, state, {
+        paragraphs: state.paragraphs.map(item => item.id === action.payload.paragraphId ? Object.assign({}, item, {
+          logs: [...item.logs||[], action.payload.data]
+        }) : item)
+      })
+
+    case 'PROGRESS':
+
+      return Object.assign({}, state, {
+        paragraphs: state.paragraphs.map(item => item.id === action.payload.id ? Object.assign({}, item, {
+          status: action.type
+        }) : item)
+      })
+
+    case 'UPDATE_CODE':
+      state.paragraphs[action.payload.index].text = action.payload.message;
+      return state;
+
+    default:
+      return state
+  }
+}
+
+function notesReducer(state, action) {
+  switch (action.type) {
+    case 'NOTES_INFO':
+      return state.concat(action.payload.notes);
+    default:
+      return state
+  }
+}
+
+// function paragraphReducer(Obj) {
+//   var reducedObj;
+//     switch(Obj.method){
+//       case 'push':
+//         reducedObj = {[Obj.key]:[...Obj.key,Obj.val]}
+//         break;
+//       case 'assign':
+//         reducedObj =  {[Obj.key]:Obj.val}
+//         break;
+//       default:
+//         reducedObj = Obj.payload
+//         break;
+//     }
+//   var _privateObj = Obj.state.paragraphs.map(item => item.id === Obj.payload ? Object.assign({}, item, reducedObj) : item);
+//   return Object.assign({}, Obj.state, {
+//     paragraphs: _privateObj
+//   })
+// }
+
+function defaultReducer(state, action, type) {
+  if (action.type && action.type === type) return action.payload;
+  return state
+}
+
+function _getObjIndex(state, id) {
+  return state.paragraphs.map(data => data.id).indexOf(id);
+}
+
+const store = Redux.createStore(reducer, Model,
+  Redux.compose(window.devToolsExtension ? window.devToolsExtension() : v => v)
+);
+
+ZeppelinReduxMixin = PolymerRedux(store);
+</script>

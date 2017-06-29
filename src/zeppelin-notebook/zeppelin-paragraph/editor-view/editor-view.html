@@ -1,31 +1,91 @@
 <dom-module id="editor-view">
-    <template>
-        <!-- <iron-ajax id="ajax" on-response="handleResponse"  handle-as="json"></iron-ajax> -->
-        <style>
-        :host {
-            display: block;
+  <link rel="import" type="css" href="editor-view-editor.css">
+  <link rel="import" type="css" href="editor-view-theme.css">
+  <template>
+    <style>
+    :host {
+      display: block;
+    }
+    
+    .ace-editor {
+      display: block;
+      height: 200px;
+      font-size: 14px;
+      width: 100%;
+    }
+    
+    :host .ace_scroller::-webkit-scrollbar {
+      width: 5px;
+    }
+    
+    :host .ace_scroller::-webkit-scrollbar-track {
+      background: #ddd;
+    }
+    
+    :host .ace_scroller::-webkit-scrollbar-thumb {
+      background: #666;
+    }
+    </style>
+    <div class="ace-editor"></div>
+  </template>
+  <script>
+  class EditorView extends ZeppelinReduxMixin(Polymer.Element) {
+
+    static get is() {
+      return 'editor-view'
+    }
+
+    static get properties() {
+      return {
+        index: {
+          type: Number
+        },
+        paragraph: {
+          type: Object,
+          statePath(state) {
+            return state.notebook.paragraphs[this.index]
+          }
+        },
+        editor: {
+          type: Object
         }
-        
-        .ace-editor {
-            display: block;
-            height: 200px;
-            font-size: 14px;
-            width: 100%;
-        }
-        
-        :host .ace_scroller::-webkit-scrollbar {
-            width: 5px;
-        }
-        
-        :host .ace_scroller::-webkit-scrollbar-track {
-            background: #ddd;
-        }
-        
-        :host .ace_scroller::-webkit-scrollbar-thumb {
-            background: #666;
-        }
-        </style>
-        <div id="[[ paragraph.id ]]" class="ace-editor"></div>
-    </template>
-    <script src="editor-view.js"></script>
+      }
+    }
+
+    static get observers() {
+      return ['initialize(paragraph)']
+    }
+
+    initialize(paragraph) {
+      if (this.init) return false;
+      this.init = true;
+      this.editor = window.ace.edit(this.root.querySelector('.ace-editor'));
+      this.editor.setValue(this.paragraph.text || '', 1);
+      this.editor.setOptions({
+        fontSize: "14px",
+        maxLines: Infinity,
+        minLines: 15
+      });
+      this.editor.setTheme('ace/theme/dawn');
+      this.editor.getSession().setMode('ace/mode/scala');
+      this.editor.getSession().setUseWrapMode(true);
+      this.editor.on('input', () => {
+        let editorVal = this.editor.getSession().getValue();
+        this.dispatch({
+          type: "UPDATE_CODE",
+          payload: {
+            index: this.index,
+            message: editorVal
+          }
+        })
+      });
+
+    }
+
+    getText() {
+      return this.editor.getSession().getValue();
+    }
+  }
+  window.customElements.define(EditorView.is, EditorView);
+  </script>
 </dom-module>

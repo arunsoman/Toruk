@@ -1,0 +1,20 @@
+<dom-module id="html-view">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div id="htmlcontent"></div>
+  </template>
+<script>
+  class htmlView extends ZeppelinReduxMixin(Polymer.Element) {
+    static get is() {    return 'html-view'  }
+    connectedCallback(){
+      this.$.htmlcontent.innerHTML = this.result;
+    }
+  }
+  window.customElements.define(htmlView.is, htmlView);
+
+</script>
+</dom-module>

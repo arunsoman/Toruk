@@ -1,0 +1,56 @@
+<script>
+// var ZEPPELIN_UI = {} || window.ZEPPELIN_UI;
+ZEPPELIN_BEHAVIORS = {
+
+  // Adds iron overlay open and close events for specific datatable in the page
+  addListener: function(list) {
+    var me = this;
+    list.addEventListener('iron-overlay-opened', function(e) {
+      var row = me.getParentByTagName(e.target, 'data-table-row');
+      row.parentElement.style.zIndex = 1;
+    });
+    list.addEventListener('iron-overlay-closed', function(e) {
+      var row = me.getParentByTagName(e.target, 'data-table-row');
+      row.parentElement.style.zIndex = '';
+    });
+  },
+  // helper to check if object equals
+  eq: function(obj, val) {
+    return obj == val;
+  },
+  // helpre function for object not equals
+  not: function(a, b) {
+    return a !== b;
+  },
+  // helper function to check values in an array
+  contains: function(el,arrayVal) {
+    return [b, c, d].indexOf(a) !== -1;
+  },
+  //Helper method to find a parent element with given tag name
+  getParentByTagName: function(element, tag) {
+    var me = this;
+    if (!tag) {
+      return element.parentElement;
+    }
+    if (element.parentElement.tagName.toLowerCase() === tag.toLowerCase() || element.parentElement.tagName.toLowerCase() === 'body') {
+      return element.parentElement;
+    } else {
+      return me.getParentByTagName(element.parentElement, tag);
+    }
+  },
+
+  _checkBounds: function(row, table, target) {
+    var rowBounds = row.getBoundingClientRect();
+    var tableBounds = table.getBoundingClientRect();
+    return (tableBounds.bottom - rowBounds.bottom) <= target.clientHeight;
+  },
+
+  attached: function() {
+    var me = this;
+    var ironLists = document.querySelectorAll('iron-list');
+    for (var i = 0; i < ironLists.length; i++) {
+      me.addListener(ironLists[i]);
+    }
+  }
+}
+</script>

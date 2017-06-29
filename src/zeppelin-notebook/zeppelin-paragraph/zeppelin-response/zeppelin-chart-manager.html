@@ -1,0 +1,117 @@
+<!-- <link rel="import" href="src/bower_components/polymer-d3/polymer-d3-imports.html"> -->
+<dom-module id="zeppelin-chart-manager">
+  <template>
+    chartManager
+    <!-- <pie-chart data="[[ data ]]"></pie-chart> -->
+    <polymer-d3 edit-mode="[[ !viewMode ]]" chart-response="{{ chartResponse }}"></polymer-d3>
+  </template>
+  <script>
+  class zeppelinChartManager extends Polymer.Element {
+    static get is() {
+      return 'zeppelin-chart-manager'
+    }
+    static get properties() {
+      return {
+        source: {
+          type: Object,
+          value: []
+        },
+        external: {
+          type: Array,
+          value: []
+        },
+      }
+    }
+    static get observers() {
+      return ['transformData(result)']
+    }
+
+    transformData(data) {
+      var me = this;
+      // if (data) {
+      data = data.replace();
+      var headerObj = [];
+      var lines = data.split('\n');
+      var result = [];
+      var headers = lines[0].split('\t');
+      var firstRow = lines[1].split('\t');
+
+      headers.forEach(function(el, key) {
+        var type = me.getDataType(firstRow[key]);
+        headerObj.push({
+          key: headers[key],
+          value: key,
+          type: type
+        });
+      });
+
+      me.set('external', headerObj);
+
+      // lines.length - 1 is used because, last row is always just a '\n' with no data
+      for (var i = 1; i < lines.length - 1; i++) {
+        var obj = [];
+        var currentline = lines[i].split('\t');
+        for (var j = 0; j < headers.length; j++) {
+          var converted = me.convertData(currentline[j], headerObj[j].type);
+          obj.push(converted);
+        }
+
+        result.push(obj);
+      }
+      this.set('source', result);
+      // if (!this.data.config.graph) {
+      //   this.data.config.graph = {};
+      // }
+      // var polyD3 = this.data.config.graph.polymerD3;
+      // var chartConf = {
+      //   externals: this.external,
+      //   source: this.source,
+      //   mode: 'create' // Can be view and create
+      // };
+      // if (polyD3) {
+      //   chartConf.mode = 'edit';
+      //   chartConf.availableCharts = polyD3.availableCharts;
+      //   chartConf.selectedChart = polyD3.selectedChart;
+      //   chartConf.legendSettings = polyD3.selectedChart.settings.legendSettings;
+      //   chartConf.settings = polyD3.selectedChart.settings.settings;
+      //   chartConf.inputs = polyD3.selectedChart.settings.inputs;
+      // }
+      // if (this.viewMode) {
+      //   chartConf.mode = 'view';
+      // }
+      // Avoid twoway binding with polymer-d3
+      // Too much data tangling
+      // this.root.querySelector('polymer-d3').bootstrapCharts(chartConf);
+      // }
+    }
+    getDataType(data) {
+      var result = '';
+      if (data.match(/^\d*\.?\d*$/g)) {
+        result = 'Number';
+      } else if (Date.parse(data)) {
+        result = 'Date';
+      } else {
+        result = 'String';
+      }
+      return result;
+    }
+
+    convertData(data, type) {
+      var result;
+      switch (type) {
+        case 'Number':
+          result = parseFloat(data);
+          break;
+        case 'Date':
+          result = new Date(data);
+          break;
+        default:
+          result = data;
+      }
+      return result;
+    }
+  }
+  window.customElements.define(zeppelinChartManager.is, zeppelinChartManager);
+  </script>
+  <!-- <script src="zeppelin-chart-manager.js"></script> -->
+</dom-module>

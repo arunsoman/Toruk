@@ -1,0 +1,55 @@
+/*::content .noselect *{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+:host {
+  display: block;
+  height: auto;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+.title h3 {
+  cursor: text;
+  margin: 8px;
+}
+.title h3:hover {
+  border: 1px solid;
+  border-radius: 2px;
+}
+.name-wrap {
+  position: relative;
+}
+.name-wrap paper-input,
+.name-wrap paper-icon-button {
+  display: none;
+}
+.name-wrap paper-icon-button {
+  position: absolute;
+  top: 20px;
+}
+.save-btn {
+  left: -80px;
+}
+.clear-btn {
+  left: -50px;
+}
+.name-wrap.edit-mode h3 {
+  display: none;
+}
+.name-wrap.edit-mode paper-input,
+.name-wrap.edit-mode paper-icon-button {
+  display: block;
+}*/
+:host{
+  background: #d8dce3;
+  display: block;
+  overflow: hidden;
+  /*margin: 0;*/
+}

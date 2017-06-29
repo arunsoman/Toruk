@@ -1,5 +1,8 @@
 :host {
     display: inline;
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin: 1em; 
 }
 
 .clearfix:after {
@@ -8,24 +11,6 @@
     clear: both;
 }
 
-.editor-true {
-    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.2);
-}
-
-.editor-card {
-    margin: 0.5rem 0 1rem 0;
-}
-
-/*.card:after {
-    content: '';
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 50px;
-    overflow: hidden;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6;
-}*/
 .settings-wrapper{
     position: relative;
     min-height: 50px;
@@ -42,8 +27,8 @@
     background-color: white;
     padding: 0;
     position: relative;
-    margin-left: 15px;
-    margin-right: 15px;
+    /*margin-left: 15px;*/
+    /*margin-right: 15px;*/
     overflow: hidden;
     /*padding-bottom: 3em;*/
 }
@@ -77,22 +62,6 @@
     width: 100%!important;
 }
 
-header {
-    /*border-bottom: solid 1px #cecece;*/
-/*    margin-bottom: 1em;
-    padding-bottom: 1em;
-    margin-left: -2em;
-    margin-right: -2em;
-    margin-top: -1em;
-    padding: 1em 2em;
-    position: relative;*/
-}
-
-.editor-true header {
-    padding: 0;
-    background: #efefef;
-}
-
 header h4 {
     margin: 0;
     width: 100%;
@@ -111,18 +80,8 @@ iron-dropdown {
     background: #fff;
 }
 
-.pre-style{
-    white-space: pre-wrap;
-    word-break: break-all!important;
-    word-wrap: break-word!important;
-    max-height: 150px;
-    overflow-x: auto;
-    font-size: 11px;
-    color: #bf8c2e;
-    background: #fffde4;
-    border: solid 1px #efddbd;
-    padding: 1em;
-}
+
+
 
 .drag-me {
     position: absolute;

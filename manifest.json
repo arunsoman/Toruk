@@ -1,0 +1,7 @@
+{
+  "name": "zeppelin-viewer",
+  "short_name": "zeppelin-viewer",
+  "description": "Webcomponent based UI for apache zeppelin",
+  "start_url": "/",
+  "display": "standalone"
+}

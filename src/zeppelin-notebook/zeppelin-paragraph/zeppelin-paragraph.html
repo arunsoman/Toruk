@@ -1,168 +1,198 @@
 <!-- Polymer dependencies -->
-<link rel="import" href="../../helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-form.html">
+<!-- <link rel="import" href="../../helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-form.html"> -->
 <!-- Local components -->
+<link rel="import" href="zeppelin-response/zeppelin-response.html">
 <link rel="import" href="editor-view/editor-view.html">
-<link rel="import" href="html-view/html-view.html">
-<link rel="import" href="zeppelin-resizer/zeppelin-resizer.html">
+<!-- <link rel="import" href="html-view/html-view.html"> -->
+<!-- <link rel="import" href="zeppelin-resizer/zeppelin-resizer.html"> -->
 <!-- External libraries -->
-<!-- Utilities -->
-<script src="../../zeppelin.js"></script>
 <dom-module id="zeppelin-paragraph">
-    <link rel="import" type="css" href="zeppelin-paragraph.css">
-    <template>
-        <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
-            <article class$="card opac-[[ paragraph.config.visible ]] editor-card  editor-[[ !viewMode ]]">
-                <!-- Title -->
-                <template is="dom-if" if="[[ !viewMode ]]" restamp>
-                    <div class="settings-wrapper">
-                        <ul class="toolbar left">
-                            <li>
-                                <iron-label>
-                                    <template is="dom-if" if="[[ contains(paragraph.status,'ERROR','READY','FINISHED') ]]" restamp>
-                                        <paper-icon-button icon="icons:send" on-tap="runParagraph"></paper-icon-button> Run
-                                    </template>
-                                    <template is="dom-if" if="[[ eq(paragraph.status,'RUNNING') ]]" restamp>
-                                        <paper-icon-button icon="icons:cancel" on-tap="pauseParagraph"></paper-icon-button> Running
-                                    </template>
-                                </iron-label>
-                                <iron-label>
-                                    <paper-icon-button icon="save" on-tap="saveParagraph" title="Save"></paper-icon-button> Save
-                                </iron-label>
-                                <iron-label>
-                                    <paper-icon-button icon="delete" on-tap="removeParagraph" title="Delete Paragraph"></paper-icon-button>
-                                    Delete
-                                </iron-label>
-                                <iron-label>
-                                    <paper-icon-button icon="add" on-tap="addParagraph" title="Add Paragraph"></paper-icon-button>
-                                    Add
-                                </iron-label>
-                            </li>
-                        </ul>
-                        <ul class="toolbar">
-                            <li>
-                                <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
-                                <iron-dropdown horizontal-align="right" id="navdrop" vertical-align="top">
-                                    <div class="dropdown-content">
-                                        <paper-icon-button icon="select-all" on-tap="toggleParagraph" title="Show / Hide Paragraph"></paper-icon-button>
-                                        <paper-icon-button icon="picture-in-picture" on-tap="toggleTitle" title="Show / Hide Title"></paper-icon-button>
-                                        <paper-icon-button icon="arrow-upward" on-tap="moveUp" title="Move Up"></paper-icon-button>
-                                        <paper-icon-button icon="arrow-downward" on-tap="moveDown" title="Move Down"></paper-icon-button>
-                                        <paper-icon-button icon="list" on-tap="hideNumber" title="Toggle line number"></paper-icon-button>
-                                        <paper-icon-button icon="more-vert" on-tap="showDropDown"></paper-icon-button>
-                                    </div>
-                                </iron-dropdown>
-                            </li>
-                        </ul>
-                    </div>
-                </template>
-                <header class="layout horizontal">
-                    <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
-                        <h4>
-                        <template is="dom-if" if="[[ !viewMode]]">
-                            <span on-tap="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button></span>
-                        </template>
+  <link rel="import" type="css" href="zeppelin-paragraph.css">
+  <template>
+    <div class$="col-md-12 col-md-[[ paragraph.config.colWidth ]] col">
+      <article class$="card opac-[[ paragraph.config.visible ]] editor-card  editor-[[ !viewMode ]]">
+        <!-- Title -->
+        <!-- <template is="dom-if" if="[[ !viewMode ]]" restamp> -->
+        <template is="dom-if" if="[[showCode]]">
+          <div class="settings-wrapper">
+            <ul class="toolbar left">
+              <li>
+                <iron-label on-click="run">
+                  <template is="dom-if" if="{{contains(paragraph.status,['ERROR','READY','FINISHED']) }}" restamp>
+                    <paper-icon-button icon="icons:send"></paper-icon-button> Run
+                  </template>
+                  <template is="dom-if" if="{{ eq(paragraph.status,'RUNNING') }}" restamp>
+                    <paper-icon-button icon="icons:cancel" on-click="pauseParagraph"></paper-icon-button> Running
+                  </template>
+                </iron-label>
+                <iron-label on-click="saveParagraph">
+                  <paper-icon-button icon="save" title="Save"></paper-icon-button> Save
+                </iron-label>
 
-                        <template is="dom-if" if="[[ !editTitle ]]">
-                            [[ paragraph.title ]]
-                        </template>
+                  <iron-label on-click="removeParagraph">
+                    <paper-icon-button icon="delete" title="Delete Paragraph"></paper-icon-button>
+                  Delete
+                  </iron-label>
 
-                        <template is="dom-if" if="[[ editTitle ]]">
-                            <paper-input value="{{ paragraph.title }}"></paper-input>
-                            <paper-icon-button icon="icons:done" class="save-btn" on-tap="saveTitle"></paper-icon-button>
-                            <paper-icon-button icon="icons:clear" class="clear-btn" on-tap="cancelTitle"></paper-icon-button>
-                        </template>
-                    </h4>
-                    </template>
-                    <!-- <template is="dom-if" if="[[ eq(viewMode,paragraph.config.showTitle) ]]">
-            </template> -->
-                    <!-- <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
-                        <h4> 
-                    <template is="dom-if" if="[[ editTitle ]]" restamp>
-                    </template>
-                    <template is="dom-if" if="[[ !editTitle ]]">
-                        <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
-                        <template is="dom-if" if="[[ !paragraph.title ]]">
-                            Untitled
-                        </template>
-                        <template is="dom-if" if="[[ paragraph.title ]]">
-                            [[ paragraph.title ]] 
-                        </template>
-                        </template>
-                    </template>
-                    </h4>
-                </template> -->
-                </header>
-                <template is="dom-if" if="[[ !viewMode ]]" restamp>
-                    <!-- ACE Editor -->
-                    <!-- {{content}} -->
-                    <section class="ace-editor">
-                        <editor-view paragraph="[[ paragraph ]]" settings="[[ settings ]]" id="editor"></editor-view>
-                    </section>
-                    <div class="drag-me">
-                        <zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
-                    </div>
-                    <!-- Visualization of results -->
-                    <template is="dom-if" if="[[ eq(settings.progress,paragraph.id) ]]">
-                        <paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
-                    </template>
-                </template>
-                <section class="visualization">
-                    <!-- options -->
-                    <template is="dom-if" if="[[ !viewMode ]]" restamp>
-                        <div class="options">
-                            <template is="dom-repeat" items="{{ formObjects }}">
-                                <template is="dom-if" if="[[ !item.options ]]">
-                                    <paper-input label="[[ item.name ]]" value="{{ item.defaultValue }}"></paper-input>
-                                </template>
-                                <template is="dom-if" if="[[ item.options ]]">
-                                    <paper-dropdown-menu label="[[ item.name ]]">
-                                        <paper-menu attr-for-selected="value" class="dropdown-content">
-                                            <template is="dom-repeat" items="[[ item.options ]]">
-                                                <paper-item value="[[ item.value ]]">[[ item.value ]]</paper-item>
-                                            </template>
-                                        </paper-menu>
-                                    </paper-dropdown-menu>
-                                </template>
-                            </template>
-                        </div>
-                    </template>
-                    <!-- / options -->
-                    <div class="response-wrapper">
-                        <!-- check for response type -->
-                        <template is="dom-if" if="{{ eq(paragraph.status,'PROGRESS') }}">
-                            <paper-progress indeterminate class="blue"></paper-progress>
-                            <pre class="pre-style">[[ paragraph.progress.data ]]</pre>
-                        </template>
-                            <template is="dom-repeat" items="[[ paragraph.results.msg ]]" index-as="index">
-                                <!-- show html template -->
-                                <template is="dom-if" if="[[ eq(item.type,'HTML') ]]" restamp>
-                                    <html-view result="[[ item.data ]]"></html-view>
-                                </template>
-                                <template is="dom-if" if="[[ eq(item.type,'TEXT') ]]" restamp>
-                                    <pre class="pre-style">[[ item.data ]]</pre>
-                                </template>
-                                <template is="dom-if" if="[[ eq(item.type,'TABLE') ]]" restamp>
-                                    <zeppelin-chart-manager tabular-data="[[ item.data ]]" data="{{ paragraph }}" view-mode="{{ viewMode }}" chart-response="{{response}}"></zeppelin-chart-manager>
-                                </template>
-                            </template>
-                    </div>
-                    <!-- <template is="dom-if" if="[[ not(paragraph.status,'RUNNING') ]]">
-                        <template is="dom-if" if="[[ templatetype.text ]]" restamp>
-                            <pre class="pre-style">[[ paragraph.result.msg ]]</pre>
-                        </template>
-                    </template>
-                    <template is="dom-if" if="[[ eq(paragraph.status,'RUNNING') ]]">
-                        <pre class="pre-style">running....</pre>
-                    </template>
-                    <template is="dom-if" if="[[ templatetype.html ]]" restamp>
-                        <html-view result="[[ paragraph.result.msg ]]"></html-view>
-                    </template>
-                    <template is="dom-if" if="{{ templatetype.graph }}" restamp>
-                        <zeppelin-chart-manager data="{{ paragraph }}" view-mode="{{ viewMode }}"></zeppelin-chart-manager>
-                    </template> -->
-                </section>
-            </article>
-        </div>
-    </template>
-    <script src="zeppelin-paragraph.js"></script>
+                <iron-label on-click="addParagraph">
+                  <paper-icon-button icon="add" title="Add Paragraph"></paper-icon-button>
+                  Add
+                </iron-label>
+              </li>
+            </ul>
+            <ul class="toolbar">
+              <li>
+                <paper-icon-button icon="more-vert" on-click="showDropDown"></paper-icon-button>
+                <iron-dropdown horizontal-align="right" id="navdrop" vertical-align="top">
+                  <div class="dropdown-content">
+                    <paper-icon-button icon="select-all" on-click="toggleParagraph" title="Show / Hide Paragraph"></paper-icon-button>
+                    <paper-icon-button icon="picture-in-picture" on-click="toggleTitle" title="Show / Hide Title"></paper-icon-button>
+                    <paper-icon-button icon="arrow-upward" on-click="moveUp" title="Move Up"></paper-icon-button>
+                    <paper-icon-button icon="arrow-downward" on-click="moveDown" title="Move Down"></paper-icon-button>
+                    <paper-icon-button icon="list" on-click="hideNumber" title="Toggle line number"></paper-icon-button>
+                    <paper-icon-button icon="more-vert" on-click="showDropDown"></paper-icon-button>
+                  </div>
+                </iron-dropdown>
+              </li>
+            </ul>
+          </div>
+        </template>
+        <header class="layout horizontal">
+          <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
+            <h4>
+            <template is="dom-if" if="[[ !viewMode]]">
+                <span on-click="setEditTitle" ><paper-icon-button icon="editor:mode-edit" title="Toggle line number"></paper-icon-button></span>
+            </template>
+
+            <template is="dom-if" if="[[ !editTitle ]]">
+                [[ paragraph.title ]]
+            </template>
+
+            <template is="dom-if" if="[[ editTitle ]]">
+                <paper-input value="{{ paragraph.title }}"></paper-input>
+                <paper-icon-button icon="icons:done" class="save-btn" on-click="saveTitle"></paper-icon-button>
+                <paper-icon-button icon="icons:clear" class="clear-btn" on-click="cancelTitle"></paper-icon-button>
+            </template>
+        </h4>
+          </template>
+          <!-- <template is="dom-if" if="[[ eq(viewMode,paragraph.config.showTitle) ]]">
+</template> -->
+          <!-- <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
+<h4> 
+<template is="dom-if" if="[[ editTitle ]]" restamp>
+</template>
+<template is="dom-if" if="[[ !editTitle ]]">
+<template is="dom-if" if="[[ paragraph.config.showTitle ]]">
+<template is="dom-if" if="[[ !paragraph.title ]]">
+Untitled
+</template>
+<template is="dom-if" if="[[ paragraph.title ]]">
+[[ paragraph.title ]] 
+</template>
+</template>
+</template>
+</h4>
+</template> -->
+        </header>
+        <template is="dom-if" if="[[showCode]]">
+          <section class="ace-editor">
+            <editor-view index="[[index]]"></editor-view>
+          </section>
+        </template>
+        <!-- <template is="dom-if" if="[[ !viewMode ]]" restamp> -->
+        <!-- ACE Editor -->
+        <!-- {{content}} -->
+        <!-- <div class="drag-me">
+<zeppelin-resizer grid="{{ paragraph.config.colWidth }}"></zeppelin-resizer>
+</div>
+Visualization of results
+<template is="dom-if" if="{{ eq(paragraph.status,'PROGRESS') }}">
+<paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
+</template> -->
+        <!-- </template> -->
+        <section class="visualization">
+          <div class="response-wrapper">
+            <template is="dom-if" if="{{ eq(paragraph.status,'PROGRESS') }}" restamp>
+              <paper-progress indeterminate class="blue"></paper-progress>
+              <template is="dom-repeat" items="[[paragraph.logs]]">
+                <pre>[[item]]</pre>
+              </template>
+            </template>
+            <zeppelin-response index="{{index}}"></zeppelin-response>
+          </div>
+        </section>
+      </article>
+    </div>
+  </template>
+  <script>
+  class ZeppelinParagraph extends Polymer.mixinBehaviors([ZEPPELIN_BEHAVIORS], ZeppelinReduxMixin(Polymer.Element)) {
+    static get is() {
+      return 'zeppelin-paragraph'
+    }
+    static get properties() {
+      return {
+        paragraph: {
+          type: Object,
+          statePath(state) {
+            return state.notebook.paragraphs[this.index]
+          }
+        },
+        index: {
+          type: Number
+        },
+        showCode: {
+          type: Boolean
+        }
+      }
+    }
+
+    // run paragraph
+    run() {
+        let postData = {
+          config: this.paragraph.config,
+          id: this.paragraph.id,
+          title: this.paragraph.title,
+          paragraph: this.paragraph.text
+        }
+        this.handlePOST({
+          op: 'RUN_PARAGRAPH',
+          data: postData
+        })
+      }
+      // add paragraph
+    addParagraph() {
+      var newIndex = +this.index + 1;
+      let postData = {
+        index: newIndex
+      }
+      this.handlePOST({
+        op: 'INSERT_PARAGRAPH',
+        data: postData
+      })
+    }
+    removeParagraph() {
+        let postData = {
+          id: this.paragraph.id
+        };
+        this.handlePOST({
+          op: 'PARAGRAPH_REMOVE',
+          data: postData
+        })
+      }
+      // handler to post data through websocket
+    handlePOST(obj) {
+      obj.data.params = obj.params;
+      var postObj = {
+        op: obj.op,
+        data: obj.data
+      };
+      this.dispatch({
+        type: "WS_POST",
+        payload: postObj
+      });
+    }
+
+  }
+  window.customElements.define(ZeppelinParagraph.is, ZeppelinParagraph);
+  </script>
 </dom-module>

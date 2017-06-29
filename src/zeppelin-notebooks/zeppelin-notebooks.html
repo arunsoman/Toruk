@@ -1,116 +1,68 @@
-<link rel="import" href="../drop-down-fix/drop-down-fix.html">
 <dom-module id="zeppelin-notebooks">
-    <link rel="import" type="css" href="zeppelin-notebooks.css">
-    <template>
-        <style>
-        iron-data-table #container {
-            /*  height: 100%;
-            top: 5em;
-            bottom: 0;
-            position: absolute;
-            left: 0;
-            right: 0;*/
-            width: 100%!important;
-        }
-        
-        .top-panel {
-            margin-top: 1em;
-        }
-        
-        .details {
-            opacity: 0;
-            pointer-events: none;
-            position: relative;
-            height: 0;
-            overflow-x: hidden;
-        }
-        
-        .folder-check {
-            display: none;
-        }
-        
-        .folder-check:checked+.details {
-            opacity: 1;
-            pointer-events: initial;
-            height: auto;
-        }
-        
-        .folder-icon {
-            position: relative;
-            z-index: 999;
-            display: block;
-            background: #fff;
-            padding: 1em;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-        
-        .folders {
-            float: left;
-            margin: 5px;
-            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-            width: 48%;
-            position: relative;
-            z-index: 1;
-        }
-        </style>
-        <div class="layout horizontal top-panel">
-            <h3 class="headingPage flex">Categories of analytical models</h3>
-            <paper-dialog modal id="dialog" dynamic-align>
-                <h2>Create Model</h2>
-                <paper-dialog-scrollable>
-                    <p>Use '/' to create folders. Example: NoteDirA/Model1</p>
-                    <paper-input value="{{ noteBookName }}" required placeholder="Model Name">
-                        <template is="dom-if" if="[[ showTemplates.show ]]">
-                            <div prefix>[[ showTemplates.folder ]] / &nbsp; </div>
-                        </template>
-                    </paper-input>
-                </paper-dialog-scrollable>
-                <div class="buttons">
-                    <paper-button class="cancel" dialog-dismiss>Cancel</paper-button>
-                    <paper-button on-tap="createNoteBook">Save</paper-button>
-                </div>
-            </paper-dialog>
-            <template is="dom-if" if="[[ showTemplates.show ]]">
-                <div class="addButton">
-                    <paper-button on-tap="showCreateView">Create new model</paper-button>
-                </div>
-            </template>
+  <template>
+    <style>
+    .container {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+    }
+    
+    paper-card {
+      @apply(--layout-flex);
+      margin: 0.5em;
+      @apply(--layout-self-center);
+      height: 15em;
+    }
+    </style>
+    <template is="dom-repeat" items="{{ items }}" index-as="index">
+      <paper-card on-click="selectedItem">
+        <div class="card-content layout vertical">
+          <div class="heading">
+            <div class="categoryName">[[ item.name ]]</div>
+          </div>
+          <div class="icon-holder">
+            <iron-image sizing="contain" src$="images/models/[[item.folder]].svg"></iron-image>
+          </div>
         </div>
-        <template is="dom-if" if="[[ !showTemplates.show ]]" restamp>
-            <template is="dom-repeat" items="[[ responseItems ]]" index-as="index">
-                <paper-card on-tap="setView">
-                    <div class="card-content layout vertical">
-                        <div class="heading">
-                            <div class="categoryName">[[ item.folder ]]</div>
-                        </div>
-                        <div class="icon-holder">
-                            <iron-image sizing="contain" src$="images/models/[[item.folder]].svg"></iron-image>
-                        </div>
-                    </div>
-                </paper-card>
-            </template>
-        </template>
-        <template is="dom-if" if="[[ showTemplates.show ]]" restamp>
-            <paper-button class="btn-back" on-tap="hideTemplates">
-            <iron-icon icon="chevron-left"></iron-icon>Back to model listing</paper-button>
-            <iron-data-table items="[[ showTemplates.data.items ]]" id="notebooksTable" custom-filter selection-enabled selected-item="{{ selectedItem }}">
-                <data-table-column name="[[showTemplates.data.folder]]" filter-by="name" filter-type="text">
-                    <template>[[ item.name ]]</template>
-                </data-table-column>
-                <data-table-column flex="0" width="3.5em">
-                    <template>
-                        <paper-menu-button dynamic-align>
-                            <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
-                            <paper-menu class="dropdown-content">
-                                <paper-item on-tap="editNotebook" data-args="{{ item }}">Edit</paper-item>
-                                <paper-item on-tap="deleteNotebook" data-args="{{ item }}">Delete</paper-item>
-                            </paper-menu>
-                        </paper-menu-button>
-                    </template>
-                </data-table-column>
-            </iron-data-table>
-        </template>
+      </paper-card>
     </template>
-    <script src="zeppelin-notebooks.js"></script>
+  </template>
+  <script>
+  class zeppelinNotebooks extends ZeppelinReduxMixin(Polymer.Element) {
+    static get is() {
+      return 'zeppelin-notebooks'
+    }
+    static get properties() {
+      return {
+        items: {
+          type: Object,
+          statePath: 'selectedItem.items'
+        }
+      }
+    }
+
+    selectedItem(e) {
+      this.dispatch({
+        type: 'SELECTED_GROUP',
+        payload: e.model.item.id
+      })
+      this.dispatch({
+        type: 'CHANGE_VIEW',
+        payload: 'single'
+      });
+    }
+
+    constructor() {
+      super();
+    }
+    deleteNotebook(e) {
+      this.dispatch({
+        type: 'DELETE_NOTEBOOK',
+        payload: e.target.dataArgs.id
+      })
+    }
+
+
+  }
+  window.customElements.define(zeppelinNotebooks.is, zeppelinNotebooks);
+  </script>
 </dom-module>

@@ -1,0 +1,40 @@
+<link rel="import" href="html-view.html">
+<link rel="import" href="zeppelin-log-viewer.html">
+<link rel="import" href="zeppelin-chart-manager.html">
+<dom-module id="zeppelin-response">
+  <template>
+    <style>
+    :host {
+      display: block;
+    }
+    </style>
+    <template is="dom-if" if="{{eq(response.type,'TEXT')}}">
+      <zeppelin-log-viewer result="[[response.data]]"></zeppelin-log-viewer>
+    </template>
+    <template is="dom-if" if="{{eq(response.type,'HTML')}}">
+      <html-view result="[[response.data]]"></html-view>
+    </template>
+    <template is="dom-if" if="{{eq(response.type,'TABLE')}}">
+      Chart Manager
+      <zeppelin-chart-manager result="[[response.data]]"></zeppelin-chart-manager>
+    </template>
+  </template>
+  <script>
+  class zeppelinResponse extends Polymer.mixinBehaviors([ZEPPELIN_BEHAVIORS], ZeppelinReduxMixin(Polymer.Element)) {
+    static get is() {
+      return 'zeppelin-response'
+    }
+    static get properties() {
+      return {
+        response: {
+          statePath(state) {
+            let paragraph = state.notebook.paragraphs[this.index];
+            return paragraph.results ? paragraph.results.msg[0] : paragraph.status == 'ERROR' ? 'ERROR' : 'NA';
+          }
+        }
+      }
+    }
+  }
+  window.customElements.define(zeppelinResponse.is, zeppelinResponse);
+  </script>
+</dom-module>

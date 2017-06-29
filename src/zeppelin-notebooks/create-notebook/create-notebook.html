@@ -1,0 +1,28 @@
+<dom-module id="create-notebook">
+  <template>
+    <paper-dialog modal id="dialog" dynamic-align>
+      <h2>Create Model</h2>
+      <paper-dialog-scrollable>
+        <p>Use '/' to create folders. Example: NoteDirA/Model1</p>
+        <paper-input value="{{ noteBookName }}" required placeholder="Model Name">
+          <template is="dom-if" if="[[ showTemplates.show ]]">
+            <div prefix>[[ showTemplates.folder ]] / &nbsp; </div>
+          </template>
+        </paper-input>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button class="cancel" dialog-dismiss>Cancel</paper-button>
+        <paper-button on-tap="createNoteBook">Save</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+  class createNotebook extends Polymer.Element {
+    static get is() {
+      return 'create-notebook'
+    }
+    constuctor() {}
+  }
+  window.customeElements.define(createNotebook.is, createNotebook);
+  </script>
+</dom-module>
