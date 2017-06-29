@@ -1,5 +1,6 @@
 <link rel="import" href="html-view.html">
 <link rel="import" href="zeppelin-log-viewer.html">
+<link rel="import" href="error-logs.html">
 <link rel="import" href="zeppelin-chart-manager.html">
 <dom-module id="zeppelin-response">
   <template>
@@ -13,6 +14,9 @@
     </template>
     <template is="dom-if" if="{{eq(response.type,'HTML')}}">
       <html-view result="[[response.data]]"></html-view>
+    </template>
+    <template is="dom-if" if="{{eq(response.type,'ERROR')}}">
+      <error-logs logs="[[response.data]]"></error-logs>
     </template>
     <template is="dom-if" if="{{eq(response.type,'TABLE')}}">
       Chart Manager
@@ -29,7 +33,7 @@
         response: {
           statePath(state) {
             let paragraph = state.notebook.paragraphs[this.index];
-            return paragraph.results ? paragraph.results.msg[0] : paragraph.status == 'ERROR' ? 'ERROR' : 'NA';
+            return paragraph.results ? paragraph.results.msg[0] : paragraph.status == 'ERROR' ? {type:'ERROR',data:[paragraph.errorMessage]} : 'NA';
           }
         }
       }

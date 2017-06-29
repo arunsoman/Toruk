@@ -65,7 +65,7 @@ function noteBookReducer(state, action) {
       return action.payload.note;
 
     case 'PARAGRAPH':
-      return Object.assign({},state,{paragraphs:state.paragraphs.map(item=>item.id==action.payload.paragraph.id ? Object.assign({},item,action.payload.paragraph) : item)})
+      return Object.assign({},state,{paragraphs:state.paragraphs.map(item=>item.id==action.payload.paragraph.id ? action.payload.paragraph : item)})
 
     case 'PARAGRAPH_ADDED':
 

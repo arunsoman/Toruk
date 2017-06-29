@@ -1,5 +1,5 @@
 :host {
-    display: inline;
+    display: block;
     box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     margin: 1em; 

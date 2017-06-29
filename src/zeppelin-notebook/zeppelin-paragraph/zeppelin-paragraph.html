@@ -2,6 +2,7 @@
 <!-- <link rel="import" href="../../helper-elements/zeppelin-dynamic-form/zeppelin-dynamic-form.html"> -->
 <!-- Local components -->
 <link rel="import" href="zeppelin-response/zeppelin-response.html">
+<link rel="import" href="zeppelin-response/zeppelin-runtime-logs.html">
 <link rel="import" href="editor-view/editor-view.html">
 <!-- <link rel="import" href="html-view/html-view.html"> -->
 <!-- <link rel="import" href="zeppelin-resizer/zeppelin-resizer.html"> -->
@@ -21,8 +22,8 @@
                   <template is="dom-if" if="{{contains(paragraph.status,['ERROR','READY','FINISHED']) }}" restamp>
                     <paper-icon-button icon="icons:send"></paper-icon-button> Run
                   </template>
-                  <template is="dom-if" if="{{ eq(paragraph.status,'RUNNING') }}" restamp>
-                    <paper-icon-button icon="icons:cancel" on-click="pauseParagraph"></paper-icon-button> Running
+                  <template is="dom-if" if="{{ not(paragraph.status,'FINISHED') }}" restamp>
+                    <paper-icon-button icon="icons:cancel" on-click="pauseParagraph"></paper-icon-button> {{paragraph.status}}
                   </template>
                 </iron-label>
                 <iron-label on-click="saveParagraph">
@@ -114,9 +115,7 @@ Visualization of results
           <div class="response-wrapper">
             <template is="dom-if" if="{{ eq(paragraph.status,'PROGRESS') }}" restamp>
               <paper-progress indeterminate class="blue"></paper-progress>
-              <template is="dom-repeat" items="[[paragraph.logs]]">
-                <pre>[[item]]</pre>
-              </template>
+              <zeppelin-runtime-logs logs="[[paragraph.logs]]"></zeppelin-runtime-logs>
             </template>
             <zeppelin-response index="{{index}}"></zeppelin-response>
           </div>

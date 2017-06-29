@@ -1,16 +1,15 @@
-<dom-module id="zeppelin-log-viewer">
+<dom-module id="error-logs">
   <template>
     <style>
     .pre-styled {
       white-space: pre-wrap;
       word-break: break-all!important;
       word-wrap: break-word!important;
-      /*max-height: 30px;*/
       overflow: hidden;
       font-size: 11px;
-      color: #bf8c2e;
-      background: #fffde4;
-      border: solid 1px #efddbd;
+      color: #ff3232;
+      background: #fff;
+      border: none;
       padding: 1em;
     }
     
@@ -18,14 +17,16 @@
       max-height: auto;
     }
     </style>
-    <pre class="pre-styled">[[result]]</pre>
+    <template is="dom-repeat" items="{{logs}}">
+      <pre class="pre-styled">[[item]]</pre>
+    </template>
   </template>
   <script>
-  class zeppelinLogViewer extends Polymer.Element {
+  class zeppelinErrorLogViewer extends Polymer.Element {
     static get is() {
-      return 'zeppelin-log-viewer'
+      return 'error-logs'
     }
   }
-  window.customElements.define(zeppelinLogViewer.is, zeppelinLogViewer);
+  window.customElements.define(zeppelinErrorLogViewer.is, zeppelinErrorLogViewer);
   </script>
 </dom-module>

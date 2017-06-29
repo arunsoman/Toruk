@@ -1,4 +1,4 @@
-<dom-module id="zeppelin-log-viewer">
+<dom-module id="zeppelin-runtime-logs">
   <template>
     <style>
     .pre-styled {
@@ -18,14 +18,16 @@
       max-height: auto;
     }
     </style>
-    <pre class="pre-styled">[[result]]</pre>
+    <template is="dom-repeat" items="{{logs}}">
+      <pre class="pre-styled">[[item]]</pre>
+    </template>
   </template>
   <script>
-  class zeppelinLogViewer extends Polymer.Element {
+  class zeppelinRuntimeLogViewer extends Polymer.Element {
     static get is() {
-      return 'zeppelin-log-viewer'
+      return 'zeppelin-runtime-logs'
     }
   }
-  window.customElements.define(zeppelinLogViewer.is, zeppelinLogViewer);
+  window.customElements.define(zeppelinRuntimeLogViewer.is, zeppelinRuntimeLogViewer);
   </script>
 </dom-module>
