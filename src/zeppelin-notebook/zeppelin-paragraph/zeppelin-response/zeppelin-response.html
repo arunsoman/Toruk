@@ -20,7 +20,7 @@
     </template>
     <template is="dom-if" if="{{eq(response.type,'TABLE')}}">
       Chart Manager
-      <zeppelin-chart-manager result="[[response.data]]"></zeppelin-chart-manager>
+      <zeppelin-chart-manager response="[[response.data]]" index="[[index]]"></zeppelin-chart-manager>
     </template>
   </template>
   <script>

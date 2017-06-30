@@ -3,10 +3,10 @@
   <template>
     chartManager
     <!-- <pie-chart data="[[ data ]]"></pie-chart> -->
-    <polymer-d3 edit-mode="[[ !viewMode ]]" chart-response="{{ chartResponse }}"></polymer-d3>
+    <polymer-d3 paragraph-id="[[paragraphId]]" chart-response="{{ chartResponse }}"></polymer-d3>
   </template>
   <script>
-  class zeppelinChartManager extends Polymer.Element {
+  class zeppelinChartManager extends ZeppelinReduxMixin(Polymer.Element) {
     static get is() {
       return 'zeppelin-chart-manager'
     }
@@ -20,16 +20,22 @@
           type: Array,
           value: []
         },
+        paragraphId:{
+          type:String,
+          statePath(state){
+            return state.notebook.paragraphs[this.index].id;
+          }
+        }
       }
     }
     static get observers() {
-      return ['transformData(result)']
+      return ['transformData(paragraphId)']
     }
 
-    transformData(data) {
+    transformData() {
       var me = this;
       // if (data) {
-      data = data.replace();
+      var data = this.response.replace();
       var headerObj = [];
       var lines = data.split('\n');
       var result = [];
@@ -47,6 +53,8 @@
 
       me.set('external', headerObj);
 
+      this.dispatch({type:'SET_EXTERNAL',payload:{id:this.paragraphId,externals:headerObj}});
+
       // lines.length - 1 is used because, last row is always just a '\n' with no data
       for (var i = 1; i < lines.length - 1; i++) {
         var obj = [];
@@ -59,10 +67,12 @@
         result.push(obj);
       }
       this.set('source', result);
-      // if (!this.data.config.graph) {
-      //   this.data.config.graph = {};
+      this.dispatch({type:'SET_SOURCE',payload:{id:this.paragraphId,source:result}});
+
+      // if (!this.response.config.graph) {
+      //   this.response.config.graph = {};
       // }
-      // var polyD3 = this.data.config.graph.polymerD3;
+      // var polyD3 = this.response.config.graph.polymerD3;
       // var chartConf = {
       //   externals: this.external,
       //   source: this.source,
@@ -79,10 +89,9 @@
       // if (this.viewMode) {
       //   chartConf.mode = 'view';
       // }
-      // Avoid twoway binding with polymer-d3
-      // Too much data tangling
+      // // Avoid twoway binding with polymer-d3
+      // // Too much data tangling
       // this.root.querySelector('polymer-d3').bootstrapCharts(chartConf);
-      // }
     }
     getDataType(data) {
       var result = '';

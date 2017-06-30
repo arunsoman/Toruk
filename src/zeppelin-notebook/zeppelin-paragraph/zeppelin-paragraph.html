@@ -16,7 +16,17 @@
         <!-- <template is="dom-if" if="[[ !viewMode ]]" restamp> -->
         <template is="dom-if" if="[[showCode]]">
           <div class="settings-wrapper">
-            <ul class="toolbar left">
+          <paper-icon-button icon="{{icon(paragraph.status)}}" id="run" on-click="run" title="{{paragraph.status}}"></paper-icon-button>
+          <!-- <template is="dom-if" if="{{ not(paragraph.status,'FINISHED') }}" restamp>
+            <paper-icon-button icon="icons:cancel" on-click="pauseParagraph"></paper-icon-button> {{paragraph.status}}
+          </template> -->
+          <paper-icon-button icon="save" title="Save" on-click="saveParagraph"></paper-icon-button>
+          <paper-icon-button icon="delete" title="Delete Paragraph" on-click="removeParagraph"></paper-icon-button>
+          <paper-icon-button icon="add" title="Add Paragraph" on-click="addParagraph"></paper-icon-button>
+
+
+
+            <!-- <ul class="toolbar left">
               <li>
                 <iron-label on-click="run">
                   <template is="dom-if" if="{{contains(paragraph.status,['ERROR','READY','FINISHED']) }}" restamp>
@@ -40,7 +50,7 @@
                   Add
                 </iron-label>
               </li>
-            </ul>
+            </ul> -->
             <ul class="toolbar">
               <li>
                 <paper-icon-button icon="more-vert" on-click="showDropDown"></paper-icon-button>
@@ -141,8 +151,23 @@ Visualization of results
         },
         showCode: {
           type: Boolean
+        },
+        icons:{
+          type:Object,
+          value:{
+          'FINISHED':'av:play-arrow',
+          'READY':'av:play-arrow',
+          'RUN':'av:play-arrow',
+          'PENDING':'av:av-timer',
+          'PROGRESS':'av:pause',
+          'ERROR':'av:new-releases'  
+          }
         }
       }
+    }
+    // get icons based on paragraph status
+    icon(item){
+      return this.icons[item];
     }
 
     // run paragraph

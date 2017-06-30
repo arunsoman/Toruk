@@ -13,10 +13,10 @@
 
 .settings-wrapper{
     position: relative;
-    min-height: 50px;
+    /*min-height: 50px;*/
     background: #ffffff;
     /*box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.5);*/
-    margin-top: 1px;
+    /*margin-top: 1px;*/
     border-bottom: solid 1px #f1ebeb;
 }
 .response-wrapper{
