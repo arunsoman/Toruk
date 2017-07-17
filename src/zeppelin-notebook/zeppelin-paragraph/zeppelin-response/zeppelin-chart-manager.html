@@ -1,9 +1,7 @@
-<!-- <link rel="import" href="src/bower_components/polymer-d3/polymer-d3-imports.html"> -->
+<link rel="import" href="src/bower_components/polymer-d3/polymer-d3-imports.html">
 <dom-module id="zeppelin-chart-manager">
   <template>
-    chartManager
-    <!-- <pie-chart data="[[ data ]]"></pie-chart> -->
-    <polymer-d3 paragraph-id="[[paragraphId]]" chart-response="{{ chartResponse }}"></polymer-d3>
+    <polymer-d3 paragraph-id="[[paragraphId]]"></polymer-d3>
   </template>
   <script>
   class zeppelinChartManager extends ZeppelinReduxMixin(Polymer.Element) {
@@ -16,7 +14,7 @@
           type: Object,
           value: []
         },
-        external: {
+        externals: {
           type: Array,
           value: []
         },
@@ -51,7 +49,7 @@
         });
       });
 
-      me.set('external', headerObj);
+      me.set('externals', headerObj);
 
       this.dispatch({type:'SET_EXTERNAL',payload:{id:this.paragraphId,externals:headerObj}});
 

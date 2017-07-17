@@ -65,7 +65,9 @@ function noteBookReducer(state, action) {
       return action.payload.note;
 
     case 'PARAGRAPH':
-      return Object.assign({},state,{paragraphs:state.paragraphs.map(item=>item.id==action.payload.paragraph.id ? action.payload.paragraph : item)})
+      return Object.assign({}, state, {
+        paragraphs: state.paragraphs.map(item => item.id == action.payload.paragraph.id ? action.payload.paragraph : item)
+      })
 
     case 'PARAGRAPH_ADDED':
 
@@ -93,7 +95,7 @@ function noteBookReducer(state, action) {
 
       return Object.assign({}, state, {
         paragraphs: state.paragraphs.map(item => item.id === action.payload.paragraphId ? Object.assign({}, item, {
-          logs: [...item.logs||[], action.payload.data]
+          logs: [...item.logs || [], action.payload.data]
         }) : item)
       })
 
@@ -110,17 +112,21 @@ function noteBookReducer(state, action) {
       return state;
 
     case 'SET_EXTERNAL':
-      debugger;
-      return Object.assign({},state,{
-        paragraphs:state.paragraphs.map(item=>item.id===action.payload.id ?
-          Object.assign({},item,{externals:action.payload.externals}) : item
+
+      return Object.assign({}, state, {
+        paragraphs: state.paragraphs.map(item => item.id === action.payload.id ?
+          Object.assign({}, item, {
+            externals: action.payload.externals
+          }) : item
         )
       })
     case 'SET_SOURCE':
-      debugger;
-      return Object.assign({},state,{
-        paragraphs:state.paragraphs.map(item=>item.id===action.payload.id ?
-          Object.assign({},item,{source:action.payload.source}) : item
+
+      return Object.assign({}, state, {
+        paragraphs: state.paragraphs.map(item => item.id === action.payload.id ?
+          Object.assign({}, item, {
+            source: action.payload.source
+          }) : item
         )
       })
 

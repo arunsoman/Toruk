@@ -19,7 +19,6 @@
       <error-logs logs="[[response.data]]"></error-logs>
     </template>
     <template is="dom-if" if="{{eq(response.type,'TABLE')}}">
-      Chart Manager
       <zeppelin-chart-manager response="[[response.data]]" index="[[index]]"></zeppelin-chart-manager>
     </template>
   </template>
