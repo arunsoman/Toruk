@@ -1,5 +1,5 @@
-<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.min.js"></script>
+<link rel="import" href="../../../polymer-redux/polymer-redux.html">
+<script src="../../../redux/index.js"></script>
 <script>
 const Model = {
   notes: [],
@@ -172,7 +172,7 @@ function _getObjIndex(state, id) {
   return state.paragraphs.map(data => data.id).indexOf(id);
 }
 
-const store = Redux.createStore(reducer, Model,
+var store = Redux.createStore(reducer, Model,
   Redux.compose(window.devToolsExtension ? window.devToolsExtension() : v => v)
 );
 

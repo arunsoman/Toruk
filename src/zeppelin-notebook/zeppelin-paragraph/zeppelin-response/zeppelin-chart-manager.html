@@ -1,7 +1,8 @@
-<link rel="import" href="src/bower_components/polymer-d3/polymer-d3-imports.html">
+<link rel="import" href="../../../../../polymer-d3/polymer-d3.html">
 <dom-module id="zeppelin-chart-manager">
   <template>
-    <polymer-d3 paragraph-id="[[paragraphId]]"></polymer-d3>
+  {{source}}
+    <polymer-d3 source="[[source]]" paragraph-id="[[paragraphId]]"></polymer-d3>
   </template>
   <script>
   class zeppelinChartManager extends ZeppelinReduxMixin(Polymer.Element) {
@@ -12,11 +13,7 @@
       return {
         source: {
           type: Object,
-          value: []
-        },
-        externals: {
-          type: Array,
-          value: []
+          value: {}
         },
         paragraphId:{
           type:String,
@@ -32,6 +29,10 @@
 
     transformData() {
       var me = this;
+      let sourceObj={
+        source:[],
+        externals:[]
+      }
       // if (data) {
       var data = this.response.replace();
       var headerObj = [];
@@ -49,9 +50,9 @@
         });
       });
 
-      me.set('externals', headerObj);
+      // me.set('externals', headerObj);
 
-      this.dispatch({type:'SET_EXTERNAL',payload:{id:this.paragraphId,externals:headerObj}});
+      // this.dispatch({type:'SET_EXTERNAL',payload:{id:this.paragraphId,externals:headerObj}});
 
       // lines.length - 1 is used because, last row is always just a '\n' with no data
       for (var i = 1; i < lines.length - 1; i++) {
@@ -64,32 +65,10 @@
 
         result.push(obj);
       }
-      this.set('source', result);
-      this.dispatch({type:'SET_SOURCE',payload:{id:this.paragraphId,source:result}});
-
-      // if (!this.response.config.graph) {
-      //   this.response.config.graph = {};
-      // }
-      // var polyD3 = this.response.config.graph.polymerD3;
-      // var chartConf = {
-      //   externals: this.external,
-      //   source: this.source,
-      //   mode: 'create' // Can be view and create
-      // };
-      // if (polyD3) {
-      //   chartConf.mode = 'edit';
-      //   chartConf.availableCharts = polyD3.availableCharts;
-      //   chartConf.selectedChart = polyD3.selectedChart;
-      //   chartConf.legendSettings = polyD3.selectedChart.settings.legendSettings;
-      //   chartConf.settings = polyD3.selectedChart.settings.settings;
-      //   chartConf.inputs = polyD3.selectedChart.settings.inputs;
-      // }
-      // if (this.viewMode) {
-      //   chartConf.mode = 'view';
-      // }
-      // // Avoid twoway binding with polymer-d3
-      // // Too much data tangling
-      // this.root.querySelector('polymer-d3').bootstrapCharts(chartConf);
+      sourceObj.externals = headerObj;
+      sourceObj.source = result;
+      this.set('source',sourceObj);
+      debugger;
     }
     getDataType(data) {
       var result = '';

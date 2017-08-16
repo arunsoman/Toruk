@@ -1,7 +1,15 @@
 {
-  "lint": {
-    "rules": [
-      "polymer-2"
-    ]
-  }
+  "entrypoint": "index.html",
+  "shell": "src/zeppelin-viewer.html",
+  "fragments": [
+    "src/zeppelin-viewer.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
 }
