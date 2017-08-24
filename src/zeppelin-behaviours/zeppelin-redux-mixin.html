@@ -1,16 +1,16 @@
 <link rel="import" href="../../../polymer-redux/polymer-redux.html">
 <script src="../../../redux/index.js"></script>
 <script>
-const Model = {
-  notes: [],
-  notebook: {},
-  view: 'group',
-  selectedItem: '',
-  ws: {}
-}
+  const Model = {
+    notes: [],
+    notebook: {},
+    view: 'group',
+    selectedItem: '',
+    ws: {}
+  }
 
-const reducer = (state, action) => {
-  state = state || Model;
+  const reducer = (state, action) => {
+    state = state || Model;
 
 
   // let mutateFunc= ( actionType) =>  {
@@ -51,6 +51,7 @@ const reducer = (state, action) => {
     notebook: noteBookReducer(state.notebook, action),
     view: defaultReducer(state.view, action, 'CHANGE_VIEW'),
     selectedItem: defaultReducer(state.selectedItem, action, 'SELECTED_GROUP'),
+    source:chartSourceReducer(state.source,action),
     ws: {
       auth: defaultReducer(state.ws.auth, action, 'SET_AUTH'),
       post: defaultReducer(state.ws.post, action, 'WS_POST')
@@ -62,85 +63,92 @@ const reducer = (state, action) => {
 function noteBookReducer(state, action) {
   switch (action.type) {
     case 'NOTE':
-      return action.payload.note;
+    return action.payload.note;
 
     case 'PARAGRAPH':
-      return Object.assign({}, state, {
-        paragraphs: state.paragraphs.map(item => item.id == action.payload.paragraph.id ? action.payload.paragraph : item)
-      })
+    return Object.assign({}, state, {
+      paragraphs: state.paragraphs.map(item => item.id == action.payload.paragraph.id ? action.payload.paragraph : item)
+    })
 
     case 'PARAGRAPH_ADDED':
 
-      var objectIndex = action.payload.index;
-      return Object.assign({}, state, {
-        paragraphs: [
-          ...state.paragraphs.slice(0, objectIndex),
-          action.payload.paragraph,
-          ...state.paragraphs.slice(objectIndex)
-        ]
-      })
+    var objectIndex = action.payload.index;
+    return Object.assign({}, state, {
+      paragraphs: [
+      ...state.paragraphs.slice(0, objectIndex),
+      action.payload.paragraph,
+      ...state.paragraphs.slice(objectIndex)
+      ]
+    })
 
     case 'PARAGRAPH_REMOVED':
 
-      var objectIndex = _getObjIndex(state, action.payload.id);
-      return Object.assign({}, state, {
-        paragraphs: [
-          ...state.paragraphs.slice(0, objectIndex),
-          ...state.paragraphs.slice(objectIndex + 1)
-        ]
-      });
+    var objectIndex = _getObjIndex(state, action.payload.id);
+    return Object.assign({}, state, {
+      paragraphs: [
+      ...state.paragraphs.slice(0, objectIndex),
+      ...state.paragraphs.slice(objectIndex + 1)
+      ]
+    });
 
 
     case 'PARAGRAPH_APPEND_OUTPUT':
 
-      return Object.assign({}, state, {
-        paragraphs: state.paragraphs.map(item => item.id === action.payload.paragraphId ? Object.assign({}, item, {
-          logs: [...item.logs || [], action.payload.data]
-        }) : item)
-      })
+    return Object.assign({}, state, {
+      paragraphs: state.paragraphs.map(item => item.id === action.payload.paragraphId ? Object.assign({}, item, {
+        logs: [...item.logs || [], action.payload.data]
+      }) : item)
+    })
 
     case 'PROGRESS':
 
-      return Object.assign({}, state, {
-        paragraphs: state.paragraphs.map(item => item.id === action.payload.id ? Object.assign({}, item, {
-          status: action.type
-        }) : item)
-      })
+    return Object.assign({}, state, {
+      paragraphs: state.paragraphs.map(item => item.id === action.payload.id ? Object.assign({}, item, {
+        status: action.type
+      }) : item)
+    })
 
     case 'UPDATE_CODE':
-      state.paragraphs[action.payload.index].text = action.payload.message;
-      return state;
-
-    case 'SET_EXTERNAL':
-
-      return Object.assign({}, state, {
-        paragraphs: state.paragraphs.map(item => item.id === action.payload.id ?
-          Object.assign({}, item, {
-            externals: action.payload.externals
-          }) : item
-        )
-      })
-    case 'SET_SOURCE':
-
-      return Object.assign({}, state, {
-        paragraphs: state.paragraphs.map(item => item.id === action.payload.id ?
-          Object.assign({}, item, {
-            source: action.payload.source
-          }) : item
-        )
-      })
+    state.paragraphs[action.payload.index].text = action.payload.message;
+    return state;
 
     default:
-      return state
+    return state
   }
 }
 
 function notesReducer(state, action) {
   switch (action.type) {
     case 'NOTES_INFO':
-      return state.concat(action.payload.notes);
+    return state.concat(action.payload.notes);
     default:
-      return state
+    return state
+  }
+}
+
+function chartSourceReducer(state,action){
+
+  switch (action.type) {
+    case 'SET_EXTERNAL':
+
+    return Object.assign({}, state, {
+      paragraphs: state.paragraphs.map(item => item.id === action.payload.id ?
+        Object.assign({}, item, {
+          externals: action.payload.externals
+        }) : item
+        )
+    })
+    case 'SET_SOURCE':
+
+    return Object.assign({}, state, {
+      paragraphs: state.paragraphs.map(item => item.id === action.payload.id ?
+        Object.assign({}, item, {
+          source: action.payload.source
+        }) : item
+        )
+    })
+    default:
+    return state
   }
 }
 
@@ -174,7 +182,7 @@ function _getObjIndex(state, id) {
 
 var store = Redux.createStore(reducer, Model,
   Redux.compose(window.devToolsExtension ? window.devToolsExtension() : v => v)
-);
+  );
 
 ZeppelinReduxMixin = PolymerRedux(store);
 </script>
