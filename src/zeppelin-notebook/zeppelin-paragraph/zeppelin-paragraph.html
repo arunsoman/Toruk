@@ -177,7 +177,8 @@ Visualization of results
           config: this.paragraph.config,
           id: this.paragraph.id,
           title: this.paragraph.title,
-          paragraph: this.paragraph.text
+          paragraph: this.paragraph.text,
+          params:{}
         }
         this.handlePOST({
           op: 'RUN_PARAGRAPH',
@@ -206,7 +207,7 @@ Visualization of results
       }
       // handler to post data through websocket
     handlePOST(obj) {
-      obj.data.params = obj.params;
+      // obj.data.params = obj.params;
       var postObj = {
         op: obj.op,
         data: obj.data
