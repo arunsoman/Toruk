@@ -12,7 +12,7 @@
 }
 
 .settings-wrapper{
-    position: relative;
+    /*position: relative;*/
     /*min-height: 50px;*/
     background: #ffffff;
     /*box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.5);*/
@@ -35,8 +35,11 @@
 .card.opac-false{
     background: transparent;
 }
+.progress-container{
+    margin-top: -9px;
+}
 
-.toolbar {
+/*.toolbar {
     position: absolute;
     right: 10px;
     bottom: 5px;
@@ -56,7 +59,7 @@
 
 .toolbar li {
     list-style: none;
-}
+}*/
 
 ::content .ace_content {
     width: 100%!important;

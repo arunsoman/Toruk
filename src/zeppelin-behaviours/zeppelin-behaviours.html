@@ -22,9 +22,13 @@ ZEPPELIN_BEHAVIORS = {
   not: function(a, b) {
     return a !== b;
   },
-  // helper function to check values in an array
   contains: function(el,arrayVal) {
     return [b, c, d].indexOf(a) !== -1;
+  },
+
+  // helper function to check values in an array
+  any: function(el,arrayVal) {
+    return arrayVal.split(',').indexOf(el) !== -1;
   },
   //Helper method to find a parent element with given tag name
   getParentByTagName: function(element, tag) {

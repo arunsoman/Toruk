@@ -16,44 +16,26 @@
         <!-- <template is="dom-if" if="[[ !viewMode ]]" restamp> -->
         <template is="dom-if" if="[[showCode]]">
           <div class="settings-wrapper">
-          <paper-icon-button icon="{{icon(paragraph.status)}}" id="run" on-click="run" title="{{paragraph.status}}"></paper-icon-button>
+          <paper-icon-button icon="{{icon(paragraph.status)}}" id="run" on-click="actions" title="{{paragraph.status}}"></paper-icon-button>
           <!-- <template is="dom-if" if="{{ not(paragraph.status,'FINISHED') }}" restamp>
             <paper-icon-button icon="icons:cancel" on-click="pauseParagraph"></paper-icon-button> {{paragraph.status}}
           </template> -->
+          
           <paper-icon-button icon="save" title="Save" on-click="saveParagraph"></paper-icon-button>
           <paper-icon-button icon="delete" title="Delete Paragraph" on-click="removeParagraph"></paper-icon-button>
           <paper-icon-button icon="add" title="Add Paragraph" on-click="addParagraph"></paper-icon-button>
+          <paper-icon-button icon="more-vert" on-click="showDropDown"></paper-icon-button>
 
-
-
-            <!-- <ul class="toolbar left">
+          <template is="dom-if" if="{{ eq(paragraph.status,'PROGRESS') }}" restamp>
+              <div class="progress-container">
+                  <paper-progress indeterminate class="blue"></paper-progress>
+              </div>
+          </template>
+          <!-- <template is="dom-if" if="{{eq(response.type,'TEXT')}}"> -->
+            <zeppelin-log-viewer index="[[index]]"></zeppelin-log-viewer>
+          <!-- </template> -->
+            <!-- <ul class="toolbar">
               <li>
-                <iron-label on-click="run">
-                  <template is="dom-if" if="{{contains(paragraph.status,['ERROR','READY','FINISHED']) }}" restamp>
-                    <paper-icon-button icon="icons:send"></paper-icon-button> Run
-                  </template>
-                  <template is="dom-if" if="{{ not(paragraph.status,'FINISHED') }}" restamp>
-                    <paper-icon-button icon="icons:cancel" on-click="pauseParagraph"></paper-icon-button> {{paragraph.status}}
-                  </template>
-                </iron-label>
-                <iron-label on-click="saveParagraph">
-                  <paper-icon-button icon="save" title="Save"></paper-icon-button> Save
-                </iron-label>
-
-                  <iron-label on-click="removeParagraph">
-                    <paper-icon-button icon="delete" title="Delete Paragraph"></paper-icon-button>
-                  Delete
-                  </iron-label>
-
-                <iron-label on-click="addParagraph">
-                  <paper-icon-button icon="add" title="Add Paragraph"></paper-icon-button>
-                  Add
-                </iron-label>
-              </li>
-            </ul> -->
-            <ul class="toolbar">
-              <li>
-                <paper-icon-button icon="more-vert" on-click="showDropDown"></paper-icon-button>
                 <iron-dropdown horizontal-align="right" id="navdrop" vertical-align="top">
                   <div class="dropdown-content">
                     <paper-icon-button icon="select-all" on-click="toggleParagraph" title="Show / Hide Paragraph"></paper-icon-button>
@@ -65,7 +47,7 @@
                   </div>
                 </iron-dropdown>
               </li>
-            </ul>
+            </ul> -->
           </div>
         </template>
         <header class="layout horizontal">
@@ -86,24 +68,6 @@
             </template>
         </h4>
           </template>
-          <!-- <template is="dom-if" if="[[ eq(viewMode,paragraph.config.showTitle) ]]">
-</template> -->
-          <!-- <template is="dom-if" if="[[ paragraph.config.showTitle ]]">
-<h4> 
-<template is="dom-if" if="[[ editTitle ]]" restamp>
-</template>
-<template is="dom-if" if="[[ !editTitle ]]">
-<template is="dom-if" if="[[ paragraph.config.showTitle ]]">
-<template is="dom-if" if="[[ !paragraph.title ]]">
-Untitled
-</template>
-<template is="dom-if" if="[[ paragraph.title ]]">
-[[ paragraph.title ]] 
-</template>
-</template>
-</template>
-</h4>
-</template> -->
         </header>
         <template is="dom-if" if="[[showCode]]">
           <section class="ace-editor">
@@ -121,15 +85,9 @@ Visualization of results
 <paper-progress indeterminate class="slow">Progress bar comes here</paper-progress>
 </template> -->
         <!-- </template> -->
-        <section class="visualization">
-          <div class="response-wrapper">
-            <template is="dom-if" if="{{ eq(paragraph.status,'PROGRESS') }}" restamp>
-              <paper-progress indeterminate class="blue"></paper-progress>
-              <zeppelin-runtime-logs logs="[[paragraph.logs]]"></zeppelin-runtime-logs>
-            </template>
+       
             <zeppelin-response index="{{index}}"></zeppelin-response>
-          </div>
-        </section>
+
       </article>
     </div>
   </template>
@@ -157,6 +115,7 @@ Visualization of results
           value:{
           'FINISHED':'av:play-arrow',
           'READY':'av:play-arrow',
+          'ABORT':'av:play-arrow',
           'RUN':'av:play-arrow',
           'PENDING':'av:av-timer',
           'PROGRESS':'av:pause',
@@ -169,6 +128,26 @@ Visualization of results
     // get icons based on paragraph status
     icon(item){
       return this.icons[item];
+    }
+    actions(state){
+      switch(this.paragraph.status){
+        case 'PENDING':
+        case 'PROGRESS':
+          this.cancel()
+          break
+        default:
+          this.run()
+          break
+      }
+    }
+    /*
+    pause or cancel paragraph
+    */
+    cancel(){
+      this.handlePOST({
+          op: 'CANCEL_PARAGRAPH',
+          data: {id:this.paragraph.id}
+        })
     }
 
     // run paragraph

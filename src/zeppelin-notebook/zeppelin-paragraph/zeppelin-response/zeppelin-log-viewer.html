@@ -5,40 +5,72 @@
       white-space: pre-wrap;
       word-break: break-all!important;
       word-wrap: break-word!important;
-      /*max-height: 30px;*/
-      overflow: hidden;
       font-size: 11px;
-      color: #bf8c2e;
-      background: #fffde4;
-      border: solid 1px #efddbd;
+      color: #f9f77e;
       padding: 1em;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .pre-wrapper{
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 42px;
+      display: block;
+      z-index: 9;
+      box-shadow: 0px 40px 34px 21px rgba(0,0,0,0.2);
+      bottom: 0;
+      background: rgba(10, 10, 10, 0.9);
+      overflow: auto; 
     }
     
-    .pre-styled.open {
-      max-height: auto;
-    }
     paper-badge {
         --paper-badge-margin-left: -12px;
         --paper-badge-margin-top: -12px;
     }
     </style>
-    <paper-icon-button icon="icons:warning" id="warning" on-click="toggleConsole"></paper-icon-button>
-    <paper-badge label="1" for="warning"></paper-badge>
-    
-    <template is="dom-if" if="[[ showConsole ]]">
-      <pre class="pre-styled">[[result]]</pre>
+    <template is="dom-if" if="{{eq(response.type,'TEXT')}}">
+      <paper-icon-button icon="icons:report" id="warning" on-click="toggleConsole"></paper-icon-button>
+      <paper-badge label="1" for="warning"></paper-badge>
     </template>
+      <template is="dom-if" if="[[ showConsole ]]">
+        <div class="pre-wrapper">
+          <pre class="pre-styled">[[response.data]]</pre>
+        </div>
+      </template>
+      <template is="dom-if" if="[[ showLogs ]]">
+        <div class="pre-wrapper">
+          <pre class="pre-styled">[[showLogs]]</pre>
+        </div>
+      </template>
   </template>
   <script>
-  class zeppelinLogViewer extends Polymer.Element {
+  class zeppelinLogViewer extends  Polymer.mixinBehaviors([ZEPPELIN_BEHAVIORS], ZeppelinReduxMixin(Polymer.Element)) {
     static get is() {
       return 'zeppelin-log-viewer'
     }
+
     static get properties(){
       return{
+
+        response: {
+          statePath(state) {
+            let paragraph = state.notebook.paragraphs[this.index];
+            return paragraph.results ? paragraph.results.msg[0] : paragraph.status == 'ERROR' ? {type:'ERROR',data:[paragraph.errorMessage]} : 'NA';
+          }
+        },
+
         showConsole:{
           type:Boolean,
           value:false
+        },
+        showLogs:{
+          statePath(state) {
+            let paragraph = state.notebook.paragraphs[this.index];
+            return paragraph.logs;
+          }
         }
       }
     }

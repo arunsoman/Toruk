@@ -5,13 +5,15 @@
 <dom-module id="zeppelin-response">
   <template>
     <style>
-    :host {
-      display: block;
-    }
+      :host {
+        display: block;
+      }
     </style>
-    <template is="dom-if" if="{{eq(response.type,'TEXT')}}">
+    <section class="visualization">
+      <div class="response-wrapper">
+    <!-- <template is="dom-if" if="{{eq(response.type,'TEXT')}}">
       <zeppelin-log-viewer result="[[response.data]]"></zeppelin-log-viewer>
-    </template>
+    </template> -->
     <template is="dom-if" if="{{eq(response.type,'HTML')}}">
       <html-view result="[[response.data]]"></html-view>
     </template>
@@ -21,8 +23,10 @@
     <template is="dom-if" if="{{eq(response.type,'TABLE')}}">
       <zeppelin-chart-manager response="[[response.data]]" index="[[index]]"></zeppelin-chart-manager>
     </template>
-  </template>
-  <script>
+  </div>
+</section>
+</template>
+<script>
   class zeppelinResponse extends Polymer.mixinBehaviors([ZEPPELIN_BEHAVIORS], ZeppelinReduxMixin(Polymer.Element)) {
     static get is() {
       return 'zeppelin-response'
@@ -39,5 +43,5 @@
     }
   }
   window.customElements.define(zeppelinResponse.is, zeppelinResponse);
-  </script>
+</script>
 </dom-module>
